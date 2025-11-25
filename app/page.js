@@ -34,7 +34,13 @@ export default function Home() {
             <i className="far fa-bell"></i>
           </div>
           <div className="header-profile">
-            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Profile" />
+            <Image
+              src="https://randomuser.me/api/portraits/men/32.jpg"
+              alt="Profile"
+              width={40}
+              height={40}
+              style={{ borderRadius: '50%', objectFit: 'cover' }}
+            />
           </div>
         </div>
       </div>
@@ -288,10 +294,13 @@ export default function Home() {
         <div className="destinations-grid">
           {/* Card 1 */}
           <div className="dest-card">
-            <img
+            <Image
               src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=2073&auto=format&fit=crop"
               alt="Paris"
               className="dest-img"
+              width={400}
+              height={300}
+              style={{ objectFit: 'cover' }}
             />
             <div className="dest-info">
               <div className="dest-title">Romance in the City of Lights</div>
@@ -309,10 +318,13 @@ export default function Home() {
 
           {/* Card 2 */}
           <div className="dest-card">
-            <img
+            <Image
               src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=2038&auto=format&fit=crop"
               alt="Santorini"
               className="dest-img"
+              width={400}
+              height={300}
+              style={{ objectFit: 'cover' }}
             />
             <div className="dest-info">
               <div className="dest-title">Sunset Dreams by the Sea</div>
@@ -330,10 +342,13 @@ export default function Home() {
 
           {/* Card 3 */}
           <div className="dest-card">
-            <img
+            <Image
               src="https://images.unsplash.com/photo-1542051841857-5f90071e7989?q=80&w=2070&auto=format&fit=crop"
               alt="Tokyo"
               className="dest-img"
+              width={400}
+              height={300}
+              style={{ objectFit: 'cover' }}
             />
             <div className="dest-info">
               <div className="dest-title">The Future Meets Tradition</div>
@@ -351,10 +366,13 @@ export default function Home() {
 
           {/* Card 4 */}
           <div className="dest-card">
-            <img
+            <Image
               src="https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=2070&auto=format&fit=crop"
               alt="Swiss Alps"
               className="dest-img"
+              width={400}
+              height={300}
+              style={{ objectFit: 'cover' }}
             />
             <div className="dest-info">
               <div className="dest-title">Adventure in the Mountains</div>
