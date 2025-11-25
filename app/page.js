@@ -158,6 +158,14 @@ export default function Home() {
       </header>
 
       <section className="hero">
+        <Image
+          src="/image.png"
+          alt="Hero Background"
+          fill
+          priority
+          quality={80}
+          style={{ objectFit: 'cover', zIndex: -1 }}
+        />
         <h1>Welcome To Paymm !</h1>
         <p>Find Flights, Hotels, Visa & Holidays</p>
         {/* Using a div with background image to simulate the plane for now */}
