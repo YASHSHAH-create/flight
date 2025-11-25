@@ -1,5 +1,7 @@
 import "./globals.css";
 
+import SmoothScroll from "../components/SmoothScroll";
+
 export const metadata = {
   title: "Paymm | Find Your Next Adventure",
   description: "Find Flights, Hotels, Visa & Holidays",
@@ -14,7 +16,10 @@ export default function RootLayout({ children }) {
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
       </head>
-      <body>{children}</body>
+      <body>
+        <SmoothScroll />
+        {children}
+      </body>
     </html>
   );
 }
