@@ -312,24 +312,41 @@
         max-width: 100%;
     }
 
+    /* Mobile: Normal rounded tab design */
     .tabs-area {
         justify-content: center;
+        padding: 0 15px;
+        margin-bottom: 15px;
     }
 
+    /* Remove wavy shape on mobile */
     .tabs-bg-shape {
-        width: 100%;
-        min-width: 100%;
+        display: none;
     }
 
     .tab-btn {
-        padding: 10px 16px;
+        padding: 10px 18px;
         font-size: 13px;
         white-space: nowrap;
         flex: 1;
+        background: #f1f5f9;
+        color: #64748b;
+        border-radius: 12px;
+        margin: 0 4px;
     }
 
     .tab-btn.active {
-        padding: 11px 20px;
+        padding: 10px 18px;
+        background: var(--primary-blue);
+        color: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(43, 127, 219, 0.25);
+    }
+
+    /* Remove curves on mobile */
+    .tab-btn.active::before,
+    .tab-btn.active::after {
+        display: none;
     }
 
     .search-container-widget {
@@ -339,14 +356,13 @@
         min-height: auto;
         width: 100%;
         max-width: 100%;
-        border-top-left-radius: 0;
-        border-top-right-radius: 0;
+        border-radius: 20px;
     }
 
-    /* Cities container - 2 column grid on mobile */
+    /* Cities container - stacked vertically on mobile with swap button */
     .cities-container {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
+        display: flex;
+        flex-direction: column;
         gap: 12px;
         flex: 1;
         position: relative;
@@ -354,11 +370,20 @@
 
     .cities-container .field-box {
         margin-bottom: 0;
+        width: 100%;
     }
 
-    /* Hide swap button on mobile */
+    /* Show swap button on mobile - centered between cities */
     .swap-circle {
-        display: none;
+        display: flex;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 40px;
+        height: 40px;
+        z-index: 10;
+        box-shadow: 0 4px 12px rgba(43, 127, 219, 0.2);
     }
 
     /* Dates container - 2 column grid on mobile */
@@ -391,22 +416,33 @@
     .label {
         font-size: 10px;
         margin-bottom: 3px;
+        white-space: nowrap;
     }
 
     .value {
-        font-size: 16px;
+        font-size: 15px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .value i {
-        font-size: 14px;
+        font-size: 13px;
+        flex-shrink: 0;
     }
 
     .value span {
         font-size: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .sub-info {
         font-size: 10px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .btn-wrapper {
@@ -428,33 +464,57 @@
         padding: 0 10px;
     }
 
+    .tabs-area {
+        padding: 0 10px;
+    }
+
     .tab-btn {
-        padding: 10px 15px;
-        font-size: 13px;
+        padding: 9px 12px;
+        font-size: 12px;
+        margin: 0 3px;
     }
 
     .tab-btn.active {
-        padding: 11px 20px;
+        padding: 9px 12px;
+        font-size: 12px;
     }
 
     .search-container-widget {
         padding: 15px 12px 55px 12px;
     }
 
+    .field-box {
+        padding: 10px 12px;
+    }
+
+    .label {
+        font-size: 9px;
+    }
+
     .value {
-        font-size: 18px;
+        font-size: 14px;
+    }
+
+    .value i {
+        font-size: 12px;
     }
 
     .value span {
-        font-size: 13px;
+        font-size: 11px;
     }
 
     .sub-info {
-        font-size: 11px;
+        font-size: 9px;
     }
 
     .search-btn {
         padding: 12px 30px;
         font-size: 15px;
+    }
+
+    /* Adjust swap button for extra small screens */
+    .swap-circle {
+        width: 36px;
+        height: 36px;
     }
 }
