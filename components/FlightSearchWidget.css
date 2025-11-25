@@ -510,6 +510,7 @@
     .search-btn {
         padding: 12px 30px;
         font-size: 15px;
+        white-space: nowrap;
     }
 
     /* Adjust swap button for extra small screens */
