@@ -1,0 +1,460 @@
+/* FlightSearchWidget.css - Mobile First Responsive Design */
+:root {
+    --primary-blue: #2B7FDB;
+    --bg-color: #F0F7FF;
+    --light-blue: #E3F2FD;
+}
+
+.widget-wrapper {
+    width: 100%;
+    max-width: 1100px;
+    position: relative;
+    padding: 0 20px;
+    margin: 0 auto;
+}
+
+/* --- TABS SECTION --- */
+.tabs-area {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    position: relative;
+    z-index: 1;
+    padding-bottom: 0;
+}
+
+/* THE BLUE WAVEY SHAPE */
+.tabs-bg-shape {
+    background: var(--primary-blue);
+    height: 55px;
+    width: 60%;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    z-index: -1;
+}
+
+/* LEFT SIDE WAVE */
+.tabs-bg-shape::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: -25px;
+    height: 25px;
+    width: 25px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='25' height='25' viewBox='0 0 25 25'%3E%3Cpath d='M25,0 L25,25 L0,25 A25,25 0 0,0 25,0 Z' fill='%232B7FDB'/%3E%3C/svg%3E");
+    background-size: cover;
+}
+
+/* RIGHT SIDE WAVE */
+.tabs-bg-shape::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: -25px;
+    height: 25px;
+    width: 25px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='25' height='25' viewBox='0 0 25 25'%3E%3Cpath d='M0,0 L0,25 L25,25 A25,25 0 0,1 0,0 Z' fill='%232B7FDB'/%3E%3C/svg%3E");
+    background-size: cover;
+}
+
+.tab-btn {
+    padding: 14px 30px;
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.85);
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    position: relative;
+    transition: 0.3s;
+}
+
+.tab-btn:hover {
+    color: white;
+}
+
+/* --- ACTIVE TAB --- */
+.tab-btn.active {
+    background: white;
+    color: var(--primary-blue);
+    font-weight: 700;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    padding: 15px 45px;
+    margin: 0 2px;
+    position: relative;
+    bottom: 0;
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.05);
+    z-index: 2;
+}
+
+/* Active Tab - LEFT Inner Curve */
+.tab-btn.active::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: -20px;
+    height: 20px;
+    width: 20px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath d='M20,0 L20,20 L0,20 A20,20 0 0,0 20,0 Z' fill='%23FFFFFF'/%3E%3C/svg%3E");
+    background-size: cover;
+    z-index: 1;
+}
+
+/* Active Tab - RIGHT Inner Curve */
+.tab-btn.active::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: -20px;
+    height: 20px;
+    width: 20px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath d='M0,0 L0,20 L20,20 A20,20 0 0,1 0,0 Z' fill='%23FFFFFF'/%3E%3C/svg%3E");
+    background-size: cover;
+    z-index: 1;
+}
+
+/* --- SEARCH BOX CONTAINER --- */
+.search-container-widget {
+    background: white;
+    border-radius: 24px;
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    padding: 25px 20px 50px 20px;
+    box-shadow: 0 15px 40px rgba(43, 127, 219, 0.12);
+    display: flex;
+    gap: 15px;
+    position: relative;
+    z-index: 2;
+    min-height: 120px;
+}
+
+/* Input Fields styling */
+.field-box {
+    border: 1px solid #E5E5E5;
+    border-radius: 16px;
+    padding: 12px 18px;
+    flex: 1;
+    position: relative;
+    transition: 0.3s;
+    cursor: pointer;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.field-box:hover {
+    border-color: var(--primary-blue);
+    background: #F8FBFF;
+}
+
+.f-city {
+    flex: 1.4;
+}
+
+.f-date {
+    flex: 0.9;
+}
+
+.f-traveler {
+    flex: 1.1;
+}
+
+/* Cities Container */
+.cities-container {
+    flex: 2.8;
+    position: relative;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+/* Dates Container */
+.dates-container {
+    flex: 1.8;
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    transition: all 0.35s ease-in-out;
+}
+
+/* When return date is hidden, collapse to single column */
+.dates-container:has(.return-date-field.hidden) {
+    grid-template-columns: 1fr 0fr;
+    gap: 0;
+}
+
+/* Return Date Field Smooth Transition */
+.return-date-field {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.35s ease-in-out,
+        visibility 0.35s ease-in-out,
+        width 0.35s ease-in-out,
+        padding 0.35s ease-in-out;
+}
+
+.return-date-field.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    width: 0;
+    min-width: 0;
+    padding: 0;
+    border: none;
+    overflow: hidden;
+}
+
+.label {
+    font-size: 11px;
+    color: var(--primary-blue);
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+}
+
+.value {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1e1e1e;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.value i {
+    font-size: 16px;
+    color: #888;
+}
+
+.value span {
+    font-size: 14px;
+    font-weight: 600;
+    color: #555;
+    margin-left: 5px;
+}
+
+.sub-info {
+    font-size: 12px;
+    color: #999;
+    margin-top: 2px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/* Swap Icon */
+.swap-circle {
+    width: 36px;
+    height: 36px;
+    border: 1px solid #B3D9FF;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--primary-blue);
+    background: white;
+    flex-shrink: 0;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(43, 127, 219, 0.15);
+    transition: 0.3s;
+    z-index: 10;
+}
+
+.swap-circle:hover {
+    transform: rotate(180deg);
+}
+
+/* Search Button */
+.btn-wrapper {
+    position: absolute;
+    bottom: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.search-btn {
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 16px 50px;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(43, 127, 219, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: 0.2s;
+}
+
+.search-btn:hover {
+    background: #1E6BC4;
+    transform: translateY(-2px);
+}
+
+/* ========================================
+   RESPONSIVE DESIGN - MOBILE FIRST
+   ======================================== */
+
+/* Tablet and below */
+@media (max-width: 992px) {
+    .widget-wrapper {
+        padding: 0;
+        max-width: 100%;
+    }
+
+    .tabs-area {
+        justify-content: center;
+    }
+
+    .tabs-bg-shape {
+        width: 100%;
+        min-width: 100%;
+    }
+
+    .tab-btn {
+        padding: 10px 16px;
+        font-size: 13px;
+        white-space: nowrap;
+        flex: 1;
+    }
+
+    .tab-btn.active {
+        padding: 11px 20px;
+    }
+
+    .search-container-widget {
+        flex-direction: column;
+        gap: 12px;
+        padding: 20px 15px 60px 15px;
+        min-height: auto;
+        width: 100%;
+        max-width: 100%;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+    }
+
+    /* Cities container - 2 column grid on mobile */
+    .cities-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        flex: 1;
+        position: relative;
+    }
+
+    .cities-container .field-box {
+        margin-bottom: 0;
+    }
+
+    /* Hide swap button on mobile */
+    .swap-circle {
+        display: none;
+    }
+
+    /* Dates container - 2 column grid on mobile */
+    .dates-container {
+        flex: 1;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .dates-container:has(.return-date-field.hidden) {
+        grid-template-columns: 1fr;
+    }
+
+    .return-date-field.hidden {
+        display: none;
+    }
+
+    .f-city,
+    .f-date,
+    .f-traveler {
+        width: 100%;
+        flex: 1;
+    }
+
+    .field-box {
+        padding: 12px 14px;
+    }
+
+    .label {
+        font-size: 10px;
+        margin-bottom: 3px;
+    }
+
+    .value {
+        font-size: 16px;
+    }
+
+    .value i {
+        font-size: 14px;
+    }
+
+    .value span {
+        font-size: 12px;
+    }
+
+    .sub-info {
+        font-size: 10px;
+    }
+
+    .btn-wrapper {
+        bottom: -30px;
+    }
+
+    .search-btn {
+        padding: 14px 40px;
+        font-size: 16px;
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+    }
+}
+
+/* Mobile phones */
+@media (max-width: 576px) {
+    .widget-wrapper {
+        padding: 0 10px;
+    }
+
+    .tab-btn {
+        padding: 10px 15px;
+        font-size: 13px;
+    }
+
+    .tab-btn.active {
+        padding: 11px 20px;
+    }
+
+    .search-container-widget {
+        padding: 15px 12px 55px 12px;
+    }
+
+    .value {
+        font-size: 18px;
+    }
+
+    .value span {
+        font-size: 13px;
+    }
+
+    .sub-info {
+        font-size: 11px;
+    }
+
+    .search-btn {
+        padding: 12px 30px;
+        font-size: 15px;
+    }
+}

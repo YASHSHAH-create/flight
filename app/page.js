@@ -1,23 +1,11 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import FlightSearchWidget from "../components/FlightSearchWidget";
 
 export default function Home() {
   const router = useRouter();
-  const [from, setFrom] = useState("BLR");
-  const [to, setTo] = useState("DEL");
-  const [date, setDate] = useState("2025-11-25");
-  const [travelers, setTravelers] = useState(1);
 
-  const handleSearch = () => {
-    const queryParams = new URLSearchParams({
-      date,
-      adults: travelers,
-    }).toString();
-    // Redirect to SEO-friendly route
-    router.push(`/flights/${from.toLowerCase()}-to-${to.toLowerCase()}?${queryParams}`);
-  };
 
   return (
     <>
@@ -45,75 +33,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Mobile Search Container */}
-      <div className="mobile-search-container">
-        {/* Tabs */}
-        <div className="mobile-search-tabs">
-          <button className="mobile-tab active">One way</button>
-          <button className="mobile-tab">Round Trip</button>
-          <button className="mobile-tab">Multicity</button>
-        </div>
-
-        {/* Route Stack */}
-        <div className="mobile-route-container">
-          {/* From */}
-          <div className="mobile-input-row">
-            <div className="route-icon">
-              <i className="fas fa-plane-departure"></i>
-            </div>
-            <div className="route-details">
-              <span className="route-label">From</span>
-              <div className="route-value">
-                London, UK
-                <span className="route-code">LHR</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Swap Button */}
-          <button className="mobile-swap-btn">
-            <i className="fas fa-exchange-alt"></i>
-          </button>
-
-          {/* To */}
-          <div className="mobile-input-row">
-            <div className="route-icon">
-              <i className="fas fa-plane-arrival"></i>
-            </div>
-            <div className="route-details">
-              <span className="route-label">To</span>
-              <div className="route-value">
-                Lagos, Nigeria
-                <span className="route-code">LOS</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Date & Travelers Grid */}
-        <div className="mobile-grid-row">
-          {/* Date */}
-          <div className="mobile-card-input">
-            <span className="input-label-small">
-              <i className="far fa-calendar-alt"></i> Departure
-            </span>
-            <span className="input-value-large">Sat, 14 Aug</span>
-          </div>
-
-          {/* Travelers */}
-          <div className="mobile-card-input">
-            <span className="input-label-small">
-              <i className="far fa-user"></i> Travelers
-            </span>
-            <span className="input-value-large">2 Adult</span>
-          </div>
-        </div>
-
-        {/* Button */}
-        <button className="mobile-search-btn">
-          <i className="fas fa-search"></i> Search Flights
-        </button>
-      </div>
+      {/* Mobile Search Container - REMOVED and replaced by responsive FlightSearchWidget */}
 
       <header className="desktop-header">
         <div className="logo">
@@ -172,120 +92,11 @@ export default function Home() {
         <div className="plane-img"></div>
       </section>
 
-      <div className="search-container">
-        <div className="search-card">
-          <div className="search-header">
-            <div className="search-tabs">
-              <div className="search-tab">
-                <i className="fas fa-hotel"></i> Hotels
-              </div>
-              <div className="search-tab active">
-                <i className="fas fa-plane"></i> Flights
-              </div>
-            </div>
-          </div>
-
-          <div className="trip-type">
-            <label className="radio-group">
-              <div className="custom-radio selected">
-                <div className="radio-dot"></div>
-              </div>
-              <span>One Way</span>
-            </label>
-            <label className="radio-group">
-              <div className="custom-radio"></div>
-              <span>Round Way</span>
-            </label>
-            <label className="radio-group">
-              <div className="custom-radio"></div>
-              <span>Multi City</span>
-            </label>
-          </div>
-
-          <div className="search-inputs-row">
-            {/* From */}
-            <div className="input-group">
-              <div className="input-icon">
-                <i className="fas fa-plane-departure"></i>
-              </div>
-              <div className="input-content">
-                <span className="input-label">From</span>
-                <input
-                  type="text"
-                  className="input-value"
-                  value={from}
-                  onChange={(e) => setFrom(e.target.value)}
-                  style={{ border: 'none', background: 'transparent', width: '100%', fontSize: 'inherit', fontWeight: 'inherit', color: 'inherit' }}
-                />
-                <div className="input-sub">Origin Airport</div>
-              </div>
-              <div className="swap-btn">
-                <i className="fas fa-exchange-alt"></i>
-              </div>
-            </div>
-
-            {/* To */}
-            <div className="input-group">
-              <div className="input-icon">
-                <i className="fas fa-plane-arrival"></i>
-              </div>
-              <div className="input-content">
-                <span className="input-label">To</span>
-                <input
-                  type="text"
-                  className="input-value"
-                  value={to}
-                  onChange={(e) => setTo(e.target.value)}
-                  style={{ border: 'none', background: 'transparent', width: '100%', fontSize: 'inherit', fontWeight: 'inherit', color: 'inherit' }}
-                />
-                <div className="input-sub">Destination Airport</div>
-              </div>
-            </div>
-
-            {/* Dates */}
-            <div className="input-group">
-              <div className="input-icon">
-                <i className="far fa-calendar-alt"></i>
-              </div>
-              <div className="input-content">
-                <span className="input-label">Dates</span>
-                <input
-                  type="date"
-                  className="input-value"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  style={{ border: 'none', background: 'transparent', width: '100%', fontSize: 'inherit', fontWeight: 'inherit', color: 'inherit' }}
-                />
-                <div className="input-sub">Departure Date</div>
-              </div>
-            </div>
-
-            {/* Travelers */}
-            <div className="input-group">
-              <div className="input-icon">
-                <i className="fas fa-user-friends"></i>
-              </div>
-              <div className="input-content">
-                <span className="input-label">Travelers</span>
-                <input
-                  type="number"
-                  className="input-value"
-                  value={travelers}
-                  min="1"
-                  onChange={(e) => setTravelers(parseInt(e.target.value))}
-                  style={{ border: 'none', background: 'transparent', width: '100%', fontSize: 'inherit', fontWeight: 'inherit', color: 'inherit' }}
-                />
-                <div className="input-sub">Travelers</div>
-              </div>
-            </div>
-
-            {/* Search Button */}
-            <button className="btn-search-large" onClick={handleSearch}>
-              <i className="fas fa-search"></i>
-            </button>
-          </div>
-        </div>
+      {/* New Wavy Flight Search Widget */}
+      <div className="search-widget-container">
+        <FlightSearchWidget />
       </div>
+
 
       <section className="destinations">
         <div className="section-header">
