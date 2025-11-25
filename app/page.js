@@ -12,12 +12,11 @@ export default function Home() {
 
   const handleSearch = () => {
     const queryParams = new URLSearchParams({
-      from,
-      to,
       date,
       adults: travelers,
     }).toString();
-    router.push(`/search?${queryParams}`);
+    // Redirect to SEO-friendly route
+    router.push(`/flights/${from.toLowerCase()}-to-${to.toLowerCase()}?${queryParams}`);
   };
 
   return (
