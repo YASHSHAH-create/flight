@@ -2,6 +2,11 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import FlightSearchWidget from "../components/FlightSearchWidget";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 export default function Home() {
   const router = useRouter();
@@ -110,111 +115,145 @@ export default function Home() {
           </h2>
         </div>
 
-        <div className="destinations-grid">
-          {/* Card 1 */}
-          <div className="dest-card">
-            <Image
-              src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=2073&auto=format&fit=crop"
-              alt="Paris"
-              className="dest-img"
-              width={400}
-              height={300}
-              style={{ objectFit: 'cover' }}
-            />
-            <div className="dest-info">
-              <div className="dest-title">Romance in the City of Lights</div>
-              <div className="dest-meta">
-                <div className="dest-location">
-                  <i className="fas fa-map-marker-alt"></i> Paris, France
-                </div>
-                <div className="dest-rating">
-                  <i className="fas fa-star"></i> 5.0
-                </div>
-              </div>
-              <div className="dest-price">$2999</div>
-            </div>
-          </div>
-
-          {/* Card 2 */}
-          <div className="dest-card">
-            <Image
-              src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=2038&auto=format&fit=crop"
-              alt="Santorini"
-              className="dest-img"
-              width={400}
-              height={300}
-              style={{ objectFit: 'cover' }}
-            />
-            <div className="dest-info">
-              <div className="dest-title">Sunset Dreams by the Sea</div>
-              <div className="dest-meta">
-                <div className="dest-location">
-                  <i className="fas fa-map-marker-alt"></i> Santorini, Greece
-                </div>
-                <div className="dest-rating">
-                  <i className="fas fa-star"></i> 5.0
-                </div>
-              </div>
-              <div className="dest-price">$3999</div>
-            </div>
-          </div>
-
-          {/* Card 3 */}
-          <div className="dest-card">
-            <Image
-              src="https://images.unsplash.com/photo-1542051841857-5f90071e7989?q=80&w=2070&auto=format&fit=crop"
-              alt="Tokyo"
-              className="dest-img"
-              width={400}
-              height={300}
-              style={{ objectFit: 'cover' }}
-            />
-            <div className="dest-info">
-              <div className="dest-title">The Future Meets Tradition</div>
-              <div className="dest-meta">
-                <div className="dest-location">
-                  <i className="fas fa-map-marker-alt"></i> Tokyo, Japan
-                </div>
-                <div className="dest-rating">
-                  <i className="fas fa-star"></i> 5.0
+        <div className="destinations-slider-container">
+          <Swiper
+            modules={[Navigation, Autoplay]}
+            spaceBetween={30}
+            slidesPerView={1}
+            navigation={{
+              nextEl: '.swiper-button-next-custom',
+              prevEl: '.swiper-button-prev-custom',
+            }}
+            autoplay={{
+              delay: 3000,
+              disableOnInteraction: false,
+            }}
+            breakpoints={{
+              640: {
+                slidesPerView: 2,
+              },
+              1024: {
+                slidesPerView: 3,
+              },
+              1280: {
+                slidesPerView: 4,
+              },
+            }}
+            className="destinations-swiper"
+          >
+            {/* Card 1 */}
+            <SwiperSlide>
+              <div className="dest-card">
+                <Image
+                  src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=2073&auto=format&fit=crop"
+                  alt="Paris"
+                  className="dest-img"
+                  width={400}
+                  height={300}
+                  style={{ objectFit: 'cover' }}
+                />
+                <div className="dest-info">
+                  <div className="dest-title">Romance in the City of Lights</div>
+                  <div className="dest-meta">
+                    <div className="dest-location">
+                      <i className="fas fa-map-marker-alt"></i> Paris, France
+                    </div>
+                    <div className="dest-rating">
+                      <i className="fas fa-star"></i> 5.0
+                    </div>
+                  </div>
+                  <div className="dest-price">$2999</div>
                 </div>
               </div>
-              <div className="dest-price">$2599</div>
-            </div>
-          </div>
+            </SwiperSlide>
 
-          {/* Card 4 */}
-          <div className="dest-card">
-            <Image
-              src="https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=2070&auto=format&fit=crop"
-              alt="Swiss Alps"
-              className="dest-img"
-              width={400}
-              height={300}
-              style={{ objectFit: 'cover' }}
-            />
-            <div className="dest-info">
-              <div className="dest-title">Adventure in the Mountains</div>
-              <div className="dest-meta">
-                <div className="dest-location">
-                  <i className="fas fa-map-marker-alt"></i> Swiss Alps, Switzerland
-                </div>
-                <div className="dest-rating">
-                  <i className="fas fa-star"></i> 5.0
+            {/* Card 2 */}
+            <SwiperSlide>
+              <div className="dest-card">
+                <Image
+                  src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=2038&auto=format&fit=crop"
+                  alt="Santorini"
+                  className="dest-img"
+                  width={400}
+                  height={300}
+                  style={{ objectFit: 'cover' }}
+                />
+                <div className="dest-info">
+                  <div className="dest-title">Sunset Dreams by the Sea</div>
+                  <div className="dest-meta">
+                    <div className="dest-location">
+                      <i className="fas fa-map-marker-alt"></i> Santorini, Greece
+                    </div>
+                    <div className="dest-rating">
+                      <i className="fas fa-star"></i> 5.0
+                    </div>
+                  </div>
+                  <div className="dest-price">$3999</div>
                 </div>
               </div>
-              <div className="dest-price">$2999</div>
-            </div>
-          </div>
-        </div>
+            </SwiperSlide>
 
-        <div className="slider-controls">
-          <button className="control-btn">
-            <i className="fas fa-arrow-left"></i>
-          </button>
-          <button className="control-btn">
-            <i className="fas fa-arrow-right"></i>
-          </button>
+            {/* Card 3 */}
+            <SwiperSlide>
+              <div className="dest-card">
+                <Image
+                  src="https://images.unsplash.com/photo-1542051841857-5f90071e7989?q=80&w=2070&auto=format&fit=crop"
+                  alt="Tokyo"
+                  className="dest-img"
+                  width={400}
+                  height={300}
+                  style={{ objectFit: 'cover' }}
+                />
+                <div className="dest-info">
+                  <div className="dest-title">The Future Meets Tradition</div>
+                  <div className="dest-meta">
+                    <div className="dest-location">
+                      <i className="fas fa-map-marker-alt"></i> Tokyo, Japan
+                    </div>
+                    <div className="dest-rating">
+                      <i className="fas fa-star"></i> 5.0
+                    </div>
+                  </div>
+                  <div className="dest-price">$2599</div>
+                </div>
+              </div>
+            </SwiperSlide>
+
+            {/* Card 4 */}
+            <SwiperSlide>
+              <div className="dest-card">
+                <Image
+                  src="https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=2070&auto=format&fit=crop"
+                  alt="Swiss Alps"
+                  className="dest-img"
+                  width={400}
+                  height={300}
+                  style={{ objectFit: 'cover' }}
+                />
+                <div className="dest-info">
+                  <div className="dest-title">Adventure in the Mountains</div>
+                  <div className="dest-meta">
+                    <div className="dest-location">
+                      <i className="fas fa-map-marker-alt"></i> Swiss Alps, Switzerland
+                    </div>
+                    <div className="dest-rating">
+                      <i className="fas fa-star"></i> 5.0
+                    </div>
+                  </div>
+                  <div className="dest-price">$2999</div>
+                </div>
+              </div>
+            </SwiperSlide>
+          </Swiper>
+
+          <div className="slider-controls">
+            <button className="control-btn swiper-button-prev-custom">
+              <i className="fas fa-arrow-left"></i>
+            </button>
+            <button className="control-btn swiper-button-next-custom">
+              <i className="fas fa-arrow-right"></i>
+            </button>
+          </div>
         </div>
       </section>
 

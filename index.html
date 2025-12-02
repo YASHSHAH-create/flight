@@ -1,0 +1,1738 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nestia Flight Booking Clone</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #F4F6F9;
+            --sidebar-width: 260px;
+            --primary-blue: #007BFF;
+            --text-dark: #1F2937;
+            --text-grey: #6B7280;
+            --accent-yellow: #FCD34D;
+            --border-radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            height: 100vh;
+            display: flex;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: white;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #E5E7EB;
+            height: 100vh;
+            position: fixed;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            color: var(--text-grey);
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .nav-item i {
+            width: 24px;
+            margin-right: 12px;
+        }
+
+        .nav-item.active {
+            background-color: #EFF6FF;
+            color: var(--primary-blue);
+        }
+
+        .nav-item:hover:not(.active) {
+            background-color: #F3F4F6;
+        }
+
+        .promo-card {
+            margin-top: auto;
+            background: linear-gradient(135deg, #007BFF, #0056b3);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            color: white;
+            text-align: center;
+        }
+
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            padding: 30px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 24px;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Search Section */
+        .search-container {
+            background: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+            margin-bottom: 30px;
+            flex-shrink: 0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .search-field {
+            flex: 1;
+            background: #F9FAFB;
+            padding: 12px 16px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .search-field .icon {
+            color: var(--primary-blue);
+            font-size: 18px;
+        }
+
+        .field-info h4 {
+            font-size: 12px;
+            color: var(--text-grey);
+            font-weight: 500;
+        }
+
+        .field-info p {
+            font-size: 14px;
+            font-weight: 700;
+            margin-top: 2px;
+        }
+
+        .search-btn {
+            background-color: var(--accent-yellow);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: transform 0.2s;
+        }
+
+        .search-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Content Grid (Filters + Results) */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 30px;
+            flex: 1;
+            overflow: hidden;
+            min-height: 0;
+        }
+
+        .results-list {
+            height: 100%;
+            overflow-y: auto;
+            padding-right: 5px;
+            padding-bottom: 20px;
+        }
+
+        /* Filters */
+        .filter-section {
+            background: white;
+            padding: 24px;
+            border-radius: var(--border-radius);
+            height: fit-content;
+        }
+
+        .filter-group {
+            margin-bottom: 30px;
+        }
+
+        .filter-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .checkbox-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: var(--text-grey);
+        }
+
+        /* Flight Card */
+        .flight-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .flight-info-left {
+            flex: 2;
+        }
+
+        .flight-segment {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .flight-segment:last-child {
+            margin-bottom: 0;
+        }
+
+        .airline-logo {
+            width: 60px;
+            font-weight: 800;
+            color: #002D72;
+            /* Generic airline blue */
+            margin-right: 20px;
+        }
+
+        .flight-route {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            gap: 20px;
+        }
+
+        .time-loc h3 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .time-loc p {
+            font-size: 12px;
+            color: var(--text-grey);
+            margin-top: 4px;
+        }
+
+        .duration-line {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .line {
+            height: 2px;
+            background: #E5E7EB;
+            position: relative;
+            margin: 8px 0;
+        }
+
+        .line::after,
+        .line::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--primary-blue);
+            border-radius: 50%;
+            position: absolute;
+            top: -3px;
+        }
+
+        .line::before {
+            left: 0;
+        }
+
+        .line::after {
+            right: 0;
+        }
+
+        .plane-icon-center {
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--primary-blue);
+            background: white;
+            padding: 0 5px;
+            font-size: 12px;
+        }
+
+        .duration-text {
+            font-size: 12px;
+            color: var(--text-grey);
+        }
+
+        .flight-price-right {
+            text-align: right;
+            border-left: 1px solid #E5E7EB;
+            padding-left: 30px;
+            min-width: 150px;
+        }
+
+        .price-tag {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-dark);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .per-person {
+            font-size: 12px;
+            color: var(--text-grey);
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .btn-book {
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-book:hover {
+            background-color: #0056b3;
+        }
+
+        /* Tags for "Non Refundable" etc */
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border: 1px solid #FECACA;
+            color: #EF4444;
+            padding: 6px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        /* Desktop Flight Card Styles */
+        .flight-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            border: 1px solid #F0F0F0;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .fc-header {
+            min-width: 150px;
+        }
+
+        .fc-airline-text {
+            font-size: 14px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .fc-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex: 1;
+        }
+
+        .fc-logo {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+        }
+
+        .fc-depart,
+        .fc-arrive {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .fc-time {
+            font-size: 20px;
+            font-weight: 700;
+            color: #000;
+        }
+
+        .fc-city {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .fc-middle {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 100px;
+            position: relative;
+            padding: 0 15px;
+            justify-content: center;
+            gap: 15px;
+            /* Add gap to show line */
+        }
+
+        .fc-middle::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 2px;
+            /* Thicker */
+            height: 40px;
+            /* Taller */
+            background: #9CA3AF;
+            /* Darker gray */
+            z-index: 0;
+        }
+
+        .fc-middle::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 6px;
+            height: 6px;
+            background: #6B7280;
+            /* Darker dot */
+            border-radius: 50%;
+            z-index: 1;
+            border: 2px solid white;
+            /* Add border to separate from line */
+        }
+
+        .fc-duration {
+            font-size: 11px;
+            color: #666;
+            position: relative;
+            z-index: 2;
+            background: white;
+            /* Keep background to hide line behind text */
+            padding: 2px 6px;
+        }
+
+        .fc-stops {
+            font-size: 11px;
+            color: #10B981;
+            position: relative;
+            z-index: 2;
+            background: white;
+            /* Keep background to hide line behind text */
+            padding: 2px 6px;
+        }
+
+        .fc-pricing {
+            text-align: right;
+            margin-left: auto;
+        }
+
+        .fc-price {
+            font-size: 20px;
+            font-weight: 700;
+            color: #007BFF;
+        }
+
+        .fc-old-price {
+            font-size: 12px;
+            color: #999;
+            text-decoration: line-through;
+            margin-top: 4px;
+        }
+
+        /* Mobile Adjustments for New Card */
+        @media (max-width: 768px) {
+            .card-body {
+                padding: 15px;
+                gap: 10px;
+            }
+
+            .flight-route-info {
+                gap: 10px;
+            }
+
+            .time-group .time {
+                font-size: 18px;
+            }
+
+            .price-group .price {
+                font-size: 18px;
+            }
+
+            .airline-logo-img {
+                display: none;
+            }
+
+            /* Hide logo on very small screens if needed, or keep it */
+        }
+
+        /* --- RESPONSIVE STYLES --- */
+        @media (max-width: 768px) {
+            :root {
+                --sidebar-width: 0px;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+                padding-bottom: 80px;
+                /* Space for bottom nav */
+            }
+
+            /* Header */
+            header {
+                justify-content: space-between;
+            }
+
+            /* Search Section */
+            .search-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-field {
+                width: 100%;
+            }
+
+            .search-btn {
+                width: 100%;
+                border-radius: 12px;
+                margin-top: 10px;
+            }
+
+            .user-profile {
+                display: none;
+            }
+
+            /* Content Grid */
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-section {
+                display: none;
+                /* Hide filters on mobile for now, or make collapsible */
+            }
+
+            /* Flight Card */
+            .flight-card {
+                flex-direction: column;
+                align-items: stretch;
+
+            }
+
+            .flight-info-left {
+                width: 100%;
+            }
+
+            .flight-segment {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .airline-logo {
+                margin-bottom: 10px;
+            }
+
+            .flight-route {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .flight-price-right {
+                border-left: none;
+                border-top: 1px solid #E5E7EB;
+                padding-left: 0;
+                padding-top: 20px;
+                text-align: center;
+                min-width: auto;
+            }
+
+            .btn-book {
+                width: 100%;
+            }
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            border-top: 1px solid #E5E7EB;
+            padding: 10px 20px;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        @media (max-width: 768px) {
+            .bottom-nav {
+                display: flex;
+            }
+        }
+
+        .bottom-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-grey);
+            text-decoration: none;
+            font-size: 10px;
+            gap: 4px;
+        }
+
+        .bottom-nav-item.active {
+            color: var(--primary-blue);
+        }
+
+        .bottom-nav-item i {
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="sidebar">
+        <div class="logo">
+            <i class="fas fa-plane-departure"></i> Nestia
+        </div>
+
+        <a href="#" class="nav-item"><i class="fas fa-bed"></i> Hotels & Homes</a>
+        <a href="#" class="nav-item active"><i class="fas fa-plane"></i> Flights</a>
+        <a href="#" class="nav-item"><i class="fas fa-bookmark"></i> Saved Trips</a>
+        <a href="#" class="nav-item"><i class="fas fa-shield-alt"></i> Insurance</a>
+        <a href="#" class="nav-item"><i class="fas fa-percentage"></i> Top Deals</a>
+
+        <div class="promo-card">
+            <h3>Get Nestia App</h3>
+            <p style="font-size: 12px; margin-top: 10px; opacity: 0.9;">Smart picks, live answers, and on-the-go trip
+                help.</p>
+        </div>
+    </nav>
+
+    <div class="main-content">
+
+
+
+        <style>
+            @media (max-width: 768px) {
+                .desktop-only {
+                    display: none;
+                }
+            }
+        </style>
+
+        <div class="search-container">
+            <div class="search-field">
+                <i class="fas fa-plane-departure icon"></i>
+                <div class="field-info">
+                    <h4>From</h4>
+                    <p>Bangkok</p>
+                </div>
+            </div>
+
+            <div class="search-field">
+                <i class="fas fa-plane-arrival icon"></i>
+                <div class="field-info">
+                    <h4>To</h4>
+                    <p>Tokyo, Japan</p>
+                </div>
+            </div>
+
+            <div class="search-field">
+                <i class="far fa-calendar-alt icon"></i>
+                <div class="field-info">
+                    <h4>Dates</h4>
+                    <p>05 Sep 25</p>
+                </div>
+            </div>
+
+            <div class="search-field">
+                <i class="fas fa-user-friends icon"></i>
+                <div class="field-info">
+                    <h4>Travelers</h4>
+                    <p>2 Travelers</p>
+                </div>
+            </div>
+
+            <button class="search-btn">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+
+        <div class="content-grid">
+
+            <aside class="filter-section">
+                <div class="filter-group">
+                    <div class="filter-title">Stops <span>Reset</span></div>
+                    <div class="checkbox-row">
+                        <label><input type="checkbox"> Non stop</label>
+                        <span>$158</span>
+                    </div>
+                    <div class="checkbox-row">
+                        <label><input type="checkbox"> 1 Stop</label>
+                        <span>$119</span>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <div class="filter-title">Price Range</div>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" placeholder="Min"
+                            style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 8px;">
+                        <input type="text" placeholder="Max"
+                            style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 8px;">
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <div class="filter-title">Airlines</div>
+                    <div class="checkbox-row">
+                        <label><input type="checkbox"> Vietjet</label>
+                        <span>8</span>
+                    </div>
+                    <div class="checkbox-row">
+                        <label><input type="checkbox"> Air Asia</label>
+                        <span>7</span>
+                    </div>
+                </div>
+            </aside>
+
+            <div class="results-list">
+
+                <!-- Flight Card 1 - Indigo -->
+                <div class="flight-card">
+                    <div class="fc-header">
+                        <span class="fc-airline-text">Indigo • 175</span>
+                    </div>
+                    <div class="fc-content">
+                        <img src="https://images.ixigo.com/img/common-resources/airline-new/6E.png" alt="Indigo"
+                            class="fc-logo">
+                        <div class="fc-depart">
+                            <div class="fc-time">10:45</div>
+                            <div class="fc-city">BLR</div>
+                        </div>
+                        <div class="fc-middle">
+                            <div class="fc-duration">2h 55m</div>
+                            <div class="fc-stops">Non-stop</div>
+                        </div>
+                        <div class="fc-arrive">
+                            <div class="fc-time">13:40</div>
+                            <div class="fc-city">DEL</div>
+                        </div>
+                        <div class="fc-pricing">
+                            <div class="fc-price">₹7,707</div>
+                            <div class="fc-old-price">₹8,772</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flight Card 2 - Indigo -->
+                <div class="flight-card">
+                    <div class="fc-header">
+                        <span class="fc-airline-text">Indigo • 869</span>
+                    </div>
+                    <div class="fc-content">
+                        <img src="https://images.ixigo.com/img/common-resources/airline-new/6E.png" alt="Indigo"
+                            class="fc-logo">
+                        <div class="fc-depart">
+                            <div class="fc-time">11:45</div>
+                            <div class="fc-city">BLR</div>
+                        </div>
+                        <div class="fc-middle">
+                            <div class="fc-duration">3h 0m</div>
+                            <div class="fc-stops">Non-stop</div>
+                        </div>
+                        <div class="fc-arrive">
+                            <div class="fc-time">14:45</div>
+                            <div class="fc-city">DEL</div>
+                        </div>
+                        <div class="fc-pricing">
+                            <div class="fc-price">₹7,707</div>
+                            <div class="fc-old-price">₹8,772</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flight Card 3 - Air India -->
+                <div class="flight-card">
+                    <div class="fc-header">
+                        <span class="fc-airline-text">Air India • 2814</span>
+                    </div>
+                    <div class="fc-content">
+                        <img src="https://images.ixigo.com/img/common-resources/airline-new/AI.png" alt="Air India"
+                            class="fc-logo">
+                        <div class="fc-depart">
+                            <div class="fc-time">22:00</div>
+                            <div class="fc-city">BLR</div>
+                        </div>
+                        <div class="fc-middle">
+                            <div class="fc-duration">2h 40m</div>
+                            <div class="fc-stops">Non-stop</div>
+                        </div>
+                        <div class="fc-arrive">
+                            <div class="fc-time">00:40</div>
+                            <div class="fc-city">DEL</div>
+                        </div>
+                        <div class="fc-pricing">
+                            <div class="fc-price">₹9,436</div>
+                            <div class="fc-old-price">₹10,801</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flight Card 4 - Vistara -->
+                <div class="flight-card">
+                    <div class="fc-header">
+                        <span class="fc-airline-text">Vistara • UK 807</span>
+                    </div>
+                    <div class="fc-content">
+                        <img src="https://images.ixigo.com/img/common-resources/airline-new/UK.png" alt="Vistara"
+                            class="fc-logo">
+                        <div class="fc-depart">
+                            <div class="fc-time">06:00</div>
+                            <div class="fc-city">BLR</div>
+                        </div>
+                        <div class="fc-middle">
+                            <div class="fc-duration">2h 30m</div>
+                            <div class="fc-stops">Non-stop</div>
+                        </div>
+                        <div class="fc-arrive">
+                            <div class="fc-time">08:30</div>
+                            <div class="fc-city">DEL</div>
+                        </div>
+                        <div class="fc-pricing">
+                            <div class="fc-price">₹8,950</div>
+                            <div class="fc-old-price">₹9,500</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flight Card 5 - SpiceJet -->
+                <div class="flight-card">
+                    <div class="fc-header">
+                        <span class="fc-airline-text">SpiceJet • SG 8192</span>
+                    </div>
+                    <div class="fc-content">
+                        <img src="https://images.ixigo.com/img/common-resources/airline-new/SG.png" alt="SpiceJet"
+                            class="fc-logo">
+                        <div class="fc-depart">
+                            <div class="fc-time">07:15</div>
+                            <div class="fc-city">BLR</div>
+                        </div>
+                        <div class="fc-middle">
+                            <div class="fc-duration">2h 45m</div>
+                            <div class="fc-stops">Non-stop</div>
+                        </div>
+                        <div class="fc-arrive">
+                            <div class="fc-time">10:00</div>
+                            <div class="fc-city">DEL</div>
+                        </div>
+                        <div class="fc-pricing">
+                            <div class="fc-price">₹6,850</div>
+                            <div class="fc-old-price">₹7,400</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flight Card 6 - Indigo -->
+                <div class="flight-card">
+                    <div class="fc-header">
+                        <span class="fc-airline-text">Indigo • 6E 5012</span>
+                    </div>
+                    <div class="fc-content">
+                        <img src="https://images.ixigo.com/img/common-resources/airline-new/6E.png" alt="Indigo"
+                            class="fc-logo">
+                        <div class="fc-depart">
+                            <div class="fc-time">12:30</div>
+                            <div class="fc-city">BLR</div>
+                        </div>
+                        <div class="fc-middle">
+                            <div class="fc-duration">3h 15m</div>
+                            <div class="fc-stops">Non-stop</div>
+                        </div>
+                        <div class="fc-arrive">
+                            <div class="fc-time">15:45</div>
+                            <div class="fc-city">DEL</div>
+                        </div>
+                        <div class="fc-pricing">
+                            <div class="fc-price">₹7,500</div>
+                            <div class="fc-old-price">₹8,100</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flight Card 7 - Air India -->
+                <div class="flight-card">
+                    <div class="fc-header">
+                        <span class="fc-airline-text">Air India • AI 503</span>
+                    </div>
+                    <div class="fc-content">
+                        <img src="https://images.ixigo.com/img/common-resources/airline-new/AI.png" alt="Air India"
+                            class="fc-logo">
+                        <div class="fc-depart">
+                            <div class="fc-time">14:20</div>
+                            <div class="fc-city">BLR</div>
+                        </div>
+                        <div class="fc-middle">
+                            <div class="fc-duration">2h 50m</div>
+                            <div class="fc-stops">Non-stop</div>
+                        </div>
+                        <div class="fc-arrive">
+                            <div class="fc-time">17:10</div>
+                            <div class="fc-city">DEL</div>
+                        </div>
+                        <div class="fc-pricing">
+                            <div class="fc-price">₹9,200</div>
+                            <div class="fc-old-price">₹10,500</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flight Card 8 - Vistara -->
+                <div class="flight-card">
+                    <div class="fc-header">
+                        <span class="fc-airline-text">Vistara • UK 851</span>
+                    </div>
+                    <div class="fc-content">
+                        <img src="https://images.ixigo.com/img/common-resources/airline-new/UK.png" alt="Vistara"
+                            class="fc-logo">
+                        <div class="fc-depart">
+                            <div class="fc-time">16:45</div>
+                            <div class="fc-city">BLR</div>
+                        </div>
+                        <div class="fc-middle">
+                            <div class="fc-duration">2h 35m</div>
+                            <div class="fc-stops">Non-stop</div>
+                        </div>
+                        <div class="fc-arrive">
+                            <div class="fc-time">19:20</div>
+                            <div class="fc-city">DEL</div>
+                        </div>
+                        <div class="fc-pricing">
+                            <div class="fc-price">₹8,600</div>
+                            <div class="fc-old-price">₹9,200</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flight Card 9 - Indigo -->
+                <div class="flight-card">
+                    <div class="fc-header">
+                        <span class="fc-airline-text">Indigo • 6E 2177</span>
+                    </div>
+                    <div class="fc-content">
+                        <img src="https://images.ixigo.com/img/common-resources/airline-new/6E.png" alt="Indigo"
+                            class="fc-logo">
+                        <div class="fc-depart">
+                            <div class="fc-time">18:15</div>
+                            <div class="fc-city">BLR</div>
+                        </div>
+                        <div class="fc-middle">
+                            <div class="fc-duration">2h 55m</div>
+                            <div class="fc-stops">Non-stop</div>
+                        </div>
+                        <div class="fc-arrive">
+                            <div class="fc-time">21:10</div>
+                            <div class="fc-city">DEL</div>
+                        </div>
+                        <div class="fc-pricing">
+                            <div class="fc-price">₹7,350</div>
+                            <div class="fc-old-price">₹8,000</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flight Card 10 - SpiceJet -->
+                <div class="flight-card">
+                    <div class="fc-header">
+                        <span class="fc-airline-text">SpiceJet • SG 8708</span>
+                    </div>
+                    <div class="fc-content">
+                        <img src="https://images.ixigo.com/img/common-resources/airline-new/SG.png" alt="SpiceJet"
+                            class="fc-logo">
+                        <div class="fc-depart">
+                            <div class="fc-time">20:30</div>
+                            <div class="fc-city">BLR</div>
+                        </div>
+                        <div class="fc-middle">
+                            <div class="fc-duration">2h 40m</div>
+                            <div class="fc-stops">Non-stop</div>
+                        </div>
+                        <div class="fc-arrive">
+                            <div class="fc-time">23:10</div>
+                            <div class="fc-city">DEL</div>
+                        </div>
+                        <div class="fc-pricing">
+                            <div class="fc-price">₹6,990</div>
+                            <div class="fc-old-price">₹7,500</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flight Card 11 - Air India -->
+                <div class="flight-card">
+                    <div class="fc-header">
+                        <span class="fc-airline-text">Air India • AI 806</span>
+                    </div>
+                    <div class="fc-content">
+                        <img src="https://images.ixigo.com/img/common-resources/airline-new/AI.png" alt="Air India"
+                            class="fc-logo">
+                        <div class="fc-depart">
+                            <div class="fc-time">05:30</div>
+                            <div class="fc-city">BLR</div>
+                        </div>
+                        <div class="fc-middle">
+                            <div class="fc-duration">2h 45m</div>
+                            <div class="fc-stops">Non-stop</div>
+                        </div>
+                        <div class="fc-arrive">
+                            <div class="fc-time">08:15</div>
+                            <div class="fc-city">DEL</div>
+                        </div>
+                        <div class="fc-pricing">
+                            <div class="fc-price">₹9,800</div>
+                            <div class="fc-old-price">₹11,000</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flight Card 12 - Vistara -->
+                <div class="flight-card">
+                    <div class="fc-header">
+                        <span class="fc-airline-text">Vistara • UK 819</span>
+                    </div>
+                    <div class="fc-content">
+                        <img src="https://images.ixigo.com/img/common-resources/airline-new/UK.png" alt="Vistara"
+                            class="fc-logo">
+                        <div class="fc-depart">
+                            <div class="fc-time">09:00</div>
+                            <div class="fc-city">BLR</div>
+                        </div>
+                        <div class="fc-middle">
+                            <div class="fc-duration">2h 30m</div>
+                            <div class="fc-stops">Non-stop</div>
+                        </div>
+                        <div class="fc-arrive">
+                            <div class="fc-time">11:30</div>
+                            <div class="fc-city">DEL</div>
+                        </div>
+                        <div class="fc-pricing">
+                            <div class="fc-price">₹8,450</div>
+                            <div class="fc-old-price">₹9,000</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flight Card 13 - Indigo -->
+                <div class="flight-card">
+                    <div class="fc-header">
+                        <span class="fc-airline-text">Indigo • 6E 6177</span>
+                    </div>
+                    <div class="fc-content">
+                        <img src="https://images.ixigo.com/img/common-resources/airline-new/6E.png" alt="Indigo"
+                            class="fc-logo">
+                        <div class="fc-depart">
+                            <div class="fc-time">15:20</div>
+                            <div class="fc-city">BLR</div>
+                        </div>
+                        <div class="fc-middle">
+                            <div class="fc-duration">3h 0m</div>
+                            <div class="fc-stops">Non-stop</div>
+                        </div>
+                        <div class="fc-arrive">
+                            <div class="fc-time">18:20</div>
+                            <div class="fc-city">DEL</div>
+                        </div>
+                        <div class="fc-pricing">
+                            <div class="fc-price">₹7,550</div>
+                            <div class="fc-old-price">₹8,200</div>
+                        </div>
+                    </div>
+                </div>
+
+                <nav class="bottom-nav">
+                    <a href="#" class="bottom-nav-item">
+                        <i class="fas fa-bed"></i>
+                        <span>Hotels</span>
+                    </a>
+                    <a href="#" class="bottom-nav-item active">
+                        <i class="fas fa-plane"></i>
+                        <span>Flights</span>
+                    </a>
+                    <a href="#" class="bottom-nav-item">
+                        <i class="fas fa-bookmark"></i>
+                        <span>Trips</span>
+                    </a>
+                    <a href="#" class="bottom-nav-item">
+                        <i class="fas fa-user"></i>
+                        <span>Profile</span>
+                    </a>
+                </nav>
+
+                <!-- Mobile Search Summary Bar (Updated to match image) -->
+                <div class="mobile-header-new">
+                    <div class="header-top">
+                        <div class="back-btn">
+                            <i class="fas fa-arrow-left"></i>
+                        </div>
+                        <div class="header-center">
+                            <div class="route-text">BLR <i class="fas fa-arrow-right" style="font-size: 12px;"></i> DEL
+                            </div>
+                            <div class="sub-text">2025-11-16 • 1 Passenger • Economy</div>
+                        </div>
+                        <div class="filter-btn">
+                            <i class="fas fa-sliders-h"></i>
+                        </div>
+                    </div>
+
+                    <div class="sort-tabs">
+                        <button class="sort-tab active">Recommended</button>
+                        <button class="sort-tab">Cheapest</button>
+                        <button class="sort-tab">Fastest</button>
+                    </div>
+
+                    <div class="flight-count">111 flights found</div>
+                </div>
+
+                <!-- Modify Search Modal -->
+                <div class="mobile-search-modal" id="searchModal">
+                    <div class="modal-header">
+                        <i class="fas fa-times" onclick="closeSearchModal()"></i>
+                        <h3>Modify Flight Search</h3>
+                        <div style="width: 24px;"></div> <!-- Spacer for centering -->
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="trip-type-tabs">
+                            <button class="tab active">One Way</button>
+                            <button class="tab">Round Trip</button>
+                        </div>
+
+                        <div class="modal-input-group">
+                            <div class="modal-field">
+                                <div class="label">From</div>
+                                <div class="value">IDR</div>
+                                <div class="sub-value">Indore</div>
+                                <i class="fas fa-plane-departure field-icon"></i>
+                            </div>
+                            <div class="swap-icon">
+                                <i class="fas fa-exchange-alt"></i>
+                            </div>
+                            <div class="modal-field">
+                                <div class="label">To</div>
+                                <div class="value">BOM</div>
+                                <div class="sub-value">Mumbai</div>
+                                <i class="fas fa-plane-arrival field-icon"></i>
+                            </div>
+                        </div>
+
+                        <div class="modal-field single-field">
+                            <i class="far fa-calendar-alt field-icon-left"></i>
+                            <div>
+                                <div class="value">Wed, 03 Dec</div>
+                            </div>
+                        </div>
+
+                        <div class="modal-field single-field">
+                            <i class="fas fa-user field-icon-left"></i>
+                            <div>
+                                <div class="value">1 Traveller • Economy</div>
+                            </div>
+                        </div>
+
+                        <div class="special-fares">
+                            <div class="fare-label">Special Fares (Optional)</div>
+                            <div class="fare-chips">
+                                <div class="chip">Student</div>
+                                <div class="chip">Senior Citizen</div>
+                                <div class="chip">Armed Forces</div>
+                            </div>
+                        </div>
+
+                        <button class="modal-search-btn">
+                            <i class="fas fa-search"></i> Search Flights
+                        </button>
+                    </div>
+                </div>
+</body>
+
+<style>
+    /* Mobile Search Summary */
+    .mobile-search-summary {
+        display: none;
+        position: fixed;
+        top: 20px;
+        /* Adjust based on status bar/header */
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        background: #F3F4F6;
+        border-radius: 30px;
+        padding: 10px 20px;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        z-index: 1001;
+        cursor: pointer;
+    }
+
+    .summary-content {
+        text-align: center;
+    }
+
+    .summary-route {
+        font-weight: 700;
+        font-size: 16px;
+        color: var(--text-dark);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .summary-details {
+        font-size: 12px;
+        color: var(--text-grey);
+        margin-top: 2px;
+    }
+
+    .summary-left,
+    .summary-right {
+        color: var(--text-dark);
+        font-size: 18px;
+    }
+
+    /* Mobile Header New */
+    .mobile-header-new {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: white;
+        z-index: 1000;
+        padding: 10px 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        flex-direction: column;
+    }
+
+    .header-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .back-btn,
+    .filter-btn {
+        font-size: 18px;
+        color: var(--text-dark);
+        cursor: pointer;
+    }
+
+    .header-center {
+        text-align: center;
+    }
+
+    .route-text {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--text-dark);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .sub-text {
+        font-size: 11px;
+        color: var(--text-grey);
+        margin-top: 2px;
+    }
+
+    .sort-tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    .sort-tab {
+        flex: 1;
+        padding: 8px;
+        border-radius: 20px;
+        border: none;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        background: #F3F4F6;
+        color: var(--text-dark);
+    }
+
+    .sort-tab.active {
+        background: #007BFF;
+        /* Blue */
+        color: white;
+    }
+
+    .flight-count {
+        font-size: 12px;
+        color: var(--text-grey);
+        margin-top: 5px;
+    }
+
+    /* Mobile Search Modal */
+    .mobile-search-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: white;
+        z-index: 2000;
+        overflow-y: auto;
+        animation: slideUp 0.3s ease-out;
+    }
+
+    @keyframes slideUp {
+        from {
+            transform: translateY(100%);
+        }
+
+        to {
+            transform: translateY(0);
+        }
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .modal-header h3 {
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    .modal-header i {
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    .modal-body {
+        padding: 20px;
+    }
+
+    .trip-type-tabs {
+        display: flex;
+        background: #F3F4F6;
+        border-radius: 20px;
+        padding: 4px;
+        margin-bottom: 20px;
+        justify-content: center;
+        width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .trip-type-tabs .tab {
+        border: none;
+        background: none;
+        padding: 8px 20px;
+        border-radius: 16px;
+        font-weight: 600;
+        color: var(--text-grey);
+        cursor: pointer;
+    }
+
+    .trip-type-tabs .tab.active {
+        background: white;
+        color: var(--text-dark);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .modal-input-group {
+        border: 1px solid #E5E7EB;
+        border-radius: 12px;
+        margin-bottom: 15px;
+        display: flex;
+        position: relative;
+    }
+
+    .modal-field {
+        flex: 1;
+        padding: 15px;
+        position: relative;
+    }
+
+    .modal-field:first-child {
+        border-right: 1px solid #E5E7EB;
+    }
+
+    .modal-field .label {
+        font-size: 12px;
+        color: var(--text-grey);
+        margin-bottom: 4px;
+    }
+
+    .modal-field .value {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--text-dark);
+    }
+
+    .modal-field .sub-value {
+        font-size: 12px;
+        color: var(--text-grey);
+    }
+
+    .modal-field .field-icon {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        color: var(--text-grey);
+        font-size: 14px;
+    }
+
+    .swap-icon {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        border: 1px solid #E5E7EB;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary-blue);
+        z-index: 10;
+    }
+
+    .single-field {
+        border: 1px solid #E5E7EB;
+        border-radius: 12px;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        gap: 15px;
+    }
+
+    .field-icon-left {
+        font-size: 18px;
+        color: var(--text-dark);
+    }
+
+    .special-fares {
+        margin-bottom: 25px;
+    }
+
+    .fare-label {
+        font-size: 12px;
+        color: var(--text-grey);
+        margin-bottom: 10px;
+    }
+
+    .fare-chips {
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+    }
+
+    .chip {
+        border: 1px solid #E5E7EB;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 12px;
+        white-space: nowrap;
+        color: var(--text-dark);
+    }
+
+    .modal-search-btn {
+        width: 100%;
+        background: #FF7F00;
+        /* Orange color from image */
+        color: white;
+        border: none;
+        padding: 15px;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+        .mobile-header-new {
+            display: flex;
+        }
+
+        .mobile-search-summary {
+            display: none;
+            /* Hide old summary */
+        }
+
+        /* Hide original search container on mobile */
+        .search-container {
+            display: none;
+        }
+
+        /* Adjust header to not overlap with summary */
+        .main-content {
+            padding-top: 140px;
+            /* Space for new header */
+        }
+
+        .main-content header {
+            display: none;
+            /* Hide default header on mobile */
+        }
+
+        .calendar-strip {
+            display: none;
+            /* Hide calendar strip on mobile as per image */
+        }
+
+        /* Mobile Flight Card Styling - New Design */
+        .flight-card {
+            background: white;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            border: none;
+        }
+
+        .fc-header {
+            margin-bottom: 10px;
+        }
+
+        .fc-airline-text {
+            font-size: 12px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .fc-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .fc-logo {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        .fc-depart,
+        .fc-arrive {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .fc-time {
+            font-size: 20px;
+            font-weight: 700;
+            color: #000;
+            line-height: 1.1;
+        }
+
+        .fc-city {
+            font-size: 11px;
+            color: #999;
+            margin-top: 2px;
+        }
+
+        .fc-middle {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+            padding: 0 10px;
+            justify-content: center;
+            gap: 12px;
+            /* Add gap */
+        }
+
+        .fc-middle::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 2px;
+            /* Thicker */
+            height: 36px;
+            /* Taller */
+            background: #9CA3AF;
+            /* Darker gray */
+            z-index: 0;
+        }
+
+        .fc-middle::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 5px;
+            height: 5px;
+            background: #6B7280;
+            /* Darker dot */
+            border-radius: 50%;
+            z-index: 1;
+            border: 2px solid white;
+        }
+
+        .fc-duration {
+            font-size: 11px;
+            color: #999;
+            position: relative;
+            z-index: 2;
+            background: white;
+            padding: 2px 6px;
+        }
+
+        .fc-stops {
+            font-size: 10px;
+            color: #10B981;
+            font-weight: 500;
+            position: relative;
+            z-index: 2;
+            background: white;
+            padding: 2px 6px;
+        }
+
+        .fc-pricing {
+            text-align: right;
+            margin-left: auto;
+        }
+
+        .fc-price {
+            font-size: 20px;
+            font-weight: 700;
+            color: #007BFF;
+            line-height: 1.1;
+        }
+
+        .fc-old-price {
+            font-size: 11px;
+            color: #999;
+            text-decoration: line-through;
+            margin-top: 2px;
+        }
+
+        /* Hide old desktop elements on mobile */
+        .card-header,
+        .card-body,
+        .card-footer,
+        .badge-free-meal {
+            display: none;
+        }
+    }
+</style>
+
+<script>
+    function openSearchModal() {
+        document.getElementById('searchModal').style.display = 'block';
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    }
+
+    function closeSearchModal() {
+        document.getElementById('searchModal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+</script>
+
+</html>

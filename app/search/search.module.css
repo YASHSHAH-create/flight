@@ -1,0 +1,813 @@
+.container {
+    display: flex;
+    background-color: #F4F6F9;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+    color: #1F2937;
+}
+
+/* --- SIDEBAR --- */
+.sidebar {
+    width: 260px;
+    background: white;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #E5E7EB;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: #007BFF;
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.navItem {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    color: #6B7280;
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: 500;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.navItem i {
+    width: 24px;
+    margin-right: 12px;
+}
+
+.navItem.active {
+    background-color: #EFF6FF;
+    color: #007BFF;
+}
+
+.navItem:hover:not(.active) {
+    background-color: #F3F4F6;
+}
+
+.promoCard {
+    margin-top: auto;
+    background: linear-gradient(135deg, #007BFF, #0056b3);
+    border-radius: 16px;
+    padding: 20px;
+    color: white;
+    text-align: center;
+}
+
+/* --- MAIN CONTENT --- */
+.mainContent {
+    margin-left: 260px;
+    flex: 1;
+    padding: 30px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 24px;
+    align-items: center;
+    gap: 20px;
+}
+
+.userProfile img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Search Section */
+.searchContainer {
+    background: white;
+    padding: 20px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+    margin-bottom: 30px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.searchField {
+    flex: 1;
+    background: #F9FAFB;
+    padding: 12px 16px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.searchField .icon {
+    color: #007BFF;
+    font-size: 18px;
+}
+
+.fieldInfo h4 {
+    font-size: 12px;
+    color: #6B7280;
+    font-weight: 500;
+    margin: 0;
+}
+
+.fieldInfo p {
+    font-size: 14px;
+    font-weight: 700;
+    margin-top: 2px;
+    margin-bottom: 0;
+}
+
+.searchBtn {
+    background-color: #FCD34D;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: transform 0.2s;
+    color: #1F2937;
+}
+
+.searchBtn:hover {
+    transform: scale(1.05);
+}
+
+/* Content Grid (Filters + Results) */
+.contentGrid {
+    display: flex;
+    gap: 30px;
+    flex: 1;
+    overflow: hidden;
+    min-height: 0;
+}
+
+.resultsList {
+    flex: 1;
+    height: 100%;
+    overflow-y: auto;
+    padding-right: 5px;
+    padding-bottom: 20px;
+}
+
+/* Filters */
+.filterSection {
+    width: 280px;
+    flex-shrink: 0;
+    background: white;
+    padding: 24px;
+    border-radius: 16px;
+    height: fit-content;
+    overflow-y: auto;
+    max-height: 100%;
+}
+
+.filterGroup {
+    margin-bottom: 30px;
+}
+
+.filterTitle {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.checkboxRow {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: #6B7280;
+}
+
+.checkboxRow label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+/* Flight Card */
+.flightCard {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    border: 1px solid #F0F0F0;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.fcHeader {
+    min-width: 150px;
+}
+
+.fcAirlineText {
+    font-size: 14px;
+    color: #333;
+    font-weight: 600;
+}
+
+.fcContent {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex: 1;
+}
+
+.fcLogo {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+}
+
+.fcDepart,
+.fcArrive {
+    display: flex;
+    flex-direction: column;
+}
+
+.fcTime {
+    font-size: 20px;
+    font-weight: 700;
+    color: #000;
+}
+
+.fcCity {
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+}
+
+.fcMiddle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 100px;
+    position: relative;
+    padding: 0 15px;
+    justify-content: center;
+    gap: 15px;
+}
+
+.fcMiddle::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 2px;
+    height: 40px;
+    background: #9CA3AF;
+    z-index: 0;
+}
+
+.fcMiddle::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 6px;
+    height: 6px;
+    background: #6B7280;
+    border-radius: 50%;
+    z-index: 1;
+    border: 2px solid white;
+}
+
+.fcDuration {
+    font-size: 11px;
+    color: #666;
+    position: relative;
+    z-index: 2;
+    background: white;
+    padding: 2px 6px;
+}
+
+.fcStops {
+    font-size: 11px;
+    color: #10B981;
+    position: relative;
+    z-index: 2;
+    background: white;
+    padding: 2px 6px;
+}
+
+.fcPricing {
+    text-align: right;
+    margin-left: auto;
+}
+
+.fcPrice {
+    font-size: 20px;
+    font-weight: 700;
+    color: #007BFF;
+}
+
+.fcOldPrice {
+    font-size: 12px;
+    color: #999;
+    text-decoration: line-through;
+    margin-top: 4px;
+}
+
+/* Mobile Header New */
+.mobileHeaderNew {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    z-index: 1000;
+    padding: 10px 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    flex-direction: column;
+}
+
+.headerTop {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.backBtn,
+.filterBtn {
+    font-size: 18px;
+    color: #1F2937;
+    cursor: pointer;
+}
+
+.headerCenter {
+    text-align: center;
+}
+
+.routeText {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1F2937;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.subText {
+    font-size: 11px;
+    color: #6B7280;
+    margin-top: 2px;
+}
+
+.sortTabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.sortTab {
+    flex: 1;
+    padding: 8px;
+    border-radius: 20px;
+    border: none;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    background: #F3F4F6;
+    color: #1F2937;
+}
+
+.sortTab.active {
+    background: #007BFF;
+    color: white;
+}
+
+.flightCount {
+    font-size: 12px;
+    color: #6B7280;
+    margin-top: 5px;
+}
+
+/* Mobile Search Modal */
+.mobileSearchModal {
+    display: none;
+    /* Controlled by React state */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: white;
+    z-index: 2000;
+    overflow-y: auto;
+    animation: slideUp 0.3s ease-out;
+}
+
+.mobileSearchModal.open {
+    display: block;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.modalHeader h3 {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.modalHeader i {
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.modalBody {
+    padding: 20px;
+}
+
+.tripTypeTabs {
+    display: flex;
+    background: #F3F4F6;
+    border-radius: 20px;
+    padding: 4px;
+    margin-bottom: 20px;
+    justify-content: center;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tripTypeTabs .tab {
+    border: none;
+    background: none;
+    padding: 8px 20px;
+    border-radius: 16px;
+    font-weight: 600;
+    color: #6B7280;
+    cursor: pointer;
+}
+
+.tripTypeTabs .tab.active {
+    background: white;
+    color: #1F2937;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.modalInputGroup {
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    display: flex;
+    position: relative;
+}
+
+.modalField {
+    flex: 1;
+    padding: 15px;
+    position: relative;
+}
+
+.modalField:first-child {
+    border-right: 1px solid #E5E7EB;
+}
+
+.modalField .label {
+    font-size: 12px;
+    color: #6B7280;
+    margin-bottom: 4px;
+}
+
+.modalField .value {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1F2937;
+}
+
+.modalField .subValue {
+    font-size: 12px;
+    color: #6B7280;
+}
+
+.modalField .fieldIcon {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    color: #6B7280;
+    font-size: 14px;
+}
+
+.swapIcon {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border: 1px solid #E5E7EB;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #007BFF;
+    z-index: 10;
+}
+
+.singleField {
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    gap: 15px;
+}
+
+.fieldIconLeft {
+    font-size: 18px;
+    color: #1F2937;
+}
+
+.specialFares {
+    margin-bottom: 25px;
+}
+
+.fareLabel {
+    font-size: 12px;
+    color: #6B7280;
+    margin-bottom: 10px;
+}
+
+.fareChips {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+}
+
+.chip {
+    border: 1px solid #E5E7EB;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    white-space: nowrap;
+    color: #1F2937;
+}
+
+.modalSearchBtn {
+    width: 100%;
+    background: #FF7F00;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+/* Bottom Navigation */
+.bottomNav {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 400px;
+    background: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 30px;
+    padding: 12px 20px;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 1000;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.bottomNavItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #6B7280;
+    text-decoration: none;
+    font-size: 10px;
+    gap: 4px;
+}
+
+.bottomNavItem.active {
+    color: #007BFF;
+}
+
+.bottomNavItem i {
+    font-size: 20px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .sidebar {
+        display: none;
+    }
+
+    .mainContent {
+        margin-left: 0;
+        padding: 138px 6px 19px;
+    }
+
+    .header {
+        display: none;
+    }
+
+    .searchContainer {
+        display: none;
+    }
+
+    .contentGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .filterSection {
+        display: none;
+    }
+
+    .mobileHeaderNew {
+        display: flex;
+    }
+
+    .bottomNav {
+        display: flex;
+    }
+
+    .flightCard {
+        background: white;
+        border-radius: 16px;
+        padding: 16px;
+        margin-bottom: 12px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        border: 1px solid #F0F0F0;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        position: relative;
+    }
+
+    .flightCard:first-child {
+        margin-top: 10px;
+    }
+
+    .fcHeader {
+        margin-bottom: 5px;
+        border-bottom: 1px dashed #E5E7EB;
+        padding-bottom: 8px;
+    }
+
+    .fcAirlineText {
+        font-size: 12px;
+        color: #6B7280;
+        font-weight: 600;
+    }
+
+    .fcContent {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0;
+    }
+
+    .fcLogo {
+        width: 32px;
+        height: 32px;
+        object-fit: contain;
+        padding-right: 10px;
+        margin-right: 10px;
+        border-right: 1px solid #E5E7EB;
+        flex-shrink: 0;
+    }
+
+    .fcDepart,
+    .fcArrive {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding-right: 10px;
+        margin-right: 10px;
+        border-right: 1px solid #E5E7EB;
+        flex: 1;
+    }
+
+    .fcMiddle {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding-right: 10px;
+        margin-right: 10px;
+        border-right: 1px solid #E5E7EB;
+        flex: 1;
+        gap: 4px;
+    }
+
+    .fcMiddle::before,
+    .fcMiddle::after {
+        display: none;
+    }
+
+    .fcTime {
+        font-size: 16px;
+        font-weight: 700;
+        color: #1F2937;
+        line-height: 1.2;
+    }
+
+    .fcCity {
+        font-size: 10px;
+        color: #9CA3AF;
+        margin-top: 2px;
+    }
+
+    .fcDuration {
+        font-size: 11px;
+        color: #4B5563;
+        font-weight: 500;
+        background: none;
+        padding: 0;
+    }
+
+    .fcStops {
+        font-size: 10px;
+        color: #10B981;
+        font-weight: 600;
+        background: none;
+        padding: 0;
+    }
+
+    .fcPricing {
+        text-align: right;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-end;
+        min-width: fit-content;
+    }
+
+    .fcPrice {
+        font-size: 16px;
+        font-weight: 700;
+        color: #007BFF;
+    }
+
+    .fcOldPrice {
+        font-size: 10px;
+        color: #9CA3AF;
+        text-decoration: line-through;
+    }
+}
