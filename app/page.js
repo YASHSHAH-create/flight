@@ -14,29 +14,7 @@ export default function Home() {
 
   return (
     <>
-      {/* Mobile Header */}
-      <div className="mobile-header">
-        <div className="header-left">
-          <div className="header-icon">
-            <i className="fas fa-crosshairs"></i>
-          </div>
-          <h1 className="header-title">Where are you flying to?</h1>
-        </div>
-        <div className="header-right">
-          <div className="header-bell">
-            <i className="far fa-bell"></i>
-          </div>
-          <div className="header-profile">
-            <Image
-              src="https://randomuser.me/api/portraits/men/32.jpg"
-              alt="Profile"
-              width={40}
-              height={40}
-              style={{ borderRadius: '50%', objectFit: 'cover' }}
-            />
-          </div>
-        </div>
-      </div>
+      {/* Mobile Header Removed - Replaced by FlightSearchWidget Header */}
 
       {/* Mobile Search Container - REMOVED and replaced by responsive FlightSearchWidget */}
 
@@ -59,17 +37,8 @@ export default function Home() {
             <li>
               <a href="#">Flight</a>
             </li>
-            <li>
-              <a href="#">Shop</a>
-            </li>
-            <li>
-              <a href="#">Holiday</a>
-            </li>
-            <li>
-              <a href="#">
-                Others <i className="fas fa-chevron-down" style={{ fontSize: "0.8rem" }}></i>
-              </a>
-            </li>
+
+
           </ul>
         </nav>
         <div className="header-actions">

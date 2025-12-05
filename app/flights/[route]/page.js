@@ -62,6 +62,7 @@ export default async function FlightRoutePage({ params, searchParams }) {
 
     // Fetch flight data
     let flights = [];
+    let traceId = null;
     let error = null;
     try {
         const result = await searchFlights({
@@ -73,6 +74,7 @@ export default async function FlightRoutePage({ params, searchParams }) {
             journeyType: 1
         });
         flights = result?.Response?.Results?.[0] || result || [];
+        traceId = result?.Response?.TraceId || null;
         if (!Array.isArray(flights)) flights = [];
     } catch (err) {
         console.error("Failed to fetch flights", err);
@@ -154,52 +156,71 @@ export default async function FlightRoutePage({ params, searchParams }) {
                             </Link>
                         </div>
                     ) : (
-                        flights.map((flight, index) => (
-                            <div key={index} className="bg-white rounded-xl shadow-sm hover:shadow-md transition duration-300 border border-gray-100 overflow-hidden group">
-                                <div className="p-5 flex flex-col md:flex-row justify-between items-center gap-6">
+                        flights.map((flight, index) => {
+                            // Build query params for details page
+                            const detailsUrl = `/flight-details/${index}?` + new URLSearchParams({
+                                traceId: traceId || '',
+                                resultIndex: flight.ResultIndex || '',
+                                airline: flight.Segments?.[0]?.[0]?.Airline?.AirlineName || flight.AirlineCode || 'Airline',
+                                flightNumber: `${flight.AirlineCode} ${flight.Segments?.[0]?.[0]?.Airline?.FlightNumber || ''}`,
+                                from: from,
+                                to: to,
+                                departTime: flight.Segments?.[0]?.[0]?.Origin?.DepTime || '',
+                                arriveTime: flight.Segments?.[0]?.[0]?.Destination?.ArrTime || '',
+                                duration: `${Math.floor(flight.Segments?.[0]?.[0]?.Duration / 60 || 0)}h ${flight.Segments?.[0]?.[0]?.Duration % 60 || 0}m`,
+                                price: flight.Fare?.PublishedFare || '0',
+                                date: searchDate
+                            }).toString();
 
-                                    {/* Airline Info */}
-                                    <div className="flex items-center gap-4 w-full md:w-1/4">
-                                        <div className="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center text-gray-400 text-xl">
-                                            <i className="fas fa-plane"></i>
-                                        </div>
-                                        <div>
-                                            <div className="font-bold text-gray-800">{flight.AirlineCode || 'Airline'}</div>
-                                            <div className="text-xs text-gray-500">{flight.AirlineCode} {flight.FlightNumber}</div>
-                                        </div>
-                                    </div>
+                            return (
+                                <Link key={index} href={detailsUrl} className="block">
+                                    <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition duration-300 border border-gray-100 overflow-hidden group cursor-pointer">
+                                        <div className="p-5 flex flex-col md:flex-row justify-between items-center gap-6">
 
-                                    {/* Flight Times */}
-                                    <div className="flex items-center justify-center gap-6 flex-1 w-full md:w-auto">
-                                        <div className="text-center">
-                                            <div className="text-xl font-bold text-gray-800">{new Date(flight.Origin?.DepTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
-                                            <div className="text-xs text-gray-500 font-medium">{from}</div>
-                                        </div>
-                                        <div className="flex flex-col items-center w-24">
-                                            <div className="text-xs text-gray-400 mb-1">{Math.floor(flight.Duration / 60)}h {flight.Duration % 60}m</div>
-                                            <div className="w-full h-[2px] bg-gray-200 relative">
-                                                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-gray-300 text-xs">
+                                            {/* Airline Info */}
+                                            <div className="flex items-center gap-4 w-full md:w-1/4">
+                                                <div className="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center text-gray-400 text-xl">
                                                     <i className="fas fa-plane"></i>
                                                 </div>
+                                                <div>
+                                                    <div className="font-bold text-gray-800">{flight.Segments?.[0]?.[0]?.Airline?.AirlineName || flight.AirlineCode || 'Airline'}</div>
+                                                    <div className="text-xs text-gray-500">{flight.AirlineCode} {flight.Segments?.[0]?.[0]?.Airline?.FlightNumber || ''}</div>
+                                                </div>
                                             </div>
-                                            <div className="text-xs text-green-600 mt-1 font-medium">{flight.Stop === 0 ? 'Non-stop' : `${flight.Stop} Stop`}</div>
-                                        </div>
-                                        <div className="text-center">
-                                            <div className="text-xl font-bold text-gray-800">{new Date(flight.Destination?.ArrTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
-                                            <div className="text-xs text-gray-500 font-medium">{to}</div>
-                                        </div>
-                                    </div>
 
-                                    {/* Price & Action */}
-                                    <div className="flex flex-col items-end gap-2 w-full md:w-auto border-t md:border-t-0 border-gray-100 pt-4 md:pt-0 mt-4 md:mt-0">
-                                        <div className="text-2xl font-bold text-gray-900">₹{flight.Fare?.PublishedFare?.toLocaleString('en-IN')}</div>
-                                        <button className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2.5 rounded-lg font-medium transition shadow-sm hover:shadow-md w-full md:w-auto">
-                                            Book Now
-                                        </button>
+                                            {/* Flight Times */}
+                                            <div className="flex items-center justify-center gap-6 flex-1 w-full md:w-auto">
+                                                <div className="text-center">
+                                                    <div className="text-xl font-bold text-gray-800">{new Date(flight.Segments?.[0]?.[0]?.Origin?.DepTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                                                    <div className="text-xs text-gray-500 font-medium">{from}</div>
+                                                </div>
+                                                <div className="flex flex-col items-center w-24">
+                                                    <div className="text-xs text-gray-400 mb-1">{Math.floor((flight.Segments?.[0]?.[0]?.Duration || 0) / 60)}h {(flight.Segments?.[0]?.[0]?.Duration || 0) % 60}m</div>
+                                                    <div className="w-full h-[2px] bg-gray-200 relative">
+                                                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-gray-300 text-xs">
+                                                            <i className="fas fa-plane"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div className="text-xs text-green-600 mt-1 font-medium">{flight.Segments?.[0]?.[0]?.StopOver ? '1 Stop' : 'Non-stop'}</div>
+                                                </div>
+                                                <div className="text-center">
+                                                    <div className="text-xl font-bold text-gray-800">{new Date(flight.Segments?.[0]?.[0]?.Destination?.ArrTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                                                    <div className="text-xs text-gray-500 font-medium">{to}</div>
+                                                </div>
+                                            </div>
+
+                                            {/* Price & Action */}
+                                            <div className="flex flex-col items-end gap-2 w-full md:w-auto border-t md:border-t-0 border-gray-100 pt-4 md:pt-0 mt-4 md:mt-0">
+                                                <div className="text-2xl font-bold text-gray-900">₹{flight.Fare?.PublishedFare?.toLocaleString('en-IN')}</div>
+                                                <div className="bg-orange-500 group-hover:bg-orange-600 text-white px-6 py-2.5 rounded-lg font-medium transition shadow-sm group-hover:shadow-md w-full md:w-auto text-center">
+                                                    View Details
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                        ))
+                                </Link>
+                            );
+                        })
                     )}
                 </div>
 

@@ -9,20 +9,12 @@ const Sidebar = () => {
             </div>
 
             <a href="#" className={styles.navItem}>
-                <i className="fas fa-bed"></i> Hotels & Homes
+                <i className="fas fa-bed"></i> Hotels 
             </a>
             <a href="#" className={`${styles.navItem} ${styles.active}`}>
                 <i className="fas fa-plane"></i> Flights
             </a>
-            <a href="#" className={styles.navItem}>
-                <i className="fas fa-bookmark"></i> Saved Trips
-            </a>
-            <a href="#" className={styles.navItem}>
-                <i className="fas fa-shield-alt"></i> Insurance
-            </a>
-            <a href="#" className={styles.navItem}>
-                <i className="fas fa-percentage"></i> Top Deals
-            </a>
+           
 
             <div className={styles.promoCard}>
                 <h3>Get Nestia App</h3>

@@ -1,9 +1,52 @@
+'use client';
 import React from 'react';
 import styles from '../../app/search/search.module.css';
 
-const FlightCard = ({ airline, flightNumber, logo, departTime, departCity, duration, stops, arriveTime, arriveCity, price, oldPrice }) => {
+const FlightCard = ({
+    airline,
+    flightNumber,
+    logo,
+    departTime,
+    departCity,
+    duration,
+    stops,
+    arriveTime,
+    arriveCity,
+    price,
+    oldPrice,
+    resultIndex,
+    traceId,
+    from,
+    to,
+    date,
+    index,
+    rawDepTime,
+    rawArrTime,
+    onClick
+}) => {
+    const handleClick = () => {
+        if (onClick) {
+            onClick({
+                airline,
+                flightNumber,
+                logo,
+                departTime,
+                departCity,
+                duration,
+                stops,
+                arriveTime,
+                arriveCity,
+                price,
+                oldPrice,
+                resultIndex,
+                rawDepTime,
+                rawArrTime
+            });
+        }
+    };
+
     return (
-        <div className={styles.flightCard}>
+        <div className={styles.flightCard} style={{ cursor: 'pointer' }} onClick={handleClick}>
             <div className={styles.fcHeader}>
                 <span className={styles.fcAirlineText}>{airline} • {flightNumber}</span>
             </div>
