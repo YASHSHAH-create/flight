@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+/* Swiper CSS imports */
+@import "swiper/css";
+@import "swiper/css/navigation";
+@import "swiper/css/pagination";
+
 html {
     scroll-behavior: smooth;
 }

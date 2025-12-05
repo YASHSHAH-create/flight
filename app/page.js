@@ -4,9 +4,6 @@ import { useRouter } from "next/navigation";
 import FlightSearchWidget from "../components/FlightSearchWidget";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
 
 export default function Home() {
   const router = useRouter();
