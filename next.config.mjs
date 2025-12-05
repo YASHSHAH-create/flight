@@ -15,6 +15,12 @@ const nextConfig = {
         port: '',
         pathname: '/api/portraits/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'images.ixigo.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
     // Image optimization formats - Next.js will automatically serve WebP/AVIF
     formats: ['image/avif', 'image/webp'],
