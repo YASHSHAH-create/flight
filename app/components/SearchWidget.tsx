@@ -1,13 +1,185 @@
-
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plane, Building, Car, ArrowRightLeft, Calendar, ArrowRight, ChevronDown, MapPin, Users, BedDouble } from 'lucide-react';
+import { Plane, Building, Car, ArrowRightLeft, Calendar, ArrowRight, ChevronDown, MapPin, Users } from 'lucide-react';
 
-const SearchWidget = () => {
+const airports = [
+    { code: 'DEL', city: 'New Delhi', airport: 'Indira Gandhi International Airport', country: 'India' },
+    { code: 'BOM', city: 'Mumbai', airport: 'Chhatrapati Shivaji Maharaj International Airport', country: 'India' },
+    { code: 'DXB', city: 'Dubai', airport: 'Dubai International Airport', country: 'UAE' },
+    { code: 'JFK', city: 'New York', airport: 'John F. Kennedy International Airport', country: 'USA' },
+    { code: 'LHR', city: 'London', airport: 'Heathrow Airport', country: 'UK' },
+    { code: 'SIN', city: 'Singapore', airport: 'Changi Airport', country: 'Singapore' },
+    { code: 'CDG', city: 'Paris', airport: 'Charles de Gaulle Airport', country: 'France' },
+    { code: 'HND', city: 'Tokyo', airport: 'Haneda Airport', country: 'Japan' },
+    { code: 'SYD', city: 'Sydney', airport: 'Kingsford Smith Airport', country: 'Australia' },
+    { code: 'YYZ', city: 'Toronto', airport: 'Pearson International Airport', country: 'Canada' },
+    { code: 'BLR', city: 'Bengaluru', airport: 'Kempegowda International Airport', country: 'India' },
+    { code: 'MAA', city: 'Chennai', airport: 'Chennai International Airport', country: 'India' },
+];
+
+interface SearchWidgetProps {
+    initialState?: {
+        fromCode?: string;
+        toCode?: string;
+        date?: string; // DDMMYYYY
+        adults?: number;
+        children?: number;
+        infants?: number;
+        cabinClass?: string; // e, pe, b, f
+        journeyType?: string; // 1, 2, 3
+    };
+    className?: string;
+}
+
+const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
     const [activeTab, setActiveTab] = useState('flight');
 
+    // Helper to find airport by code
+    const findAirport = (code: string) => airports.find(a => a.code === code);
+
+    // Initial State Logic
+    // Flight Data State
+    const [flightData, setFlightData] = useState(() => {
+        if (initialState?.fromCode && initialState?.toCode) {
+            const from = findAirport(initialState.fromCode);
+            const to = findAirport(initialState.toCode);
+            if (from && to) {
+                return {
+                    from: { ...from, airport: from.airport.replace(' Airport', '') }, // adjust if needed
+                    to: { ...to, airport: to.airport.replace(' Airport', '') }
+                };
+            }
+        }
+        return {
+            from: { code: 'DEL', city: 'New Delhi', airport: 'Indira Gandhi International', country: 'India' },
+            to: { code: 'DXB', city: 'Dubai', airport: 'Dubai International', country: 'UAE' }
+        };
+    });
+
+    // Detailed Flight State
+    const [tripType, setTripType] = useState(() => {
+        if (initialState?.journeyType) {
+            return initialState.journeyType === '2' ? 'Round Trip' : 'One Way'; // Simplified for now
+        }
+        return 'Round Trip';
+    });
+
+    const [travellers, setTravellers] = useState(() => ({
+        adults: initialState?.adults || 1,
+        children: initialState?.children || 0,
+        infants: initialState?.infants || 0
+    }));
+
+    const [travelClass, setTravelClass] = useState(() => {
+        const map: Record<string, string> = { 'e': 'Economy', 'pe': 'Premium Economy', 'b': 'Business', 'f': 'First Class' };
+        return map[initialState?.cabinClass || 'e'] || 'Economy';
+    });
+
+    const [dates, setDates] = useState(() => {
+        let departure = new Date().toISOString().split('T')[0];
+        if (initialState?.date) {
+            // DDMMYYYY -> YYYY-MM-DD
+            const d = initialState.date;
+            if (d.length === 8) {
+                departure = `${d.substring(4, 8)}-${d.substring(2, 4)}-${d.substring(0, 2)}`;
+            }
+        }
+        return { departure, return: '' };
+    });
+
+    // UI State for partials
+    const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+
+    // Search Slider State
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const [activeSearchField, setActiveSearchField] = useState<'from' | 'to'>('from');
+    const [searchQuery, setSearchQuery] = useState('');
+
+    // Date Picker State
+    const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+    const [activeDateField, setActiveDateField] = useState<'departure' | 'return'>('departure');
+    const [currentMonth, setCurrentMonth] = useState(new Date());
+
+    const handleSwap = () => {
+        setFlightData(prev => ({
+            from: prev.to,
+            to: prev.from
+        }));
+    };
+
+    const openSearch = (field: 'from' | 'to') => {
+        setActiveSearchField(field);
+        setSearchQuery('');
+        setIsSearchOpen(true);
+    };
+
+    const openDatePicker = (field: 'departure' | 'return') => {
+        setActiveDateField(field);
+        setIsDatePickerOpen(true);
+    };
+
+    const handleDateSelect = (day: number) => {
+        const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
+        // Adjust for timezone offset to ensure correct string representation
+        const offsetDate = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
+        const dateStr = offsetDate.toISOString().split('T')[0];
+
+        setDates(prev => ({
+            ...prev,
+            [activeDateField]: dateStr
+        }));
+
+        // Auto-switch to return date if we just picked departure and it's a round trip
+        if (activeDateField === 'departure' && tripType === 'Round Trip') {
+            setActiveDateField('return');
+            // Don't close, let user pick return date
+        } else {
+            setIsDatePickerOpen(false);
+        }
+    };
+
+    const changeMonth = (increment: number) => {
+        setCurrentMonth(prev => new Date(prev.getFullYear(), prev.getMonth() + increment, 1));
+    };
+
+    const handleSelectAirport = (airport: typeof airports[0]) => {
+        setFlightData(prev => ({
+            ...prev,
+            [activeSearchField]: {
+                code: airport.code,
+                city: airport.city,
+                airport: airport.airport,
+                country: airport.country
+            }
+        }));
+        setIsSearchOpen(false);
+    };
+
+    const filteredAirports = airports.filter(airport =>
+        airport.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        airport.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        airport.airport.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    // Helpers
+    const formatDate = (dateStr: string) => {
+        if (!dateStr) return 'Select Date';
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short' });
+    };
+
+    const toggleDropdown = (name: string) => {
+        if (openDropdown === name) {
+            setOpenDropdown(null);
+        } else {
+            setOpenDropdown(name);
+        }
+    };
+
+    const totalPassengers = travellers.adults + travellers.children + travellers.infants;
+
     return (
-        <div className="w-full max-w-5xl mx-auto mt-4 md:mt-10 relative animate-subtle-up">
+        <div className={`w-full max-w-5xl mx-auto mt-4 md:mt-10 relative animate-subtle-up ${className || ''}`} onClick={() => setOpenDropdown(null)}>
             {/* Tabs */}
             <div className="flex items-center justify-start space-x-2 pl-2 md:pl-4 mb-2 relative z-10 overflow-x-auto no-scrollbar py-1">
                 <button
@@ -37,18 +209,122 @@ const SearchWidget = () => {
             <div className="bg-white/90 md:bg-white rounded-[20px] md:rounded-[clamp(1.5rem,2vw,2rem)] p-2 md:p-[clamp(0.75rem,2vw,2rem)] shadow-2xl shadow-slate-900/10 text-slate-800 relative z-0 backdrop-blur-xl border border-white/50 min-h-auto md:min-h-[clamp(300px,35vh,400px)]">
 
                 {/* Top Options Row - Compact */}
-                <div className="flex flex-wrap items-center gap-3 md:gap-8 mb-4 md:mb-8 text-xs md:text-sm font-bold text-slate-600">
-                    <div className="flex items-center space-x-1 bg-slate-100/50 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors">
-                        <span>{activeTab === 'hotel' ? 'Free Cancellation' : 'Round Trip'}</span>
-                        <ChevronDown size={14} />
+                <div className="flex flex-wrap items-center gap-3 md:gap-8 mb-4 md:mb-8 text-xs md:text-sm font-bold text-slate-600 relative z-20">
+
+                    {/* Trip Type Dropdown */}
+                    <div className="relative">
+                        <div
+                            onClick={(e) => { e.stopPropagation(); toggleDropdown('tripType'); }}
+                            className="flex items-center space-x-1 bg-slate-100/50 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors select-none"
+                        >
+                            <span>{tripType}</span>
+                            <ChevronDown size={14} />
+                        </div>
+                        {openDropdown === 'tripType' && (
+                            <div className="absolute top-full left-0 mt-2 w-40 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden animate-subtle-down">
+                                {['Round Trip', 'One Way', 'Multi City'].map((type) => (
+                                    <div
+                                        key={type}
+                                        onClick={() => { setTripType(type); setOpenDropdown(null); }}
+                                        className={`px-4 py-2 hover:bg-slate-50 cursor-pointer ${tripType === type ? 'bg-slate-50 font-black text-black' : ''}`}
+                                    >
+                                        {type}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
-                    <div className="flex items-center space-x-1 bg-slate-100/50 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors">
-                        <span>{activeTab === 'hotel' ? '2 Adults, 1 Room' : '02 Passengers'}</span>
-                        <ChevronDown size={14} />
+
+                    {/* Travellers Dropdown */}
+                    <div className="relative">
+                        <div
+                            onClick={(e) => { e.stopPropagation(); toggleDropdown('travellers'); }}
+                            className="flex items-center space-x-1 bg-slate-100/50 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors select-none"
+                        >
+                            <span>{totalPassengers.toString().padStart(2, '0')} Passengers</span>
+                            <ChevronDown size={14} />
+                        </div>
+                        {openDropdown === 'travellers' && (
+                            <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-slate-100 p-4 animate-subtle-down" onClick={(e) => e.stopPropagation()}>
+                                <div className="space-y-4">
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <div className="font-bold text-slate-800">Adults</div>
+                                            <div className="text-xs text-slate-500">12+ years</div>
+                                        </div>
+                                        <div className="flex items-center space-x-3">
+                                            <button
+                                                onClick={() => setTravellers(p => ({ ...p, adults: Math.max(1, p.adults - 1) }))}
+                                                className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"
+                                            >-</button>
+                                            <span className="font-bold w-4 text-center">{travellers.adults}</span>
+                                            <button
+                                                onClick={() => setTravellers(p => ({ ...p, adults: p.adults + 1 }))}
+                                                className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"
+                                            >+</button>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <div className="font-bold text-slate-800">Children</div>
+                                            <div className="text-xs text-slate-500">2-12 years</div>
+                                        </div>
+                                        <div className="flex items-center space-x-3">
+                                            <button
+                                                onClick={() => setTravellers(p => ({ ...p, children: Math.max(0, p.children - 1) }))}
+                                                className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"
+                                            >-</button>
+                                            <span className="font-bold w-4 text-center">{travellers.children}</span>
+                                            <button
+                                                onClick={() => setTravellers(p => ({ ...p, children: p.children + 1 }))}
+                                                className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"
+                                            >+</button>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <div className="font-bold text-slate-800">Infants</div>
+                                            <div className="text-xs text-slate-500">0-2 years</div>
+                                        </div>
+                                        <div className="flex items-center space-x-3">
+                                            <button
+                                                onClick={() => setTravellers(p => ({ ...p, infants: Math.max(0, p.infants - 1) }))}
+                                                className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"
+                                            >-</button>
+                                            <span className="font-bold w-4 text-center">{travellers.infants}</span>
+                                            <button
+                                                onClick={() => setTravellers(p => ({ ...p, infants: p.infants + 1 }))}
+                                                className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"
+                                            >+</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
-                    <div className="flex items-center space-x-1 bg-slate-100/50 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors">
-                        <span>{activeTab === 'hotel' ? '5 Star' : 'Business Class'}</span>
-                        <ChevronDown size={14} />
+
+                    {/* Class Dropdown */}
+                    <div className="relative">
+                        <div
+                            onClick={(e) => { e.stopPropagation(); toggleDropdown('class'); }}
+                            className="flex items-center space-x-1 bg-slate-100/50 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors select-none"
+                        >
+                            <span>{travelClass}</span>
+                            <ChevronDown size={14} />
+                        </div>
+                        {openDropdown === 'class' && (
+                            <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden animate-subtle-down">
+                                {['Economy', 'Premium Economy', 'Business', 'First Class'].map((cls) => (
+                                    <div
+                                        key={cls}
+                                        onClick={() => { setTravelClass(cls); setOpenDropdown(null); }}
+                                        className={`px-4 py-2 hover:bg-slate-50 cursor-pointer ${travelClass === cls ? 'bg-slate-50 font-black text-black' : ''}`}
+                                    >
+                                        {cls}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -65,52 +341,74 @@ const SearchWidget = () => {
                             {/* Origin & Destination */}
                             <div className="lg:col-span-7 flex flex-col md:flex-row items-center gap-2 relative">
                                 {/* Origin */}
-                                <div className="w-full bg-slate-100/50 border border-slate-200/60 rounded-[14px] md:rounded-[clamp(1rem,1.5vw,1.5rem)] p-1.5 md:p-[clamp(0.75rem,2vw,1.25rem)] flex flex-col justify-center cursor-pointer transition-all hover:bg-white hover:shadow-md hover:border-slate-300 group/field">
+                                <div
+                                    onClick={() => openSearch('from')}
+                                    className="w-full bg-slate-100/50 border border-slate-200/60 rounded-[14px] md:rounded-[clamp(1rem,1.5vw,1.5rem)] p-1.5 md:p-[clamp(0.75rem,2vw,1.25rem)] flex flex-col justify-center cursor-pointer transition-all hover:bg-white hover:shadow-md hover:border-slate-300 group/field"
+                                >
                                     <div className="flex items-center space-x-1 text-slate-400 mb-0 transition-colors group-hover/field:text-slate-600">
                                         <MapPin size={9} className="md:w-3 md:h-3" />
                                         <span className="text-[9px] md:text-[clamp(0.6rem,0.8vw,0.75rem)] font-bold uppercase tracking-wider">From</span>
                                     </div>
-                                    <div className="text-base md:text-[clamp(1.25rem,2.5vw,1.875rem)] font-black text-slate-900 tracking-tight group-hover/field:text-black">Behance</div>
-                                    <div className="text-[8px] md:text-[clamp(0.65rem,0.8vw,0.75rem)] font-semibold text-slate-500 truncate mt-0 md:mt-0.5">BHN, North America, USA</div>
+                                    <div className="text-base md:text-[clamp(1.25rem,2.5vw,1.875rem)] font-black text-slate-900 tracking-tight group-hover/field:text-black">{flightData.from.city}</div>
+                                    <div className="text-[8px] md:text-[clamp(0.65rem,0.8vw,0.75rem)] font-semibold text-slate-500 truncate mt-0 md:mt-0.5">{flightData.from.code}, {flightData.from.country}</div>
                                 </div>
 
                                 {/* Swap Icon */}
                                 <div className="flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
-                                    <button className="bg-white border text-slate-400 hover:text-black hover:scale-110 hover:shadow-md hover:border-slate-300 active:scale-95 transition-all p-2 rounded-full shadow-sm rotate-90 md:rotate-0">
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleSwap();
+                                        }}
+                                        className="bg-white border text-slate-400 hover:text-black hover:scale-110 hover:shadow-md hover:border-slate-300 active:scale-95 transition-all p-2 rounded-full shadow-sm rotate-90 md:rotate-0"
+                                    >
                                         <ArrowRightLeft size={16} strokeWidth={2.5} />
                                     </button>
                                 </div>
 
                                 {/* Destination */}
-                                <div className="w-full bg-slate-100/50 border border-slate-200/60 rounded-[14px] md:rounded-[clamp(1rem,1.5vw,1.5rem)] p-1.5 md:p-[clamp(0.75rem,2vw,1.25rem)] flex flex-col justify-center cursor-pointer transition-all hover:bg-white hover:shadow-md hover:border-slate-300 group/field">
+                                <div
+                                    onClick={() => openSearch('to')}
+                                    className="w-full bg-slate-100/50 border border-slate-200/60 rounded-[14px] md:rounded-[clamp(1rem,1.5vw,1.5rem)] p-1.5 md:p-[clamp(0.75rem,2vw,1.25rem)] flex flex-col justify-center cursor-pointer transition-all hover:bg-white hover:shadow-md hover:border-slate-300 group/field"
+                                >
                                     <div className="flex items-center space-x-1 text-slate-400 mb-0 transition-colors group-hover/field:text-slate-600">
                                         <MapPin size={9} className="md:w-3 md:h-3" />
                                         <span className="text-[9px] md:text-[clamp(0.6rem,0.8vw,0.75rem)] font-bold uppercase tracking-wider">To</span>
                                     </div>
-                                    <div className="text-base md:text-[clamp(1.25rem,2.5vw,1.875rem)] font-black text-slate-900 tracking-tight group-hover/field:text-black">Dribbble</div>
-                                    <div className="text-[8px] md:text-[clamp(0.65rem,0.8vw,0.75rem)] font-semibold text-slate-500 truncate mt-0 md:mt-0.5">DRB, Cape Town, S. Africa</div>
+                                    <div className="text-base md:text-[clamp(1.25rem,2.5vw,1.875rem)] font-black text-slate-900 tracking-tight group-hover/field:text-black">{flightData.to.city}</div>
+                                    <div className="text-[8px] md:text-[clamp(0.65rem,0.8vw,0.75rem)] font-semibold text-slate-500 truncate mt-0 md:mt-0.5">{flightData.to.code}, {flightData.to.country}</div>
                                 </div>
                             </div>
 
                             {/* Dates */}
-                            <div className="lg:col-span-5 flex flex-row items-center gap-1.5 md:gap-4 h-full">
-                                <div className="flex-1 w-full bg-slate-50/80 border border-slate-200/60 rounded-[14px] md:rounded-[clamp(1rem,1.5vw,1.5rem)] p-1.5 md:p-[clamp(0.75rem,2vw,1.25rem)] flex flex-col justify-center cursor-pointer transition-all duration-300 hover:border-slate-300 hover:shadow-md hover:bg-white group/date h-full min-h-[50px] md:min-h-[clamp(80px,12vh,110px)]">
+                            <div className="lg:col-span-12 flex flex-col md:flex-row items-center gap-1.5 md:gap-4 h-full lg:col-start-8 lg:col-end-13">
+                                <div
+                                    onClick={() => openDatePicker('departure')}
+                                    className="relative flex-1 w-full bg-slate-50/80 border border-slate-200/60 rounded-[14px] md:rounded-[clamp(1rem,1.5vw,1.5rem)] p-1.5 md:p-[clamp(0.75rem,2vw,1.25rem)] flex flex-col justify-center cursor-pointer transition-all duration-300 hover:border-slate-300 hover:shadow-md hover:bg-white group/date h-full min-h-[50px] md:min-h-[clamp(80px,12vh,110px)] overflow-hidden"
+                                >
                                     <div className="flex items-center space-x-1 text-slate-400 mb-0 transition-colors group-hover/date:text-slate-600">
                                         <Calendar size={9} className="md:w-3 md:h-3" />
                                         <span className="text-[9px] md:text-[clamp(0.6rem,0.8vw,0.75rem)] font-bold uppercase tracking-wider">Departure</span>
                                     </div>
                                     <div className="flex items-center justify-between mt-auto">
-                                        <div className="text-xs md:text-[clamp(1rem,1.5vw,1.5rem)] font-black text-slate-900 tracking-tight">Fri, 22 Mar</div>
+                                        <div className={`text-xs md:text-[clamp(1rem,1.5vw,1.5rem)] font-black tracking-tight ${dates.departure ? 'text-slate-900' : 'text-slate-300'}`}>
+                                            {formatDate(dates.departure)}
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div className="flex-1 w-full bg-slate-50/80 border border-slate-200/60 rounded-[14px] md:rounded-[clamp(1rem,1.5vw,1.5rem)] p-1.5 md:p-[clamp(0.75rem,2vw,1.25rem)] flex flex-col justify-center cursor-pointer transition-all duration-300 hover:border-slate-300 hover:shadow-md hover:bg-white group/date h-full min-h-[50px] md:min-h-[clamp(80px,12vh,110px)]">
+                                <div
+                                    onClick={() => tripType !== 'One Way' && openDatePicker('return')}
+                                    className={`relative flex-1 w-full bg-slate-50/80 border border-slate-200/60 rounded-[14px] md:rounded-[clamp(1rem,1.5vw,1.5rem)] p-1.5 md:p-[clamp(0.75rem,2vw,1.25rem)] flex flex-col justify-center cursor-pointer transition-all duration-300 hover:border-slate-300 hover:shadow-md hover:bg-white group/date h-full min-h-[50px] md:min-h-[clamp(80px,12vh,110px)] overflow-hidden ${tripType === 'One Way' ? 'opacity-50 cursor-not-allowed bg-slate-100' : ''}`}
+                                >
                                     <div className="flex items-center space-x-1 text-slate-400 mb-0 transition-colors group-hover/date:text-slate-600">
                                         <Calendar size={9} className="md:w-3 md:h-3" />
                                         <span className="text-[9px] md:text-[clamp(0.6rem,0.8vw,0.75rem)] font-bold uppercase tracking-wider">Return</span>
                                     </div>
                                     <div className="flex items-center justify-between mt-auto">
-                                        <div className="text-xs md:text-[clamp(1rem,1.5vw,1.5rem)] font-black text-slate-900 tracking-tight">Mon, 2 Apr</div>
+                                        <div className={`text-xs md:text-[clamp(1rem,1.5vw,1.5rem)] font-black tracking-tight ${dates.return ? 'text-slate-900' : 'text-slate-300'}`}>
+                                            {tripType === 'One Way' ? 'One Way' : formatDate(dates.return)}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -196,7 +494,30 @@ const SearchWidget = () => {
 
                 {/* Search Button */}
                 <div className="mt-2 md:mt-0 md:absolute md:-bottom-7 md:right-8">
-                    <button className="w-full md:w-auto bg-black text-white px-8 py-3 md:py-3.5 rounded-xl md:rounded-2xl font-bold text-sm md:text-base shadow-xl shadow-slate-900/20 hover:bg-slate-800 transition-all active:scale-95 flex items-center justify-center space-x-2">
+                    <button
+                        onClick={() => {
+                            const params = new URLSearchParams();
+                            params.append('from', flightData.from.code);
+                            params.append('to', flightData.to.code);
+
+                            // Format date for API (DDMMYYYY)
+                            // dates.departure is YYYY-MM-DD
+                            if (dates.departure) {
+                                const [year, month, day] = dates.departure.split('-');
+                                const formattedDate = `${day}${month}${year}`;
+                                params.append('date', formattedDate);
+                            }
+
+                            params.append('adults', travellers.adults.toString());
+                            params.append('children', travellers.children.toString());
+                            params.append('infants', travellers.infants.toString());
+                            params.append('class', travelClass === 'Economy' ? 'e' : travelClass === 'Premium Economy' ? 'pe' : travelClass === 'Business' ? 'b' : 'f');
+                            params.append('journeyType', tripType === 'One Way' ? '1' : tripType === 'Round Trip' ? '2' : '3');
+
+                            window.location.href = `/search?${params.toString()}`;
+                        }}
+                        className="w-full md:w-auto bg-black text-white px-8 py-3 md:py-3.5 rounded-xl md:rounded-2xl font-bold text-sm md:text-base shadow-xl shadow-slate-900/20 hover:bg-slate-800 transition-all active:scale-95 flex items-center justify-center space-x-2"
+                    >
                         <span>Search {activeTab === 'flight' ? 'Flights' : activeTab === 'hotel' ? 'Hotels' : 'Cars'}</span>
                         <ArrowRight size={18} strokeWidth={3} />
                     </button>
@@ -208,6 +529,161 @@ const SearchWidget = () => {
                 <h2 className="text-xl font-bold text-slate-800 tracking-tight">Popular Destination</h2>
                 <a href="#" className="text-sm font-bold text-slate-600 underline decoration-2 decoration-slate-300 hover:text-black hover:decoration-black transition-all">Explore All</a>
             </div>
+
+            {/* Date Picker Slider/Modal */}
+            <AnimatePresence>
+                {isDatePickerOpen && (
+                    <div className="fixed inset-0 z-50 flex flex-col justify-end md:justify-center bg-black/50 backdrop-blur-sm">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setIsDatePickerOpen(false)}
+                            className="absolute inset-0 cursor-pointer"
+                        />
+                        <motion.div
+                            initial={{ y: "100%" }}
+                            animate={{ y: 0 }}
+                            exit={{ y: "100%" }}
+                            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                            className="bg-white w-full md:w-[400px] md:rounded-2xl rounded-t-[2rem] shadow-2xl relative z-10 md:mx-auto md:my-auto h-auto flex flex-col overflow-hidden pb-8"
+                        >
+                            <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                                <button
+                                    onClick={() => changeMonth(-1)}
+                                    className="p-2 hover:bg-slate-200 rounded-full transition-colors"
+                                >
+                                    <ChevronDown size={20} className="rotate-90" />
+                                </button>
+                                <h3 className="text-lg font-bold text-slate-800">
+                                    {currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' })}
+                                </h3>
+                                <button
+                                    onClick={() => changeMonth(1)}
+                                    className="p-2 hover:bg-slate-200 rounded-full transition-colors"
+                                >
+                                    <ChevronDown size={20} className="-rotate-90" />
+                                </button>
+                            </div>
+
+                            <div className="p-4">
+                                <div className="text-center font-bold text-slate-800 mb-4 border-b border-slate-100 pb-2">
+                                    Select {activeDateField === 'departure' ? 'Departure' : 'Return'} Date
+                                </div>
+                                <div className="grid grid-cols-7 gap-1 mb-2">
+                                    {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(d => (
+                                        <div key={d} className="text-center text-xs font-bold text-slate-400 py-1">{d}</div>
+                                    ))}
+                                </div>
+                                <div className="grid grid-cols-7 gap-1">
+                                    {Array.from({ length: new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1).getDay() }).map((_, i) => (
+                                        <div key={`empty-${i}`} />
+                                    ))}
+                                    {Array.from({ length: new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0).getDate() }).map((_, i) => {
+                                        const day = i + 1;
+                                        const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
+                                        const isSelected = activeDateField === 'departure'
+                                            ? dates.departure === date.toISOString().split('T')[0]
+                                            : dates.return === date.toISOString().split('T')[0];
+                                        const isPast = date < new Date(new Date().setHours(0, 0, 0, 0));
+
+                                        return (
+                                            <button
+                                                key={day}
+                                                disabled={isPast}
+                                                onClick={() => handleDateSelect(day)}
+                                                className={`
+                                                    h-10 w-10 rounded-full flex items-center justify-center text-sm font-bold transition-all
+                                                    ${isSelected ? 'bg-black text-white shadow-lg scale-110' : 'text-slate-700 hover:bg-slate-100'}
+                                                    ${isPast ? 'opacity-20 cursor-not-allowed hover:bg-transparent' : ''}
+                                                `}
+                                            >
+                                                {day}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+            <AnimatePresence>
+                {isSearchOpen && (
+                    <div className="fixed inset-0 z-50 flex flex-col justify-end md:justify-center bg-black/50 backdrop-blur-sm">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setIsSearchOpen(false)}
+                            className="absolute inset-0 cursor-pointer"
+                        />
+                        <motion.div
+                            initial={{ y: "100%" }}
+                            animate={{ y: 0 }}
+                            exit={{ y: "100%" }}
+                            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                            className="bg-white w-full md:w-[600px] md:rounded-2xl rounded-t-[2rem] shadow-2xl relative z-10 md:mx-auto md:my-auto h-[90vh] md:h-[600px] flex flex-col overflow-hidden"
+                        >
+                            <div className="p-4 border-b border-slate-100 flex items-center justify-between">
+                                <h3 className="text-lg font-bold text-slate-800">
+                                    Select {activeSearchField === 'from' ? 'Origin' : 'Destination'}
+                                </h3>
+                                <button
+                                    onClick={() => setIsSearchOpen(false)}
+                                    className="p-2 rounded-full bg-slate-100 hover:bg-slate-200 transition-colors"
+                                >
+                                    <ChevronDown size={20} />
+                                </button>
+                            </div>
+
+                            <div className="p-4 bg-slate-50">
+                                <div className="flex items-center bg-white border border-slate-200 rounded-xl px-4 py-3 shadow-sm focus-within:border-black focus-within:ring-1 focus-within:ring-black transition-all">
+                                    <MapPin size={18} className="text-slate-400 mr-3" />
+                                    <input
+                                        type="text"
+                                        placeholder="Search airport or city..."
+                                        className="bg-transparent border-none outline-none w-full text-slate-800 font-medium placeholder:text-slate-400"
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        autoFocus
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="flex-1 overflow-y-auto p-2">
+                                <div className="space-y-1">
+                                    {filteredAirports.map((airport) => (
+                                        <div
+                                            key={airport.code}
+                                            onClick={() => handleSelectAirport(airport)}
+                                            className="flex items-center justify-between p-4 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors group"
+                                        >
+                                            <div className="flex items-center space-x-4">
+                                                <div className="w-10 h-10 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-xs group-hover:bg-black group-hover:text-white transition-colors">
+                                                    <Plane size={14} />
+                                                </div>
+                                                <div>
+                                                    <div className="font-bold text-slate-800">{airport.city}</div>
+                                                    <div className="text-xs text-slate-500">{airport.airport}</div>
+                                                </div>
+                                            </div>
+                                            <div className="text-lg font-black text-slate-200 group-hover:text-slate-900 transition-colors">
+                                                {airport.code}
+                                            </div>
+                                        </div>
+                                    ))}
+                                    {filteredAirports.length === 0 && (
+                                        <div className="p-8 text-center text-slate-400">
+                                            No airports found matching "{searchQuery}"
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };
