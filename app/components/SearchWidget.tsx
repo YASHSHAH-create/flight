@@ -34,7 +34,7 @@ const SearchWidget = () => {
             </div>
 
             {/* Main Search Container - Premium Glass Card */}
-            <div className="bg-white/90 md:bg-white rounded-3xl p-5 md:p-8 shadow-2xl shadow-slate-900/10 text-slate-800 relative z-0 backdrop-blur-xl border border-white/50 min-h-[300px]">
+            <div className="bg-white/90 md:bg-white rounded-[20px] md:rounded-[clamp(1.5rem,2vw,2rem)] p-2 md:p-[clamp(0.75rem,2vw,2rem)] shadow-2xl shadow-slate-900/10 text-slate-800 relative z-0 backdrop-blur-xl border border-white/50 min-h-auto md:min-h-[clamp(300px,35vh,400px)]">
 
                 {/* Top Options Row - Compact */}
                 <div className="flex flex-wrap items-center gap-3 md:gap-8 mb-4 md:mb-8 text-xs md:text-sm font-bold text-slate-600">
@@ -65,13 +65,13 @@ const SearchWidget = () => {
                             {/* Origin & Destination */}
                             <div className="lg:col-span-7 flex flex-col md:flex-row items-center gap-2 relative">
                                 {/* Origin */}
-                                <div className="w-full bg-slate-100/50 border border-slate-200/60 rounded-3xl p-4 md:p-5 flex flex-col justify-center cursor-pointer transition-all hover:bg-white hover:shadow-md hover:border-slate-300 group/field">
-                                    <div className="flex items-center space-x-1.5 text-slate-400 mb-1 transition-colors group-hover/field:text-slate-600">
-                                        <MapPin size={12} />
-                                        <span className="text-[11px] font-bold uppercase tracking-wider">From</span>
+                                <div className="w-full bg-slate-100/50 border border-slate-200/60 rounded-[14px] md:rounded-[clamp(1rem,1.5vw,1.5rem)] p-1.5 md:p-[clamp(0.75rem,2vw,1.25rem)] flex flex-col justify-center cursor-pointer transition-all hover:bg-white hover:shadow-md hover:border-slate-300 group/field">
+                                    <div className="flex items-center space-x-1 text-slate-400 mb-0 transition-colors group-hover/field:text-slate-600">
+                                        <MapPin size={9} className="md:w-3 md:h-3" />
+                                        <span className="text-[9px] md:text-[clamp(0.6rem,0.8vw,0.75rem)] font-bold uppercase tracking-wider">From</span>
                                     </div>
-                                    <div className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight group-hover/field:text-black">Behance</div>
-                                    <div className="text-xs font-semibold text-slate-500 truncate mt-0.5">BHN, North America, USA</div>
+                                    <div className="text-base md:text-[clamp(1.25rem,2.5vw,1.875rem)] font-black text-slate-900 tracking-tight group-hover/field:text-black">Behance</div>
+                                    <div className="text-[8px] md:text-[clamp(0.65rem,0.8vw,0.75rem)] font-semibold text-slate-500 truncate mt-0 md:mt-0.5">BHN, North America, USA</div>
                                 </div>
 
                                 {/* Swap Icon */}
@@ -82,35 +82,35 @@ const SearchWidget = () => {
                                 </div>
 
                                 {/* Destination */}
-                                <div className="w-full bg-slate-100/50 border border-slate-200/60 rounded-3xl p-4 md:p-5 flex flex-col justify-center cursor-pointer transition-all hover:bg-white hover:shadow-md hover:border-slate-300 group/field">
-                                    <div className="flex items-center space-x-1.5 text-slate-400 mb-1 transition-colors group-hover/field:text-slate-600">
-                                        <MapPin size={12} />
-                                        <span className="text-[11px] font-bold uppercase tracking-wider">To</span>
+                                <div className="w-full bg-slate-100/50 border border-slate-200/60 rounded-[14px] md:rounded-[clamp(1rem,1.5vw,1.5rem)] p-1.5 md:p-[clamp(0.75rem,2vw,1.25rem)] flex flex-col justify-center cursor-pointer transition-all hover:bg-white hover:shadow-md hover:border-slate-300 group/field">
+                                    <div className="flex items-center space-x-1 text-slate-400 mb-0 transition-colors group-hover/field:text-slate-600">
+                                        <MapPin size={9} className="md:w-3 md:h-3" />
+                                        <span className="text-[9px] md:text-[clamp(0.6rem,0.8vw,0.75rem)] font-bold uppercase tracking-wider">To</span>
                                     </div>
-                                    <div className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight group-hover/field:text-black">Dribbble</div>
-                                    <div className="text-xs font-semibold text-slate-500 truncate mt-0.5">DRB, Cape Town, S. Africa</div>
+                                    <div className="text-base md:text-[clamp(1.25rem,2.5vw,1.875rem)] font-black text-slate-900 tracking-tight group-hover/field:text-black">Dribbble</div>
+                                    <div className="text-[8px] md:text-[clamp(0.65rem,0.8vw,0.75rem)] font-semibold text-slate-500 truncate mt-0 md:mt-0.5">DRB, Cape Town, S. Africa</div>
                                 </div>
                             </div>
 
                             {/* Dates */}
-                            <div className="lg:col-span-5 flex flex-row items-center gap-2 md:gap-4 h-full">
-                                <div className="flex-1 w-full bg-slate-50/80 border border-slate-200/60 rounded-3xl p-4 md:p-5 flex flex-col justify-center cursor-pointer transition-all duration-300 hover:border-slate-300 hover:shadow-md hover:bg-white group/date h-full min-h-[100px]">
-                                    <div className="flex items-center space-x-1.5 text-slate-400 mb-1 transition-colors group-hover/date:text-slate-600">
-                                        <Calendar size={12} />
-                                        <span className="text-[11px] font-bold uppercase tracking-wider">Departure</span>
+                            <div className="lg:col-span-5 flex flex-row items-center gap-1.5 md:gap-4 h-full">
+                                <div className="flex-1 w-full bg-slate-50/80 border border-slate-200/60 rounded-[14px] md:rounded-[clamp(1rem,1.5vw,1.5rem)] p-1.5 md:p-[clamp(0.75rem,2vw,1.25rem)] flex flex-col justify-center cursor-pointer transition-all duration-300 hover:border-slate-300 hover:shadow-md hover:bg-white group/date h-full min-h-[50px] md:min-h-[clamp(80px,12vh,110px)]">
+                                    <div className="flex items-center space-x-1 text-slate-400 mb-0 transition-colors group-hover/date:text-slate-600">
+                                        <Calendar size={9} className="md:w-3 md:h-3" />
+                                        <span className="text-[9px] md:text-[clamp(0.6rem,0.8vw,0.75rem)] font-bold uppercase tracking-wider">Departure</span>
                                     </div>
                                     <div className="flex items-center justify-between mt-auto">
-                                        <div className="text-xl md:text-2xl font-black text-slate-900 tracking-tight">Fri, 22 Mar</div>
+                                        <div className="text-xs md:text-[clamp(1rem,1.5vw,1.5rem)] font-black text-slate-900 tracking-tight">Fri, 22 Mar</div>
                                     </div>
                                 </div>
 
-                                <div className="flex-1 w-full bg-slate-50/80 border border-slate-200/60 rounded-3xl p-4 md:p-5 flex flex-col justify-center cursor-pointer transition-all duration-300 hover:border-slate-300 hover:shadow-md hover:bg-white group/date h-full min-h-[100px]">
-                                    <div className="flex items-center space-x-1.5 text-slate-400 mb-1 transition-colors group-hover/date:text-slate-600">
-                                        <Calendar size={12} />
-                                        <span className="text-[11px] font-bold uppercase tracking-wider">Return</span>
+                                <div className="flex-1 w-full bg-slate-50/80 border border-slate-200/60 rounded-[14px] md:rounded-[clamp(1rem,1.5vw,1.5rem)] p-1.5 md:p-[clamp(0.75rem,2vw,1.25rem)] flex flex-col justify-center cursor-pointer transition-all duration-300 hover:border-slate-300 hover:shadow-md hover:bg-white group/date h-full min-h-[50px] md:min-h-[clamp(80px,12vh,110px)]">
+                                    <div className="flex items-center space-x-1 text-slate-400 mb-0 transition-colors group-hover/date:text-slate-600">
+                                        <Calendar size={9} className="md:w-3 md:h-3" />
+                                        <span className="text-[9px] md:text-[clamp(0.6rem,0.8vw,0.75rem)] font-bold uppercase tracking-wider">Return</span>
                                     </div>
                                     <div className="flex items-center justify-between mt-auto">
-                                        <div className="text-xl md:text-2xl font-black text-slate-900 tracking-tight">Mon, 2 Apr</div>
+                                        <div className="text-xs md:text-[clamp(1rem,1.5vw,1.5rem)] font-black text-slate-900 tracking-tight">Mon, 2 Apr</div>
                                     </div>
                                 </div>
                             </div>
@@ -195,8 +195,8 @@ const SearchWidget = () => {
                 </AnimatePresence>
 
                 {/* Search Button */}
-                <div className="mt-4 md:mt-0 md:absolute md:-bottom-7 md:right-8">
-                    <button className="w-full md:w-auto bg-black text-white px-8 py-3.5 rounded-xl md:rounded-2xl font-bold text-base shadow-xl shadow-slate-900/20 hover:bg-slate-800 transition-all active:scale-95 flex items-center justify-center space-x-2">
+                <div className="mt-2 md:mt-0 md:absolute md:-bottom-7 md:right-8">
+                    <button className="w-full md:w-auto bg-black text-white px-8 py-3 md:py-3.5 rounded-xl md:rounded-2xl font-bold text-sm md:text-base shadow-xl shadow-slate-900/20 hover:bg-slate-800 transition-all active:scale-95 flex items-center justify-center space-x-2">
                         <span>Search {activeTab === 'flight' ? 'Flights' : activeTab === 'hotel' ? 'Hotels' : 'Cars'}</span>
                         <ArrowRight size={18} strokeWidth={3} />
                     </button>

@@ -41,7 +41,7 @@ const FeaturedProducts = () => {
                 {products.map((product, index) => (
                     <motion.div
                         key={product.id}
-                        className="relative group cursor-pointer overflow-hidden rounded-[29px] bg-white p-2 shadow-xl h-[360px] transition-shadow hover:shadow-2xl"
+                        className="relative group cursor-pointer overflow-hidden rounded-[clamp(1.5rem,2vw,2rem)] bg-white p-[clamp(0.5rem,1vw,0.75rem)] shadow-xl h-[clamp(240px,28vh,360px)] transition-shadow hover:shadow-2xl"
                         initial={{ opacity: 0, y: 50 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-50px" }}
@@ -58,7 +58,7 @@ const FeaturedProducts = () => {
                     >
 
                         {/* Image Container */}
-                        <div className="absolute top-2 left-2 right-2 h-[344px] overflow-hidden rounded-[25px] transition-all duration-500 ease-in-out group-hover:h-[160px] group-hover:shadow-none">
+                        <div className="absolute top-2 left-2 right-2 h-[clamp(224px,26vh,344px)] overflow-hidden rounded-[clamp(1.2rem,1.8vw,1.6rem)] transition-all duration-500 ease-in-out group-hover:h-[clamp(120px,15vh,160px)] group-hover:shadow-none">
                             {/* Background Image */}
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
@@ -79,13 +79,13 @@ const FeaturedProducts = () => {
                         {/* Content Container */}
                         <div className="absolute bottom-2 left-2 right-2 p-4 transition-all duration-500 ease-in-out group-hover:translate-y-0">
                             {/* Title & Subtitle */}
-                            <div className="mb-2 transition-all duration-300 group-hover:mb-1 group-hover:-translate-y-1">
-                                <h3 className="text-xl font-bold text-white mb-0.5 transition-colors duration-300 group-hover:text-slate-900">{product.title}</h3>
-                                <p className="text-white/70 text-xs transition-colors duration-300 group-hover:text-slate-500">Premium economy</p>
+                            <div className="mb-[1vh] transition-all duration-300 group-hover:mb-[0.5vh] group-hover:-translate-y-[0.5vh]">
+                                <h3 className="text-[clamp(1.25rem,1.8vw,1.8rem)] font-bold text-white mb-0.5 transition-colors duration-300 group-hover:text-slate-900">{product.title}</h3>
+                                <p className="text-white/70 text-[clamp(0.75rem,0.9vw,0.875rem)] transition-colors duration-300 group-hover:text-slate-500">Premium economy</p>
                             </div>
 
                             {/* Price & Airport */}
-                            <div className="flex items-center space-x-3 mb-4 text-white text-xs font-medium transition-colors duration-300 group-hover:text-slate-900 group-hover:mb-3 group-hover:-translate-y-0.5">
+                            <div className="flex items-center space-x-[clamp(0.5rem,1vw,1rem)] mb-[1.5vh] text-white text-[clamp(0.75rem,0.9vw,0.875rem)] font-medium transition-colors duration-300 group-hover:text-slate-900 group-hover:mb-[1vh] group-hover:-translate-y-[0.25vh]">
                                 <div className="flex items-center space-x-1">
                                     <Tag size={12} className="rotate-90 text-white/80 group-hover:text-slate-400" />
                                     <span className="font-bold">from {product.price}</span>

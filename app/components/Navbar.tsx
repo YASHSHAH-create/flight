@@ -3,9 +3,9 @@ import { ChevronDown, Menu } from 'lucide-react';
 
 const Navbar = () => {
     return (
-        <nav className="flex items-center justify-between py-4 px-4 md:py-6 md:px-12 w-full text-slate-800">
+        <nav className="flex items-center justify-between py-[2vh] px-[4vw] md:px-[6vw] w-full text-slate-800">
             <div className="flex items-center">
-                <h1 className="text-2xl md:text-3xl font-bold tracking-tighter text-slate-900 drop-shadow-sm">paymm</h1>
+                <h1 className="text-[clamp(1.5rem,3vw,2.25rem)] font-bold tracking-tighter text-slate-900 drop-shadow-sm">paymm</h1>
             </div>
 
             <div className="hidden lg:flex items-center space-x-10 text-sm font-semibold text-slate-700/90 backdrop-blur-sm bg-white/10 px-6 py-2 rounded-full border border-white/20 shadow-sm">

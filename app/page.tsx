@@ -53,9 +53,9 @@ export default function Home() {
           />
         </div>
 
-        <div className="relative z-10 flex-1 flex flex-col justify-center px-4 md:px-16 pt-20 max-w-7xl mx-auto w-full h-full justify-center gap-6 md:justify-evenly md:gap-0 pointer-events-none md:pointer-events-auto">
-          <div className="max-w-3xl animate-subtle-right pointer-events-auto">
-            <h1 className="text-3xl md:text-7xl font-medium text-slate-900 leading-tight tracking-tight drop-shadow-sm">
+        <div className="relative z-10 flex-1 flex flex-col justify-start md:justify-center px-[4vw] md:px-[6vw] pt-16 md:pt-20 max-w-7xl mx-auto w-full h-full gap-2 md:gap-0 pointer-events-none md:pointer-events-auto">
+          <div className="max-w-[90vw] md:max-w-3xl animate-subtle-right pointer-events-auto">
+            <h1 className="text-[clamp(1.75rem,6vw,4.5rem)] font-medium text-slate-900 leading-[1.1] tracking-tight drop-shadow-sm">
               Hey Buddy! where are you <br />
               <span className="font-extrabold relative inline-block">
                 Flying
@@ -79,9 +79,9 @@ export default function Home() {
       </section>
 
       {/* Frame 2: Content Section (All in one view) */}
-      <section className="relative min-h-screen md:h-screen w-full snap-start bg-white flex flex-col justify-center py-10 md:py-20 px-0 md:px-0 overflow-hidden">
+      <section className="relative min-h-screen md:h-screen w-full snap-start bg-white flex flex-col justify-center py-0 px-0 md:px-0 overflow-hidden">
         <motion.div
-          className="h-auto md:h-full flex flex-col justify-evenly max-w-7xl mx-auto w-full pt-4 pb-10 md:pb-0"
+          className="h-auto md:h-full flex flex-col justify-evenly max-w-7xl mx-auto w-full pt-4 pb-20 md:py-0"
           initial={{ opacity: 0, y: 100, scale: 0.95 }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
@@ -90,10 +90,10 @@ export default function Home() {
           <FeaturedProducts />
           <Testimonials />
 
-          <div className="py-6 px-8 text-center bg-slate-900 text-white mx-4 md:mx-16 rounded-3xl shadow-2xl">
-            <h2 className="text-xl md:text-2xl font-bold mb-2">Ready to paymm?</h2>
-            <p className="mb-4 text-slate-400 text-sm">Join millions of travelers today.</p>
-            <button className="bg-white text-black px-6 py-2 rounded-full font-bold text-sm hover:bg-slate-200 transition-colors transform hover:scale-105 active:scale-95">Get Started</button>
+          <div className="py-[3vh] px-[4vw] text-center bg-slate-900 text-white mx-[4vw] md:mx-16 rounded-[clamp(1.5rem,3vw,2rem)] shadow-2xl">
+            <h2 className="text-[clamp(1.25rem,2.5vw,2rem)] font-bold mb-[1vh]">Ready to paymm?</h2>
+            <p className="mb-[2vh] text-slate-400 text-[clamp(0.875rem,1.2vw,1rem)]">Join millions of travelers today.</p>
+            <button className="bg-white text-black px-[6vw] md:px-8 py-[1.5vh] md:py-3 rounded-full font-bold text-[clamp(0.875rem,1.2vw,1rem)] hover:bg-slate-200 transition-colors transform hover:scale-105 active:scale-95">Get Started</button>
           </div>
         </motion.div>
       </section>
