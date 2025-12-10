@@ -1244,9 +1244,32 @@ function BookPageContent() {
                         ₹{(fareQuote.Fare.PublishedFare + (selectedSeat?.Price || 0) + (selectedMeal?.Price || 0) + (selectedBaggage?.Price || 0)).toLocaleString()}
                     </div>
                 </div>
-                <button className="bg-black text-white px-8 py-3.5 rounded-2xl font-bold text-sm shadow-lg shadow-gray-900/20 active:scale-95 transition-transform flex items-center space-x-2">
-                    <span>Continue</span>
-                    <ArrowRight size={16} />
+                <button
+                    onClick={handleBook}
+                    disabled={bookingStatus === 'booking' || bookingStatus === 'ticketing' || bookingStatus === 'success'}
+                    className={`bg-black text-white px-8 py-3.5 rounded-2xl font-bold text-sm shadow-lg shadow-gray-900/20 active:scale-95 transition-transform flex items-center space-x-2 ${bookingStatus === 'success' ? 'bg-green-600' : ''}`}
+                >
+                    {bookingStatus === 'idle' && (
+                        <>
+                            <span>Continue</span>
+                            <ArrowRight size={16} />
+                        </>
+                    )}
+                    {(bookingStatus === 'booking' || bookingStatus === 'ticketing') && (
+                        <span className="flex items-center">
+                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
+                            {bookingStatus === 'booking' ? 'Booking...' : 'Ticketing...'}
+                        </span>
+                    )}
+                    {bookingStatus === 'success' && (
+                        <span className="flex items-center">
+                            <Check size={18} className="mr-2" />
+                            Confirmed!
+                        </span>
+                    )}
+                    {bookingStatus === 'failed' && (
+                        <span>Try Again</span>
+                    )}
                 </button>
             </div>
 
