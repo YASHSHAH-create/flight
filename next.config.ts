@@ -14,14 +14,15 @@ const nextConfig: NextConfig = {
     ],
   },
   async rewrites() {
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
     return [
       {
         source: '/api/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_URL}/api/:path*`, // Proxy to Backend
+        destination: `${API_URL}/api/:path*`, // Proxy to Backend
       },
       {
         source: '/auth/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_URL}/auth/:path*`, // Proxy to Backend Auth
+        destination: `${API_URL}/auth/:path*`, // Proxy to Backend Auth
       },
     ];
   },
