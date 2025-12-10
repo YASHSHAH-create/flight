@@ -24,6 +24,10 @@ const nextConfig: NextConfig = {
         source: '/auth/:path*',
         destination: `${API_URL}/auth/:path*`, // Proxy to Backend Auth
       },
+      {
+        source: '/flights/:path*',
+        destination: `${API_URL}/flights/:path*`, // Proxy to Backend Flights
+      },
     ];
   },
 };

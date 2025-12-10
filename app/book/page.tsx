@@ -495,7 +495,7 @@ function BookPageContent() {
                 };
 
                 console.log("Sending LCC Ticket Request:", ticketPayload);
-                const ticketRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/flights/ticket`, {
+                const ticketRes = await fetch(`/flights/ticket`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(ticketPayload)
@@ -531,7 +531,7 @@ function BookPageContent() {
                 };
 
                 console.log("Sending Book Request (Non-LCC):", bookPayload);
-                const bookRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/flights/book`, {
+                const bookRes = await fetch(`/flights/book`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(bookPayload)
@@ -562,7 +562,7 @@ function BookPageContent() {
                 };
 
                 console.log("Sending Ticket Request (Non-LCC):", ticketPayload);
-                const ticketRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/flights/ticket`, {
+                const ticketRes = await fetch(`/flights/ticket`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(ticketPayload)
@@ -621,7 +621,7 @@ function BookPageContent() {
 
             try {
                 // Fetch Fare Quote
-                const quoteRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/flights/fare-quote`, {
+                const quoteRes = await fetch(`/flights/fare-quote`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ traceId, resultIndex })
@@ -634,7 +634,7 @@ function BookPageContent() {
                 setFareQuote(quoteData.data.Results);
 
                 // Fetch Fare Rules
-                const ruleRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/flights/fare-rule`, {
+                const ruleRes = await fetch(`/flights/fare-rule`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ traceId, resultIndex })
@@ -646,7 +646,7 @@ function BookPageContent() {
                 }
 
                 // Fetch SSR (Seat Map)
-                const ssrRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/flights/ssr`, {
+                const ssrRes = await fetch(`/flights/ssr`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ traceId, resultIndex })
