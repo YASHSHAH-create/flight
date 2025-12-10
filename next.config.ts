@@ -14,7 +14,7 @@ const nextConfig: NextConfig = {
     ],
   },
   async rewrites() {
-    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://102477a0211a.ngrok-free.app';
     return [
       {
         source: '/api/:path*',
