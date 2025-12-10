@@ -12,6 +12,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { SearchResponse, FlightResult } from '@/types/api';
 import SearchWidget from '@/app/components/SearchWidget';
 import BottomNav from '@/app/components/BottomNav';
+import { useAuth } from '@/context/AuthContext';
 
 const formatDuration = (minutes: number) => {
     const h = Math.floor(minutes / 60);
@@ -88,6 +89,7 @@ function SearchResultsContent() {
 
     const searchParams = useSearchParams();
     const router = useRouter();
+    const { user, login } = useAuth();
     const [selectedFlight, setSelectedFlight] = useState<number | null>(null);
     const [flights, setFlights] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
@@ -99,7 +101,7 @@ function SearchResultsContent() {
     const [stats, setStats] = useState({
         minPrice: 0,
         maxPrice: 100000,
-        airlines: [] as string[]
+        airlines: [] as { name: string; code: string }[]
     });
 
     // Selected Filters
@@ -159,20 +161,46 @@ function SearchResultsContent() {
 
             try {
                 // Construct API URL
-                const from = searchParams.get('from');
-                const to = searchParams.get('to');
-                const date = searchParams.get('date');
+                // Construct API URL
                 const adults = searchParams.get('adults') || '1';
                 const children = searchParams.get('children') || '0';
                 const infants = searchParams.get('infants') || '0';
                 const cabinClass = searchParams.get('class') || 'e';
                 const journeyType = searchParams.get('journeyType') || '1';
 
-                if (!from || !to || !date) {
-                    throw new Error("Missing search parameters");
+                let apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/search?adults=${adults}&children=${children}&infants=${infants}&class=${cabinClass}&journeyType=${journeyType}`;
+
+                if (journeyType === '3') {
+                    // Multi City: extract all matching params
+                    const froms = searchParams.getAll('from');
+                    const tos = searchParams.getAll('to');
+                    const dates = searchParams.getAll('date');
+
+                    if (froms.length === 0) throw new Error("Missing flight segments");
+
+                    froms.forEach((f, i) => {
+                        apiUrl += `&from=${f}`;
+                        if (tos[i]) apiUrl += `&to=${tos[i]}`;
+                        if (dates[i]) apiUrl += `&date=${dates[i]}`;
+                    });
+                } else {
+                    const from = searchParams.get('from');
+                    const to = searchParams.get('to');
+                    const date = searchParams.get('date');
+
+                    if (!from || !to || !date) {
+                        throw new Error("Missing search parameters");
+                    }
+
+                    apiUrl += `&from=${from}&to=${to}&date=${date}`;
+
+                    if (journeyType === '2') {
+                        const returnDate = searchParams.get('returnDate');
+                        if (returnDate) apiUrl += `&returnDate=${returnDate}`;
+                    }
                 }
 
-                const response = await fetch(`http://localhost:3001/api/search?from=${from}&to=${to}&date=${date}&adults=${adults}&children=${children}&infants=${infants}&class=${cabinClass}&journeyType=${journeyType}`);
+                const response = await fetch(apiUrl);
 
                 if (!response.ok) {
                     throw new Error("Failed to fetch flights");
@@ -199,6 +227,7 @@ function SearchResultsContent() {
                             id: index,
                             traceId: traceId, // Add TraceId
                             airline: segment.Airline.AirlineName,
+                            airlineCode: segment.Airline.AirlineCode,
                             flightNumber: `${segment.Airline.AirlineCode}-${segment.Airline.FlightNumber}`,
                             departure: {
                                 time: depDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
@@ -224,7 +253,19 @@ function SearchResultsContent() {
                     const prices = mappedFlights.map((f: any) => f.price);
                     const minPrice = Math.min(...prices);
                     const maxPrice = Math.max(...prices);
-                    const specificAirlines = Array.from(new Set(mappedFlights.map((f: any) => f.airline))) as string[];
+
+                    // Create unique airline objects
+                    const airlineMap = new Map();
+                    mappedFlights.forEach((f: any) => {
+                        if (!airlineMap.has(f.airline)) {
+                            airlineMap.set(f.airline, f.airlineCode);
+                        }
+                    });
+
+                    const specificAirlines = Array.from(airlineMap.entries()).map(([name, code]) => ({
+                        name,
+                        code
+                    }));
 
                     setStats({
                         minPrice,
@@ -352,7 +393,7 @@ function SearchResultsContent() {
 
                 {/* 🖥️ Desktop Left Sidebar (Filters) */}
                 <div className="hidden md:block md:col-span-3 lg:col-span-3 space-y-6">
-                    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 sticky top-28">
+                    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 sticky top-28 max-h-[calc(100vh-140px)] overflow-y-auto custom-scrollbar" data-lenis-prevent>
                         <div className="flex items-center justify-between mb-6">
                             <h2 className="text-lg font-bold text-slate-800">Filters</h2>
                             <button
@@ -404,17 +445,15 @@ function SearchResultsContent() {
                         <div className="mb-8">
                             <label className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 block">Departure Time</label>
                             <div className="grid grid-cols-2 gap-3">
-                                <div className="grid grid-cols-2 gap-3">
-                                    {['Morning', 'Afternoon', 'Evening', 'Night'].map((time, i) => (
-                                        <button
-                                            key={i}
-                                            onClick={() => toggleFilter('times', time)}
-                                            className={`p-2 rounded-lg border text-xs font-bold transition-all ${filters.times.includes(time) ? 'bg-black border-black text-white' : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300'}`}
-                                        >
-                                            {time}
-                                        </button>
-                                    ))}
-                                </div>
+                                {['Morning', 'Afternoon', 'Evening', 'Night'].map((time, i) => (
+                                    <button
+                                        key={i}
+                                        onClick={() => toggleFilter('times', time)}
+                                        className={`p-2 rounded-lg border text-xs font-bold transition-all ${filters.times.includes(time) ? 'bg-black border-black text-white' : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300'}`}
+                                    >
+                                        {time}
+                                    </button>
+                                ))}
                             </div>
                         </div>
 
@@ -423,16 +462,19 @@ function SearchResultsContent() {
                             <label className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 block">Airlines</label>
                             <div className="space-y-3">
                                 <div className="space-y-3">
-                                    {stats.airlines.map((airline, i) => (
+                                    {stats.airlines.map((airlineObj, i) => (
                                         <label key={i} className="flex items-center justify-between cursor-pointer group">
                                             <div className="flex items-center space-x-3">
                                                 <div
-                                                    onClick={() => toggleFilter('airlines', airline)}
-                                                    className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${filters.airlines.includes(airline) ? 'border-black bg-black' : 'border-slate-300 group-hover:border-black'}`}
+                                                    onClick={() => toggleFilter('airlines', airlineObj.name)}
+                                                    className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${filters.airlines.includes(airlineObj.name) ? 'border-black bg-black' : 'border-slate-300 group-hover:border-black'}`}
                                                 >
-                                                    {filters.airlines.includes(airline) && <Check size={12} className="text-white" />}
+                                                    {filters.airlines.includes(airlineObj.name) && <Check size={12} className="text-white" />}
                                                 </div>
-                                                <span className="text-sm font-medium text-slate-700">{airline}</span>
+                                                <div className="flex items-center space-x-2">
+                                                    <img src={`https://images.ixigo.com/img/common-resources/airline-new/${airlineObj.code}.png`} alt={airlineObj.name} className="w-6 h-6 object-contain" />
+                                                    <span className="text-sm font-medium text-slate-700">{airlineObj.name}</span>
+                                                </div>
                                             </div>
                                             {/* <span className="text-xs text-slate-400 font-medium">₹4,899</span> */}
                                         </label>
@@ -480,12 +522,90 @@ function SearchResultsContent() {
                             onClick={() => setSelectedFlight(selectedFlight === flight.id ? null : flight.id)}
                         >
                             <div className="p-3 md:p-5 cursor-pointer">
-                                <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-0">
+                                {/* 📱 Mobile Layout (Refined & Polished) */}
+                                <div className="md:hidden flex flex-col gap-2 relative">
+                                    {/* Row 1: Airline Info */}
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-6 h-6 rounded-full overflow-hidden border border-slate-100 p-0.5">
+                                                <img src={`https://images.ixigo.com/img/common-resources/airline-new/${flight.airlineCode}.png`} alt={flight.airline} className="w-full h-full object-contain" />
+                                            </div>
+                                            <span className="font-bold text-slate-800 text-sm">{flight.airline}</span>
+                                            <span className="text-[10px] text-slate-400 font-medium bg-slate-50 px-1.5 py-0.5 rounded-full">{flight.flightNumber}</span>
+                                        </div>
+                                        {/* Duration Top Right (Optional placement for balance) */}
+                                        <div className="flex items-center gap-1 text-[10px] font-bold text-slate-500 bg-slate-50 px-2 py-0.5 rounded-full border border-slate-100">
+                                            <Clock size={10} />
+                                            <span>{flight.duration}</span>
+                                        </div>
+                                    </div>
+
+                                    {/* Row 2: Schedule (The Core) */}
+                                    <div className="flex items-center justify-between py-1">
+                                        {/* Departure */}
+                                        <div className="text-left">
+                                            <div className="text-xl font-black text-slate-900 leading-none">{flight.departure.time}</div>
+                                            <div className="text-xs font-bold text-slate-400 mt-0.5">{flight.departure.airport}</div>
+                                        </div>
+
+                                        {/* Visual Connector */}
+                                        <div className="flex flex-col items-center flex-1 px-4">
+                                            <div className="w-full h-[1px] bg-slate-200 relative flex items-center justify-center">
+                                                <div className="w-1 h-1 rounded-full bg-slate-300 absolute left-0"></div>
+                                                <div className="w-1 h-1 rounded-full bg-slate-300 absolute right-0"></div>
+                                                <Plane size={12} className="text-slate-300 rotate-90 bg-white px-1" />
+                                            </div>
+                                            <div className="text-[9px] font-bold text-slate-400 mt-1">{flight.stops}</div>
+                                        </div>
+
+                                        {/* Arrival */}
+                                        <div className="text-right">
+                                            <div className="text-xl font-black text-slate-900 leading-none">{flight.arrival.time}</div>
+                                            <div className="text-xs font-bold text-slate-400 mt-0.5">{flight.arrival.airport}</div>
+                                        </div>
+                                    </div>
+
+                                    {/* Row 3: Action Area (Tags | Price | Button) */}
+                                    <div className="flex items-center justify-between pt-2 mt-1 border-t border-dashed border-slate-100">
+                                        {/* Tags */}
+                                        <div className="flex items-center gap-1">
+                                            {flight.benefits.includes("Refundable") ? (
+                                                <div className="flex items-center gap-0.5 text-[9px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-100">
+                                                    <ShieldCheck size={9} />
+                                                    <span>Refundable</span>
+                                                </div>
+                                            ) : (
+                                                <span className="text-[9px] font-bold text-slate-400 bg-slate-50 px-1.5 py-0.5 rounded">
+                                                    {flight.tags[0] || "Economy"}
+                                                </span>
+                                            )}
+                                        </div>
+
+                                        {/* Price & Book */}
+                                        <div className="flex items-center gap-3">
+                                            <div className="flex flex-col items-end">
+                                                <span className="text-lg font-black text-slate-900 leading-tight">₹{flight.price.toLocaleString()}</span>
+                                            </div>
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleBook(flight);
+                                                }}
+                                                className="bg-black text-white px-4 py-1.5 rounded-lg font-bold text-xs shadow-lg shadow-black/10 active:scale-95 transition-transform"
+                                            >
+                                                Book
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* 🖥️ Desktop Layout (Hidden on Mobile) */}
+                                <div className="hidden md:flex flex-row md:items-center justify-between gap-3 md:gap-0">
 
                                     {/* Airline Info */}
                                     <div className="flex items-center space-x-3 min-w-[120px]">
-                                        <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center text-xs font-bold text-slate-500">
-                                            {flight.airline.substring(0, 2)}
+                                        <div className="w-10 h-10 flex items-center justify-center">
+                                            <img src={`https://images.ixigo.com/img/common-resources/airline-new/${flight.airlineCode}.png`} alt={flight.airline} className="w-full h-full object-contain" />
                                         </div>
                                         <div>
                                             <div className="font-bold text-slate-900 text-sm md:text-base">{flight.airline}</div>
@@ -571,7 +691,7 @@ function SearchResultsContent() {
                                 </div>
 
                                 {/* Tags */}
-                                <div className="mt-2 flex items-center space-x-2">
+                                <div className="hidden md:flex mt-2 items-center space-x-2">
                                     {flight.tags.map((tag: string) => (
                                         <span key={tag} className={`text-[9px] md:text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 uppercase tracking-wide border border-emerald-100`}>
                                             {tag}
@@ -664,13 +784,18 @@ function SearchResultsContent() {
 
                 {/* 🖥️ Desktop Right Sidebar */}
                 <div className="hidden lg:block lg:col-span-3 space-y-6 sticky top-28 h-fit">
-                    <div className="bg-black rounded-2xl p-6 text-white text-center shadow-xl shadow-slate-900/20">
-                        <h3 className="text-xl font-bold mb-2">Login now</h3>
-                        <p className="text-slate-400 text-sm mb-4">Login to save more with exclusive pricing and offers.</p>
-                        <button className="bg-white text-black px-6 py-2 rounded-xl font-bold text-sm w-full hover:bg-slate-200 transition-colors">
-                            Login / Sign up
-                        </button>
-                    </div>
+                    {!user && (
+                        <div className="bg-black rounded-2xl p-6 text-white text-center shadow-xl shadow-slate-900/20">
+                            <h3 className="text-xl font-bold mb-2">Login now</h3>
+                            <p className="text-slate-400 text-sm mb-4">Login to save more with exclusive pricing and offers.</p>
+                            <button
+                                onClick={() => login()}
+                                className="bg-white text-black px-6 py-2 rounded-xl font-bold text-sm w-full hover:bg-slate-200 transition-colors"
+                            >
+                                Login / Sign up
+                            </button>
+                        </div>
+                    )}
 
                     <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
                         <h3 className="font-bold text-slate-800 mb-4 flex items-center">
@@ -872,16 +997,19 @@ function SearchResultsContent() {
                                 <div>
                                     <label className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 block">Airlines</label>
                                     <div className="space-y-3">
-                                        {stats.airlines.map((airline, i) => (
+                                        {stats.airlines.map((airlineObj, i) => (
                                             <label key={i} className="flex items-center justify-between cursor-pointer group">
                                                 <div className="flex items-center space-x-3">
                                                     <div
-                                                        onClick={() => toggleFilter('airlines', airline)}
-                                                        className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${filters.airlines.includes(airline) ? 'border-black bg-black' : 'border-slate-300 group-hover:border-black'}`}
+                                                        onClick={() => toggleFilter('airlines', airlineObj.name)}
+                                                        className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${filters.airlines.includes(airlineObj.name) ? 'border-black bg-black' : 'border-slate-300 group-hover:border-black'}`}
                                                     >
-                                                        {filters.airlines.includes(airline) && <Check size={12} className="text-white" />}
+                                                        {filters.airlines.includes(airlineObj.name) && <Check size={12} className="text-white" />}
                                                     </div>
-                                                    <span className="text-sm font-medium text-slate-700">{airline}</span>
+                                                    <div className="flex items-center space-x-2">
+                                                        <img src={`https://images.ixigo.com/img/common-resources/airline-new/${airlineObj.code}.png`} alt={airlineObj.name} className="w-6 h-6 object-contain" />
+                                                        <span className="text-sm font-medium text-slate-700">{airlineObj.name}</span>
+                                                    </div>
                                                 </div>
                                             </label>
                                         ))}
@@ -901,7 +1029,7 @@ function SearchResultsContent() {
                     </div>
                 )}
             </AnimatePresence>
-        </div>
+        </div >
     );
 }
 

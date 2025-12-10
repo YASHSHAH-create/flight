@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import Image from "next/image";
 import Navbar from "./components/Navbar";
@@ -12,28 +12,20 @@ import { motion } from "framer-motion";
 
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (scrollContainerRef.current) {
-        setIsScrolled(scrollContainerRef.current.scrollTop > 10);
-      }
+      setIsScrolled(window.scrollY > 10);
     };
 
-    const container = scrollContainerRef.current;
-    if (container) {
-      container.addEventListener('scroll', handleScroll);
-    }
+    window.addEventListener('scroll', handleScroll);
     return () => {
-      if (container) {
-        container.removeEventListener('scroll', handleScroll);
-      }
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
   return (
-    <div ref={scrollContainerRef} className="relative h-screen w-full overflow-y-scroll snap-y snap-mandatory scroll-smooth bg-slate-50 font-sans selection:bg-black selection:text-white">
+    <div className="relative min-h-screen w-full bg-slate-50 font-sans selection:bg-black selection:text-white">
 
       {/* Sticky Navbar (Common across all sections) */}
       <div className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white/70 backdrop-blur-md shadow-sm md:shadow-none border-b md:border-none border-white/20 py-0' : 'bg-transparent py-2'}`}>
@@ -41,21 +33,21 @@ export default function Home() {
       </div>
 
       {/* Frame 1: Hero Section */}
-      <section className="relative h-screen w-full snap-start flex flex-col overflow-hidden">
+      <section className="relative min-h-screen w-full flex flex-col overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <Image
             src="/background.jpg"
             alt="Background"
             fill
-            className="object-cover animate-subtle-zoom"
+            className="object-cover object-top animate-subtle-zoom"
             priority
           />
         </div>
 
-        <div className="relative z-10 flex-1 flex flex-col justify-start md:justify-center px-[4vw] md:px-[6vw] pt-16 md:pt-20 max-w-7xl mx-auto w-full h-full gap-2 md:gap-0 pointer-events-none md:pointer-events-auto">
+        <div className="relative z-10 flex-1 flex flex-col justify-start px-[4vw] md:px-[6vw] pt-20 md:pt-48 max-w-7xl mx-auto w-full h-full gap-2 md:gap-0 pointer-events-none md:pointer-events-auto">
           <div className="max-w-[90vw] md:max-w-3xl animate-subtle-right pointer-events-auto">
-            <h1 className="text-[clamp(1.75rem,6vw,4.5rem)] font-medium text-slate-900 leading-[1.1] tracking-tight drop-shadow-sm">
+            <h1 className="text-[clamp(1.75rem,5vw,4.5rem)] font-medium text-slate-900 leading-[1.1] tracking-tight drop-shadow-sm">
               Hey Buddy! where are you <br />
               <span className="font-extrabold relative inline-block">
                 Flying
@@ -78,14 +70,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Frame 2: Content Section (All in one view) */}
-      <section className="relative min-h-screen md:h-screen w-full snap-start bg-white flex flex-col justify-center py-0 px-0 md:px-0 overflow-hidden">
+      {/* Frame 2: Content Section */}
+      <section className="relative w-full bg-white flex flex-col justify-center py-20 px-0 md:px-0 overflow-hidden">
         <motion.div
-          className="h-auto md:h-full flex flex-col justify-evenly max-w-7xl mx-auto w-full pt-4 pb-20 md:py-0"
+          className="flex flex-col justify-evenly max-w-7xl mx-auto w-full gap-20"
           initial={{ opacity: 0, y: 100, scale: 0.95 }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          viewport={{ once: false, amount: 0.2 }}
+          viewport={{ once: false, amount: 0.1 }}
         >
           <FeaturedProducts />
           <Testimonials />

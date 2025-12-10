@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plane, Building, Car, ArrowRightLeft, Calendar, ArrowRight, ChevronDown, MapPin, Users } from 'lucide-react';
+import { Plane, Building, Car, ArrowRightLeft, Calendar, ArrowRight, ChevronDown, MapPin, Users, Plus, X } from 'lucide-react';
 
 const airports = [
     { code: 'DEL', city: 'New Delhi', airport: 'Indira Gandhi International Airport', country: 'India' },
@@ -92,13 +92,19 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
 
     // Search Slider State
     const [isSearchOpen, setIsSearchOpen] = useState(false);
-    const [activeSearchField, setActiveSearchField] = useState<'from' | 'to'>('from');
+    const [activeSearchField, setActiveSearchField] = useState<string>('from');
     const [searchQuery, setSearchQuery] = useState('');
 
     // Date Picker State
     const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
-    const [activeDateField, setActiveDateField] = useState<'departure' | 'return'>('departure');
+    const [activeDateField, setActiveDateField] = useState<string>('departure');
     const [currentMonth, setCurrentMonth] = useState(new Date());
+
+    // Multi City State
+    const [multiCitySegments, setMultiCitySegments] = useState([
+        { id: 1, from: airports[0], to: airports[1], date: new Date().toISOString().split('T')[0] },
+        { id: 2, from: airports[1], to: airports[2], date: new Date(Date.now() + 86400000).toISOString().split('T')[0] }
+    ]);
 
     const handleSwap = () => {
         setFlightData(prev => ({
@@ -107,13 +113,13 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
         }));
     };
 
-    const openSearch = (field: 'from' | 'to') => {
+    const openSearch = (field: string) => {
         setActiveSearchField(field);
         setSearchQuery('');
         setIsSearchOpen(true);
     };
 
-    const openDatePicker = (field: 'departure' | 'return') => {
+    const openDatePicker = (field: string) => {
         setActiveDateField(field);
         setIsDatePickerOpen(true);
     };
@@ -124,10 +130,19 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
         const offsetDate = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
         const dateStr = offsetDate.toISOString().split('T')[0];
 
-        setDates(prev => ({
-            ...prev,
-            [activeDateField]: dateStr
-        }));
+        if (activeDateField.startsWith('date-')) {
+            const index = parseInt(activeDateField.split('-')[1]);
+            setMultiCitySegments(prev => {
+                const newSegments = [...prev];
+                newSegments[index].date = dateStr;
+                return newSegments;
+            });
+        } else {
+            setDates(prev => ({
+                ...prev,
+                [activeDateField]: dateStr
+            }));
+        }
 
         // Auto-switch to return date if we just picked departure and it's a round trip
         if (activeDateField === 'departure' && tripType === 'Round Trip') {
@@ -143,15 +158,31 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
     };
 
     const handleSelectAirport = (airport: typeof airports[0]) => {
-        setFlightData(prev => ({
-            ...prev,
-            [activeSearchField]: {
-                code: airport.code,
-                city: airport.city,
-                airport: airport.airport,
-                country: airport.country
-            }
-        }));
+        if (activeSearchField.startsWith('from-') || activeSearchField.startsWith('to-')) {
+            const [type, indexStr] = activeSearchField.split('-');
+            const index = parseInt(indexStr);
+            setMultiCitySegments(prev => {
+                const newSegments = [...prev];
+                const segment = { ...newSegments[index] };
+                if (type === 'from') {
+                    segment.from = { ...airport, airport: airport.airport.replace(' Airport', '') };
+                } else {
+                    segment.to = { ...airport, airport: airport.airport.replace(' Airport', '') };
+                }
+                newSegments[index] = segment;
+                return newSegments;
+            });
+        } else {
+            setFlightData(prev => ({
+                ...prev,
+                [activeSearchField]: {
+                    code: airport.code,
+                    city: airport.city,
+                    airport: airport.airport,
+                    country: airport.country
+                }
+            }));
+        }
         setIsSearchOpen(false);
     };
 
@@ -209,13 +240,13 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
             <div className="bg-white/90 md:bg-white rounded-[20px] md:rounded-[clamp(1.5rem,2vw,2rem)] p-2 md:p-[clamp(0.75rem,2vw,2rem)] shadow-2xl shadow-slate-900/10 text-slate-800 relative z-0 backdrop-blur-xl border border-white/50 min-h-auto md:min-h-[clamp(300px,35vh,400px)]">
 
                 {/* Top Options Row - Compact */}
-                <div className="flex flex-wrap items-center gap-3 md:gap-8 mb-4 md:mb-8 text-xs md:text-sm font-bold text-slate-600 relative z-20">
+                <div className="flex flex-nowrap items-center gap-2 md:gap-8 mb-4 md:mb-8 text-xs md:text-sm font-bold text-slate-600 relative z-20">
 
                     {/* Trip Type Dropdown */}
                     <div className="relative">
                         <div
                             onClick={(e) => { e.stopPropagation(); toggleDropdown('tripType'); }}
-                            className="flex items-center space-x-1 bg-slate-100/50 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors select-none"
+                            className="flex items-center space-x-1 bg-slate-100/50 px-2 md:px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors select-none whitespace-nowrap"
                         >
                             <span>{tripType}</span>
                             <ChevronDown size={14} />
@@ -239,7 +270,7 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
                     <div className="relative">
                         <div
                             onClick={(e) => { e.stopPropagation(); toggleDropdown('travellers'); }}
-                            className="flex items-center space-x-1 bg-slate-100/50 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors select-none"
+                            className="flex items-center space-x-1 bg-slate-100/50 px-2 md:px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors select-none whitespace-nowrap"
                         >
                             <span>{totalPassengers.toString().padStart(2, '0')} Passengers</span>
                             <ChevronDown size={14} />
@@ -307,7 +338,7 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
                     <div className="relative">
                         <div
                             onClick={(e) => { e.stopPropagation(); toggleDropdown('class'); }}
-                            className="flex items-center space-x-1 bg-slate-100/50 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors select-none"
+                            className="flex items-center space-x-1 bg-slate-100/50 px-2 md:px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors select-none whitespace-nowrap"
                         >
                             <span>{travelClass}</span>
                             <ChevronDown size={14} />
@@ -329,7 +360,7 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
                 </div>
 
                 <AnimatePresence mode="wait">
-                    {activeTab === 'flight' && (
+                    {activeTab === 'flight' && tripType !== 'Multi City' && (
                         <motion.div
                             key="flight"
                             initial={{ opacity: 0, y: 10 }}
@@ -412,6 +443,85 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
                                     </div>
                                 </div>
                             </div>
+                        </motion.div>
+                    )}
+
+                    {activeTab === 'flight' && tripType === 'Multi City' && (
+                        <motion.div
+                            key="flight-multicity"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.3 }}
+                            className="space-y-4"
+                        >
+                            <div className="max-h-[60vh] md:max-h-auto overflow-y-auto pr-2 space-y-3">
+                                {multiCitySegments.map((segment, index) => (
+                                    <div key={segment.id} className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center bg-slate-50/50 p-2 rounded-xl relative group">
+                                        {/* Remove Button */}
+                                        {multiCitySegments.length > 2 && (
+                                            <button
+                                                onClick={() => setMultiCitySegments(prev => prev.filter((_, i) => i !== index))}
+                                                className="absolute -top-2 -right-2 bg-white text-red-500 p-1 rounded-full shadow-md z-10 opacity-0 group-hover:opacity-100 transition-opacity"
+                                            >
+                                                <X size={14} />
+                                            </button>
+                                        )}
+
+                                        {/* From */}
+                                        <div
+                                            onClick={() => openSearch(`from-${index}`)}
+                                            className="md:col-span-4 bg-white border border-slate-200 rounded-xl p-3 cursor-pointer hover:border-black/50 transition-all"
+                                        >
+                                            <div className="text-[10px] text-slate-400 font-bold uppercase">From</div>
+                                            <div className="flex items-center justify-between">
+                                                <span className="font-bold text-slate-800">{segment.from.city}</span>
+                                                <span className="text-xs font-black text-slate-400">{segment.from.code}</span>
+                                            </div>
+                                        </div>
+
+                                        {/* To */}
+                                        <div
+                                            onClick={() => openSearch(`to-${index}`)}
+                                            className="md:col-span-4 bg-white border border-slate-200 rounded-xl p-3 cursor-pointer hover:border-black/50 transition-all"
+                                        >
+                                            <div className="text-[10px] text-slate-400 font-bold uppercase">To</div>
+                                            <div className="flex items-center justify-between">
+                                                <span className="font-bold text-slate-800">{segment.to.city}</span>
+                                                <span className="text-xs font-black text-slate-400">{segment.to.code}</span>
+                                            </div>
+                                        </div>
+
+                                        {/* Date */}
+                                        <div
+                                            onClick={() => openDatePicker(`date-${index}`)}
+                                            className="md:col-span-4 bg-white border border-slate-200 rounded-xl p-3 cursor-pointer hover:border-black/50 transition-all"
+                                        >
+                                            <div className="text-[10px] text-slate-400 font-bold uppercase">Date</div>
+                                            <div className="font-bold text-slate-800">{formatDate(segment.date)}</div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Add Flight Button */}
+                            {multiCitySegments.length < 5 && (
+                                <button
+                                    onClick={() => setMultiCitySegments(prev => [
+                                        ...prev,
+                                        {
+                                            id: Date.now(),
+                                            from: prev[prev.length - 1].to, // Last segment destination as new origin
+                                            to: airports[(airports.findIndex(a => a.code === prev[prev.length - 1].to.code) + 1) % airports.length],
+                                            date: new Date(new Date(prev[prev.length - 1].date).getTime() + 86400000).toISOString().split('T')[0]
+                                        }
+                                    ])}
+                                    className="flex items-center space-x-2 text-sm font-bold text-black bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-lg transition-colors"
+                                >
+                                    <Plus size={16} />
+                                    <span>Add Another Flight</span>
+                                </button>
+                            )}
                         </motion.div>
                     )}
 
@@ -501,18 +611,41 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
                             params.append('to', flightData.to.code);
 
                             // Format date for API (DDMMYYYY)
-                            // dates.departure is YYYY-MM-DD
-                            if (dates.departure) {
-                                const [year, month, day] = dates.departure.split('-');
-                                const formattedDate = `${day}${month}${year}`;
-                                params.append('date', formattedDate);
+                            if (tripType === 'Multi City') {
+                                params.append('journeyType', '3');
+                                multiCitySegments.forEach(seg => {
+                                    params.append('from', seg.from.code);
+                                    params.append('to', seg.to.code);
+                                    if (seg.date) {
+                                        const [year, month, day] = seg.date.split('-');
+                                        const formattedDate = `${day}${month}${year}`;
+                                        params.append('date', formattedDate);
+                                    }
+                                });
+                            } else {
+                                params.append('from', flightData.from.code);
+                                params.append('to', flightData.to.code);
+
+                                if (dates.departure) {
+                                    const [year, month, day] = dates.departure.split('-');
+                                    const formattedDate = `${day}${month}${year}`;
+                                    params.append('date', formattedDate);
+                                }
+
+                                const jType = tripType === 'One Way' ? '1' : '2';
+                                params.append('journeyType', jType);
+
+                                if (jType === '2' && dates.return) {
+                                    const [year, month, day] = dates.return.split('-');
+                                    const formattedDate = `${day}${month}${year}`;
+                                    params.append('returnDate', formattedDate);
+                                }
                             }
 
                             params.append('adults', travellers.adults.toString());
                             params.append('children', travellers.children.toString());
                             params.append('infants', travellers.infants.toString());
                             params.append('class', travelClass === 'Economy' ? 'e' : travelClass === 'Premium Economy' ? 'pe' : travelClass === 'Business' ? 'b' : 'f');
-                            params.append('journeyType', tripType === 'One Way' ? '1' : tripType === 'Round Trip' ? '2' : '3');
 
                             window.location.href = `/search?${params.toString()}`;
                         }}
@@ -684,7 +817,7 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
                     </div>
                 )}
             </AnimatePresence>
-        </div>
+        </div >
     );
 };
 

@@ -176,3 +176,117 @@ export interface Seat {
     SeatTypeEnum?: string;
     AvailabilityTypeEnum?: string;
 }
+
+// Booking & Ticketing Types
+
+export interface Passenger {
+    Title: string;
+    FirstName: string;
+    LastName: string;
+    PaxType: number; // 1: Adult, 2: Child, 3: Infant
+    DateOfBirth: string; // YYYY-MM-DDTHH:mm:ss
+    Gender: number; // 1: Male, 2: Female
+    PassportNo?: string;
+    PassportExpiry?: string;
+    AddressLine1: string;
+    AddressLine2?: string;
+    Fare?: any; // From Quote
+    City: string;
+    CountryCode: string;
+    CountryName?: string;
+    ContactNo?: string;
+    Email?: string;
+    IsLeadPax: boolean;
+    FFAirlineCode?: string | null;
+    FFNumber?: string | null;
+    GSTCompanyAddress?: string;
+    GSTCompanyContactNumber?: string;
+    GSTCompanyName?: string;
+    GSTNumber?: string;
+    GSTCompanyEmail?: string;
+    Baggage?: any[]; // From SSR
+    MealDynamic?: any[]; // From SSR
+    SeatDynamic?: any[]; // From SSR
+    SpecialServices?: any[]; // From SSR
+}
+
+export interface BookRequest {
+    ResultIndex: string;
+    Passengers: Passenger[];
+    EndUserIp: string;
+    TokenId: string; // usually managed by backend session but user provided example has it
+    TraceId: string;
+}
+
+export interface BookResponse {
+    Response: {
+        Error: { ErrorCode: number; ErrorMessage: string };
+        ResponseStatus: number;
+        TraceId: string;
+        Response: {
+            PNR: string;
+            BookingId: number;
+            Status: number;
+            FlightItinerary: {
+                IsLCC: boolean;
+                PNR: string;
+                BookingId: number;
+                Passenger: any[];
+            };
+        };
+    };
+}
+
+export interface TicketRequest {
+    ResultIndex: string;
+    TraceId: string;
+    EndUserIp: string;
+    TokenId?: string;
+    PNR?: string;
+    BookingId?: number;
+    Passengers?: Passenger[]; // Required for LCC
+    PreferredCurrency?: string | null;
+    AgentReferenceNo?: string;
+}
+
+export interface TicketResponse {
+    Response: {
+        Error: { ErrorCode: number; ErrorMessage: string };
+        ResponseStatus: number;
+        TraceId: string;
+        Response: {
+            PNR: string;
+            BookingId: number;
+            Status: number;
+            FlightItinerary: TicketFlightItinerary;
+        };
+    };
+}
+
+export interface TicketFlightItinerary {
+    IsLCC: boolean;
+    PNR: string;
+    BookingId: number;
+    Invoice?: any[];
+    Passenger: Passenger[];
+    Segments: any[]; // Using any[] to accommodate flat structure in Ticket Response if it differs slightly or just to be safe, but preferably Segment[]
+    Fare: Fare;
+    Status: number;
+    Origin: string;
+    Destination: string;
+    Source: number;
+    AirlineCode: string;
+    AirlineRemark?: string;
+}
+
+export interface Booking {
+    _id: string;
+    userId: string;
+    bookingId: string;
+    pnr: string;
+    status: string;
+    amount?: number;
+    flightDetails?: any;
+    responseJson?: any;
+    createdAt: string;
+}
