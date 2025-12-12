@@ -200,11 +200,7 @@ function SearchResultsContent() {
                     }
                 }
 
-                const response = await fetch(apiUrl, {
-                    headers: {
-                        'ngrok-skip-browser-warning': 'true'
-                    }
-                });
+                const response = await fetch(apiUrl);
 
                 if (!response.ok) {
                     throw new Error("Failed to fetch flights");

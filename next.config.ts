@@ -26,7 +26,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/flights/:path*',
-        destination: `${API_URL}/api/flights/:path*`, // Proxy to Backend Flights
+        destination: `${API_URL}/flights/:path*`, // Proxy to Backend Flights
       },
     ];
   },

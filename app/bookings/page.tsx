@@ -32,11 +32,7 @@ export default function MyBookingsPage() {
 
         setLoading(true);
         try {
-            const res = await fetch(`/api/user/bookings?googleId=${userId}`, {
-                headers: {
-                    'ngrok-skip-browser-warning': 'true'
-                }
-            });
+            const res = await fetch(`/api/user/bookings?googleId=${userId}`);
             if (!res.ok) throw new Error('Failed to fetch bookings');
             const data = await res.json();
             // Ensure data is array
