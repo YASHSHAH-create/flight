@@ -14,7 +14,7 @@ const nextConfig: NextConfig = {
     ],
   },
   async rewrites() {
-    const API_URL = 'https://102477a0211a.ngrok-free.app';
+    const API_URL = 'https://api.paymm.in';
     return [
       {
         source: '/api/:path*',
