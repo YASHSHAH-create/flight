@@ -17,6 +17,10 @@ const nextConfig: NextConfig = {
     const API_URL = 'https://api.paymm.in';
     return [
       {
+        source: '/api/proxy/flights/:path*',
+        destination: `${API_URL}/flights/:path*`,
+      },
+      {
         source: '/api/:path*',
         destination: `${API_URL}/api/:path*`, // Proxy to Backend
       },

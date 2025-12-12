@@ -168,7 +168,7 @@ function SearchResultsContent() {
                 const cabinClass = searchParams.get('class') || 'e';
                 const journeyType = searchParams.get('journeyType') || '1';
 
-                let apiUrl = `/flights/search?adults=${adults}&children=${children}&infants=${infants}&class=${cabinClass}&journeyType=${journeyType}`;
+                let apiUrl = `/api/proxy/flights/search?adults=${adults}&children=${children}&infants=${infants}&class=${cabinClass}&journeyType=${journeyType}`;
 
                 if (journeyType === '3') {
                     // Multi City: extract all matching params

@@ -718,7 +718,7 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
                             params.append('infants', travellers.infants.toString());
                             params.append('class', travelClass === 'Economy' ? 'e' : travelClass === 'Premium Economy' ? 'pe' : travelClass === 'Business' ? 'b' : 'f');
 
-                            window.location.href = `/search?${params.toString()}`;
+                            window.location.href = `/flights/search?${params.toString()}`;
                         }}
                         className="w-full md:w-auto bg-black text-white px-8 py-3 md:py-3.5 rounded-xl md:rounded-2xl font-bold text-sm md:text-base shadow-xl shadow-slate-900/20 hover:bg-slate-800 transition-all active:scale-95 flex items-center justify-center space-x-2"
                     >
