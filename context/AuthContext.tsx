@@ -27,6 +27,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         try {
             const res = await fetch(`/api/auth/user`, {
                 method: 'GET',
+                headers: {
+                    'ngrok-skip-browser-warning': 'true'
+                }
             });
 
             if (res.ok) {
@@ -56,6 +59,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         try {
             await fetch(`/api/auth/logout`, {
                 method: 'GET',
+                headers: {
+                    'ngrok-skip-browser-warning': 'true'
+                }
             });
             setUser(null);
             // Optional: Redirect to home page after logout

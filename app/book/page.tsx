@@ -366,7 +366,7 @@ function BookPageContent() {
 
             const res = await fetch('/api/user/bookings', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' },
                 body: JSON.stringify({
                     googleId: userId,
                     bookingId: itinerary.BookingId,
@@ -497,7 +497,7 @@ function BookPageContent() {
                 console.log("Sending LCC Ticket Request:", ticketPayload);
                 const ticketRes = await fetch(`/flights/ticket`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' },
                     body: JSON.stringify(ticketPayload)
                 });
                 const ticketData: TicketResponse = await ticketRes.json();
@@ -533,7 +533,7 @@ function BookPageContent() {
                 console.log("Sending Book Request (Non-LCC):", bookPayload);
                 const bookRes = await fetch(`/flights/book`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' },
                     body: JSON.stringify(bookPayload)
                 });
                 const bookData: BookResponse = await bookRes.json();
@@ -564,7 +564,7 @@ function BookPageContent() {
                 console.log("Sending Ticket Request (Non-LCC):", ticketPayload);
                 const ticketRes = await fetch(`/flights/ticket`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' },
                     body: JSON.stringify(ticketPayload)
                 });
                 const ticketData: TicketResponse = await ticketRes.json();
@@ -623,7 +623,7 @@ function BookPageContent() {
                 // Fetch Fare Quote
                 const quoteRes = await fetch(`/flights/fare-quote`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' },
                     body: JSON.stringify({ traceId, resultIndex })
                 });
                 const quoteData: FareQuoteResponse = await quoteRes.json();
@@ -636,7 +636,7 @@ function BookPageContent() {
                 // Fetch Fare Rules
                 const ruleRes = await fetch(`/flights/fare-rule`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' },
                     body: JSON.stringify({ traceId, resultIndex })
                 });
                 const ruleData: FareRuleResponse = await ruleRes.json();
@@ -648,7 +648,7 @@ function BookPageContent() {
                 // Fetch SSR (Seat Map)
                 const ssrRes = await fetch(`/flights/ssr`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' },
                     body: JSON.stringify({ traceId, resultIndex })
                 });
                 const ssrResponse: SSRResponse = await ssrRes.json();
