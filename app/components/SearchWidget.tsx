@@ -821,7 +821,7 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
                 </AnimatePresence>,
                 document.body
             )}
-            
+
             {mounted && createPortal(
                 <AnimatePresence>
                     {isSearchOpen && (
@@ -867,7 +867,6 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
                                             className="bg-transparent border-none outline-none w-full text-slate-800 font-medium placeholder:text-slate-400"
                                             value={searchQuery}
                                             onChange={(e) => setSearchQuery(e.target.value)}
-                                            autoFocus
                                         />
                                     </div>
                                 </div>
