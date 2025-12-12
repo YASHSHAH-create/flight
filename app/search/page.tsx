@@ -9,10 +9,10 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { useSearchParams, useRouter } from 'next/navigation';
-import { SearchResponse, FlightResult } from '@/types/api';
-import SearchWidget from '@/app/components/SearchWidget';
-import BottomNav from '@/app/components/BottomNav';
-import { useAuth } from '@/context/AuthContext';
+import { SearchResponse, FlightResult } from '../../types/api';
+import SearchWidget from '../components/SearchWidget';
+import BottomNav from '../components/BottomNav';
+import { useAuth } from '../../context/AuthContext';
 
 const formatDuration = (minutes: number) => {
     const h = Math.floor(minutes / 60);
@@ -168,7 +168,11 @@ function SearchResultsContent() {
                 const cabinClass = searchParams.get('class') || 'e';
                 const journeyType = searchParams.get('journeyType') || '1';
 
-                let apiUrl = `/api/proxy/flights/search?adults=${adults}&children=${children}&infants=${infants}&class=${cabinClass}&journeyType=${journeyType}`;
+                const from = searchParams.get('from');
+                const to = searchParams.get('to');
+                const date = searchParams.get('date');
+
+                let apiUrl = `/flights/search?adults=${adults}&children=${children}&infants=${infants}&class=${cabinClass}&journeyType=${journeyType}`;
 
                 if (journeyType === '3') {
                     // Multi City: extract all matching params
@@ -184,10 +188,6 @@ function SearchResultsContent() {
                         if (dates[i]) apiUrl += `&date=${dates[i]}`;
                     });
                 } else {
-                    const from = searchParams.get('from');
-                    const to = searchParams.get('to');
-                    const date = searchParams.get('date');
-
                     if (!from || !to || !date) {
                         throw new Error("Missing search parameters");
                     }

@@ -17,10 +17,6 @@ const nextConfig: NextConfig = {
     const API_URL = 'https://api.paymm.in';
     return [
       {
-        source: '/api/proxy/flights/:path*',
-        destination: `${API_URL}/flights/:path*`,
-      },
-      {
         source: '/api/:path*',
         destination: `${API_URL}/api/:path*`, // Proxy to Backend
       },
@@ -29,8 +25,12 @@ const nextConfig: NextConfig = {
         destination: `${API_URL}/auth/:path*`, // Proxy to Backend Auth
       },
       {
+        source: '/flights/search',
+        destination: `${API_URL}/search`, // Proxy specifically to /search
+      },
+      {
         source: '/flights/:path*',
-        destination: `${API_URL}/flights/:path*`, // Proxy to Backend Flights
+        destination: `${API_URL}/flights/:path*`, // Proxy other flight requests
       },
     ];
   },
