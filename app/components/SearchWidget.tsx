@@ -814,7 +814,7 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
             </AnimatePresence>
             <AnimatePresence>
                 {isSearchOpen && (
-                    <div className="fixed inset-0 z-50 flex flex-col justify-end md:justify-center bg-black/60 backdrop-blur-md pb-4 md:pb-0 px-4 md:px-0">
+                    <div className="fixed inset-0 z-50 flex flex-col justify-end md:justify-center bg-black/50 backdrop-blur-sm">
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -827,7 +827,7 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
                             animate={{ y: 0 }}
                             exit={{ y: "100%" }}
                             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                            className="bg-white w-full md:w-[600px] rounded-3xl md:rounded-2xl shadow-2xl relative z-10 md:mx-auto md:my-auto h-[85vh] md:h-[600px] flex flex-col overflow-hidden"
+                            className="bg-white w-full md:w-[600px] md:rounded-2xl rounded-t-[2rem] shadow-2xl relative z-10 md:mx-auto md:my-auto h-[90vh] md:h-[600px] flex flex-col overflow-hidden"
                         >
                             <div className="p-4 border-b border-slate-100 flex items-center justify-between">
                                 <h3 className="text-lg font-bold text-slate-800">
