@@ -19,6 +19,7 @@ export const metadata: Metadata = {
 
 import SmoothScrolling from "./components/SmoothScrolling";
 import { AuthProvider } from "@/context/AuthContext";
+import Footer from "./components/Footer";
 
 
 export default function RootLayout({
@@ -35,6 +36,7 @@ export default function RootLayout({
         <AuthProvider>
           {children}
         </AuthProvider>
+        <Footer />
       </body>
     </html>
   );
