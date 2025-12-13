@@ -42,11 +42,11 @@ const FeaturedProducts = () => {
         <section className="py-8 px-4 md:px-8 lg:px-16 w-full max-w-[1920px] mx-auto">
             <h2 className="text-2xl md:text-3xl font-bold mb-6 text-slate-900">Featured Destinations</h2>
 
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 w-full">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 w-full">
                 {products.map((product, index) => (
                     <motion.div
                         key={product.id}
-                        className="group relative flex flex-col w-full h-auto aspect-[3/4] rounded-3xl bg-white p-3 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden"
+                        className="group relative flex flex-col w-full h-auto aspect-[3/4] rounded-3xl bg-white p-2 md:p-3 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden"
                         initial={{ opacity: 0, y: 50 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-50px" }}
@@ -70,20 +70,20 @@ const FeaturedProducts = () => {
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-300 group-hover:from-black/60"></div>
 
                             {/* Top Right Heart Icon */}
-                            <div className="absolute top-3 right-3 z-10">
-                                <button className="h-8 w-8 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white transition-all duration-300 hover:bg-white hover:text-red-500">
-                                    <Heart size={14} />
+                            <div className="absolute top-2 right-2 md:top-3 md:right-3 z-10">
+                                <button className="h-7 w-7 md:h-8 md:w-8 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white transition-all duration-300 hover:bg-white hover:text-red-500">
+                                    <Heart size={14} className="md:w-4 md:h-4 w-3 h-3" />
                                 </button>
                             </div>
 
                             {/* Text Content - Positioned absolutely bottom initially */}
-                            <div className="absolute bottom-0 left-0 w-full p-4 flex flex-col justify-end transition-all duration-500 group-hover:opacity-0 translate-y-0 group-hover:translate-y-4">
-                                <h3 className="text-xl md:text-2xl font-bold text-white mb-1 break-words">{product.title}</h3>
-                                <div className="flex flex-wrap items-center gap-3 text-white/90 text-sm font-medium">
-                                    <span className="bg-white/20 backdrop-blur-sm px-2 py-0.5 rounded text-xs border border-white/20">Premium Economy</span>
+                            <div className="absolute bottom-0 left-0 w-full p-3 md:p-4 flex flex-col justify-end transition-all duration-500 group-hover:opacity-0 translate-y-0 group-hover:translate-y-4">
+                                <h3 className="text-lg md:text-2xl font-bold text-white mb-1 break-words leading-none">{product.title}</h3>
+                                <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-3 text-white/90 text-sm font-medium">
+                                    <span className="bg-white/20 backdrop-blur-sm px-2 py-0.5 rounded text-[10px] md:text-xs border border-white/20 w-fit">Premium Economy</span>
                                     <div className="flex items-center gap-1">
                                         <Tag size={12} className="rotate-90" />
-                                        <span>from {product.price}</span>
+                                        <span className="text-[10px] md:text-sm">from {product.price}</span>
                                     </div>
                                 </div>
                             </div>
