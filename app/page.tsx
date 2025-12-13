@@ -57,7 +57,8 @@ export default function Home() {
       </section>
 
       {/* Frame 2: Content Section */}
-      <section className="relative w-full bg-white flex flex-col justify-center py-20 px-0 md:px-0 overflow-hidden pb-32 md:pb-20">
+      {/* Frame 2: Content Section */}
+      <section className="relative w-full bg-white flex flex-col justify-center py-20 px-0 md:px-0">
         <motion.div
           className="flex flex-col justify-evenly max-w-7xl mx-auto w-full gap-20"
           initial={{ opacity: 0, y: 100, scale: 0.95 }}
@@ -77,7 +78,7 @@ export default function Home() {
       </section>
 
       {/* Spacer for Mobile Bottom Nav */}
-      <div className="h-32 md:hidden"></div>
+      <div className="h-40 md:hidden"></div>
 
       {/* Mobile Bottom Navigation */}
       <BottomNav />
