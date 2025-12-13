@@ -42,7 +42,7 @@ const FeaturedProducts = () => {
         <section className="py-8 px-4 md:px-8 lg:px-16 w-full max-w-[1920px] mx-auto">
             <h2 className="text-2xl md:text-3xl font-bold mb-6 text-slate-900">Featured Destinations</h2>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 w-full">
                 {products.map((product, index) => (
                     <motion.div
                         key={product.id}
