@@ -11,26 +11,11 @@ import { MoveRight } from 'lucide-react';
 import { motion } from "framer-motion";
 
 export default function Home() {
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
   return (
     <div className="relative min-h-screen w-full bg-slate-50 font-sans selection:bg-black selection:text-white">
 
-      {/* Sticky Navbar (Common across all sections) */}
-      <div className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white/70 backdrop-blur-md shadow-sm md:shadow-none border-b md:border-none border-white/20 py-0' : 'bg-transparent py-2'}`}>
-        <Navbar />
-      </div>
+      {/* Sticky Navbar (Common across all sections) - Navbar handles its own scroll state */}
+      <Navbar />
 
       {/* Frame 1: Hero Section */}
       <section className="relative h-screen w-full flex flex-col overflow-hidden">
@@ -97,4 +82,3 @@ export default function Home() {
     </div>
   );
 }
-
