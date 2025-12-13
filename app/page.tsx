@@ -76,6 +76,9 @@ export default function Home() {
         </motion.div>
       </section>
 
+      {/* Spacer for Mobile Bottom Nav */}
+      <div className="h-32 md:hidden"></div>
+
       {/* Mobile Bottom Navigation */}
       <BottomNav />
 
