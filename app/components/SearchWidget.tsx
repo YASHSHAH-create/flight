@@ -138,7 +138,7 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
         if (initialState?.journeyType) {
             return initialState.journeyType === '2' ? 'Round Trip' : 'One Way'; // Simplified for now
         }
-        return 'Round Trip';
+        return 'One Way';
     });
 
     const [travellers, setTravellers] = useState(() => ({
@@ -330,7 +330,7 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
                         </div>
                         {openDropdown === 'tripType' && (
                             <div className="absolute top-full left-0 mt-2 w-40 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden animate-subtle-down">
-                                {['Round Trip', 'One Way', 'Multi City'].map((type) => (
+                                {['Round Trip', 'One Way'].map((type) => (
                                     <div
                                         key={type}
                                         onClick={() => { setTripType(type); setOpenDropdown(null); }}

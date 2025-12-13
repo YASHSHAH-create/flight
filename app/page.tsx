@@ -33,38 +33,39 @@ export default function Home() {
       </div>
 
       {/* Frame 1: Hero Section */}
-      <section className="relative min-h-screen w-full flex flex-col overflow-hidden">
+      <section className="relative h-screen w-full flex flex-col overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <Image
             src="/background.jpg"
             alt="Background"
             fill
-            className="object-cover object-top animate-subtle-zoom"
+            className="object-cover object-center animate-subtle-zoom"
             priority
           />
         </div>
 
-        <div className="relative z-10 flex-1 flex flex-col justify-start px-[4vw] md:px-[6vw] pt-20 md:pt-48 max-w-7xl mx-auto w-full h-full gap-2 md:gap-0 pointer-events-none md:pointer-events-auto">
-          <div className="max-w-[90vw] md:max-w-3xl animate-subtle-right pointer-events-auto">
-            <h1 className="text-[clamp(1.75rem,5vw,4.5rem)] font-medium text-slate-900 leading-[1.1] tracking-tight drop-shadow-sm">
-              Hey Buddy! where are you <br />
-              <span className="font-extrabold relative inline-block">
-                Flying
-              </span> to?
-            </h1>
+        <div className="relative z-10 flex-1 flex flex-col justify-center items-center px-[4vw] md:px-[6vw] max-w-7xl mx-auto w-full h-full gap-8 md:gap-12 pointer-events-none md:pointer-events-auto [@media(max-height:800px)]:gap-2 [@media(max-height:800px)]:justify-center">
+          <div className="max-w-[90vw] md:max-w-3xl animate-subtle-up pointer-events-auto flex flex-col items-center text-center">
 
-            <div className="mt-8 hidden md:block">
-              <button className="group flex items-center space-x-3 text-lg font-bold text-slate-900 hover:opacity-70 transition-opacity">
+            <div className="mb-6 block [@media(max-height:800px)]:mb-4">
+              <button className="group flex items-center gap-2 px-6 py-2 bg-white/70 backdrop-blur-md hover:bg-white text-slate-900 rounded-full font-semibold shadow-sm transition-all border border-white/40 hover:-translate-y-0.5 active:translate-y-0">
                 <span>Explore Now</span>
-                <span className="bg-black text-white rounded-full p-2 transition-transform group-hover:translate-x-2 shadow-lg">
-                  <MoveRight size={18} strokeWidth={3} />
+                <span className="bg-black text-white rounded-full p-1 transition-transform group-hover:translate-x-1">
+                  <MoveRight size={14} strokeWidth={3} />
                 </span>
               </button>
             </div>
+
+            <h1 className="text-[clamp(2.5rem,6vw,5.5rem)] [@media(max-height:800px)]:text-[clamp(2rem,5vw,4.5rem)] font-bold text-slate-900 leading-[1.1] tracking-tight drop-shadow-sm">
+              <span className="relative inline-block">
+                Flying to?
+              </span>
+            </h1>
+
           </div>
 
-          <div className="w-full pointer-events-auto">
+          <div className="w-full pointer-events-auto transform transition-transform origin-top [@media(max-height:800px)]:scale-90 [@media(max-height:800px)]:-mt-2">
             <SearchWidget />
           </div>
         </div>
