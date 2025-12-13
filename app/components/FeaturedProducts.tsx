@@ -42,11 +42,11 @@ const FeaturedProducts = () => {
         <section className="py-8 px-4 md:px-8 lg:px-16 w-full max-w-[1920px] mx-auto">
             <h2 className="text-2xl md:text-3xl font-bold mb-6 text-slate-900">Featured Destinations</h2>
 
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 w-full">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
                 {products.map((product, index) => (
                     <motion.div
                         key={product.id}
-                        className="group relative flex flex-col w-full h-auto aspect-[3/4] rounded-3xl bg-white p-2 md:p-3 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden"
+                        className="group relative flex flex-col w-full rounded-2xl md:rounded-3xl bg-white p-3 md:p-3 shadow-sm md:shadow-xl hover:shadow-md md:hover:shadow-2xl transition-all duration-300 overflow-hidden md:aspect-[3/4]"
                         initial={{ opacity: 0, y: 50 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-50px" }}
@@ -56,8 +56,8 @@ const FeaturedProducts = () => {
                             ease: "easeOut"
                         }}
                     >
-                        {/* Image Container - Grows nicely, shrinks on hover to reveal buttons more clearly if needed */}
-                        <div className="relative w-full h-full rounded-2xl overflow-hidden transition-all duration-500 ease-in-out group-hover:h-[65%] shrink-0">
+                        {/* Image Container */}
+                        <div className="relative w-full h-64 md:h-full rounded-xl md:rounded-2xl overflow-hidden transition-all duration-500 ease-in-out md:group-hover:h-[65%] shrink-0">
                             {/* Background Image */}
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
@@ -66,18 +66,18 @@ const FeaturedProducts = () => {
                                 className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                             />
 
-                            {/* Gradient Overlay - Always visible for text readability */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-300 group-hover:from-black/60"></div>
+                            {/* Gradient Overlay - Desktop Only for readability of overlay text */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-300 md:group-hover:from-black/60 hidden md:block"></div>
 
                             {/* Top Right Heart Icon */}
                             <div className="absolute top-2 right-2 md:top-3 md:right-3 z-10">
-                                <button className="h-7 w-7 md:h-8 md:w-8 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white transition-all duration-300 hover:bg-white hover:text-red-500">
-                                    <Heart size={14} className="md:w-4 md:h-4 w-3 h-3" />
+                                <button className="h-8 w-8 md:h-8 md:w-8 flex items-center justify-center rounded-full bg-black/20 md:bg-white/20 backdrop-blur-md border border-white/30 text-white transition-all duration-300 hover:bg-white hover:text-red-500">
+                                    <Heart size={16} className="md:w-4 md:h-4 w-4 h-4" />
                                 </button>
                             </div>
 
-                            {/* Text Content - Positioned absolutely bottom initially */}
-                            <div className="absolute bottom-0 left-0 w-full p-3 md:p-4 flex flex-col justify-end transition-all duration-500 group-hover:opacity-0 translate-y-0 group-hover:translate-y-4">
+                            {/* Desktop Overlay Text - Hidden on Mobile, Hidden on Hover on Desktop */}
+                            <div className="absolute bottom-0 left-0 w-full p-3 md:p-4 flex-col justify-end transition-all duration-500 md:group-hover:opacity-0 translate-y-0 md:group-hover:translate-y-4 hidden md:flex">
                                 <h3 className="text-lg md:text-2xl font-bold text-white mb-1 break-words leading-none">{product.title}</h3>
                                 <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-3 text-white/90 text-sm font-medium">
                                     <span className="bg-white/20 backdrop-blur-sm px-2 py-0.5 rounded text-[10px] md:text-xs border border-white/20 w-fit">Premium Economy</span>
@@ -89,32 +89,36 @@ const FeaturedProducts = () => {
                             </div>
                         </div>
 
-                        {/* Hover Content - Revealed below image on hover (or technically sits there and image shrinks to show it) 
-                            Actually, simpler approach: Flex layout.
-                            Image takes flex-1. On hover, it flex-shrink? 
-                            Let's use the 'reveal' strategy consistent with zoom-proof layout.
-                        */}
-                        <div className="absolute bottom-0 left-0 w-full p-4 flex flex-col justify-end h-[35%] opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
-                            <div className="mb-2">
-                                <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-1 break-words leading-tight">{product.title}</h3>
-                                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-slate-600 text-sm font-medium">
-                                    <div className="flex items-center gap-1">
+                        {/* Content Section - Visible Below Image on Mobile, Sliding Up on Desktop */}
+                        <div className="relative md:absolute md:bottom-0 md:left-0 w-full p-2 pt-4 md:p-4 flex flex-col justify-end md:h-[35%] opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-500 md:translate-y-4 md:group-hover:translate-y-0">
+                            <div className="mb-3 md:mb-2">
+                                {/* Title visible here on mobile, and on hover on desktop */}
+                                <div className="flex justify-between items-start">
+                                    <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-1 break-words leading-tight">{product.title}</h3>
+                                    <div className="flex md:hidden items-center gap-1 bg-slate-100 px-2 py-1 rounded-lg">
+                                        <span className="text-xs font-bold text-slate-900">{product.rating}</span>
+                                        <Heart size={10} className="fill-red-500 text-red-500" />
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-slate-600 text-sm font-medium mt-1">
+                                    <div className="flex items-center gap-1.5 bg-slate-50 px-2 py-1 rounded-md md:bg-transparent md:p-0">
                                         <Tag size={14} className="rotate-90 text-slate-400" />
                                         <span className="font-bold text-slate-900">{product.price}</span>
                                     </div>
-                                    <div className="flex items-center gap-1">
+                                    <div className="flex items-center gap-1.5 md:gap-1">
                                         <Plane size={14} className="text-slate-400" />
-                                        <span className="font-bold uppercase tracking-wider">{product.code}</span>
+                                        <span className="font-bold uppercase tracking-wider text-xs md:text-sm">{product.code}</span>
                                     </div>
                                 </div>
                             </div>
 
                             <div className="flex items-center gap-2 w-full mt-auto">
-                                <button className="flex-1 bg-black text-white py-3 rounded-xl font-bold text-sm hover:bg-slate-800 transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2">
+                                <button className="flex-1 bg-black text-white py-2.5 md:py-3 rounded-xl font-bold text-sm hover:bg-slate-800 transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2">
                                     <Search size={16} />
                                     <span>Search Flight</span>
                                 </button>
-                                <button className="h-11 w-11 flex items-center justify-center rounded-xl border border-slate-200 text-slate-400 hover:text-red-500 hover:border-red-500 hover:bg-red-50 transition-all">
+                                <button className="h-10 w-10 md:h-11 md:w-11 flex items-center justify-center rounded-xl border border-slate-200 text-slate-400 hover:text-red-500 hover:border-red-500 hover:bg-red-50 transition-all hidden md:flex">
                                     <Heart size={20} />
                                 </button>
                             </div>

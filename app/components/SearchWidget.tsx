@@ -183,7 +183,10 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
         { id: 2, from: airports[1], to: airports[2], date: new Date(Date.now() + 86400000).toISOString().split('T')[0] }
     ]);
 
+    const [rotation, setRotation] = useState(0);
+
     const handleSwap = () => {
+        setRotation(prev => prev - 180);
         setFlightData(prev => ({
             from: prev.to,
             to: prev.from
@@ -289,7 +292,7 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
     return (
         <div className={`w-full max-w-5xl mx-auto mt-4 md:mt-10 relative animate-subtle-up ${className || ''}`} onClick={() => setOpenDropdown(null)}>
             {/* Tabs */}
-            <div className="flex items-center justify-start space-x-2 pl-2 md:pl-4 mb-2 relative z-10 overflow-x-auto no-scrollbar py-1">
+            <div className="flex items-center justify-center space-x-2 mb-4 relative z-10 py-1">
                 <button
                     onClick={() => setActiveTab('flight')}
                     className={`flex items-center space-x-2 px-4 py-2 rounded-full font-bold text-xs shadow-sm transition-all hover:-translate-y-0.5 whitespace-nowrap flex-shrink-0 border ${activeTab === 'flight' ? 'bg-white text-black border-slate-100' : 'bg-white/40 backdrop-blur-md text-slate-800 border-white/20 hover:bg-white/60'}`}
@@ -314,10 +317,10 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
             </div>
 
             {/* Main Search Container - Premium Glass Card */}
-            <div className="bg-white/90 md:bg-white rounded-[20px] md:rounded-[clamp(1.5rem,2vw,2rem)] p-2 md:p-[clamp(0.75rem,2vw,2rem)] shadow-2xl shadow-slate-900/10 text-slate-800 relative z-0 backdrop-blur-xl border border-white/50 min-h-auto md:min-h-[clamp(300px,35vh,400px)]">
+            <div className="bg-white/95 md:bg-white rounded-[24px] md:rounded-[clamp(1.5rem,2vw,2rem)] p-4 md:p-[clamp(0.75rem,2vw,2rem)] shadow-2xl shadow-slate-900/10 text-slate-800 relative z-0 backdrop-blur-xl border border-white/50 min-h-auto md:min-h-[clamp(300px,35vh,400px)]">
 
                 {/* Top Options Row - Compact */}
-                <div className="flex flex-nowrap items-center gap-2 md:gap-8 mb-4 md:mb-8 text-xs md:text-sm font-bold text-slate-600 relative z-20">
+                <div className="flex flex-wrap justify-center md:justify-start items-center gap-2 md:gap-8 mb-4 md:mb-8 text-xs md:text-sm font-bold text-slate-600 relative z-20">
 
                     {/* Trip Type Dropdown */}
                     <div className="relative">
@@ -329,16 +332,28 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
                             <ChevronDown size={14} />
                         </div>
                         {openDropdown === 'tripType' && (
-                            <div className="absolute top-full left-0 mt-2 w-40 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden animate-subtle-down">
-                                {['Round Trip', 'One Way'].map((type) => (
-                                    <div
-                                        key={type}
-                                        onClick={() => { setTripType(type); setOpenDropdown(null); }}
-                                        className={`px-4 py-2 hover:bg-slate-50 cursor-pointer ${tripType === type ? 'bg-slate-50 font-black text-black' : ''}`}
-                                    >
-                                        {type}
-                                    </div>
-                                ))}
+                            <div className="absolute top-full left-0 mt-2 z-50 w-40">
+                                <div className="bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden animate-subtle-down">
+                                    {['Round Trip', 'One Way'].map((type) => (
+                                        <div
+                                            key={type}
+                                            onClick={() => {
+                                                setTripType(type);
+                                                setOpenDropdown(null);
+                                                if (type === 'Round Trip' && !dates.return) {
+                                                    const nextDay = new Date(new Date(dates.departure).getTime() + 86400000);
+                                                    setDates(prev => ({
+                                                        ...prev,
+                                                        return: nextDay.toISOString().split('T')[0]
+                                                    }));
+                                                }
+                                            }}
+                                            className={`px-4 py-2 hover:bg-slate-50 cursor-pointer ${tripType === type ? 'bg-slate-50 font-black text-black' : ''}`}
+                                        >
+                                            {type}
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         )}
                     </div>
@@ -353,57 +368,59 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
                             <ChevronDown size={14} />
                         </div>
                         {openDropdown === 'travellers' && (
-                            <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-slate-100 p-4 animate-subtle-down" onClick={(e) => e.stopPropagation()}>
-                                <div className="space-y-4">
-                                    <div className="flex items-center justify-between">
-                                        <div>
-                                            <div className="font-bold text-slate-800">Adults</div>
-                                            <div className="text-xs text-slate-500">12+ years</div>
+                            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 z-50 w-64" onClick={(e) => e.stopPropagation()}>
+                                <div className="bg-white rounded-xl shadow-xl border border-slate-100 p-4 animate-subtle-down">
+                                    <div className="space-y-4">
+                                        <div className="flex items-center justify-between">
+                                            <div>
+                                                <div className="font-bold text-slate-800">Adults</div>
+                                                <div className="text-xs text-slate-500">12+ years</div>
+                                            </div>
+                                            <div className="flex items-center space-x-3">
+                                                <button
+                                                    onClick={() => setTravellers(p => ({ ...p, adults: Math.max(1, p.adults - 1) }))}
+                                                    className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"
+                                                >-</button>
+                                                <span className="font-bold w-4 text-center">{travellers.adults}</span>
+                                                <button
+                                                    onClick={() => setTravellers(p => ({ ...p, adults: p.adults + 1 }))}
+                                                    className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"
+                                                >+</button>
+                                            </div>
                                         </div>
-                                        <div className="flex items-center space-x-3">
-                                            <button
-                                                onClick={() => setTravellers(p => ({ ...p, adults: Math.max(1, p.adults - 1) }))}
-                                                className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"
-                                            >-</button>
-                                            <span className="font-bold w-4 text-center">{travellers.adults}</span>
-                                            <button
-                                                onClick={() => setTravellers(p => ({ ...p, adults: p.adults + 1 }))}
-                                                className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"
-                                            >+</button>
+                                        <div className="flex items-center justify-between">
+                                            <div>
+                                                <div className="font-bold text-slate-800">Children</div>
+                                                <div className="text-xs text-slate-500">2-12 years</div>
+                                            </div>
+                                            <div className="flex items-center space-x-3">
+                                                <button
+                                                    onClick={() => setTravellers(p => ({ ...p, children: Math.max(0, p.children - 1) }))}
+                                                    className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"
+                                                >-</button>
+                                                <span className="font-bold w-4 text-center">{travellers.children}</span>
+                                                <button
+                                                    onClick={() => setTravellers(p => ({ ...p, children: p.children + 1 }))}
+                                                    className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"
+                                                >+</button>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="flex items-center justify-between">
-                                        <div>
-                                            <div className="font-bold text-slate-800">Children</div>
-                                            <div className="text-xs text-slate-500">2-12 years</div>
-                                        </div>
-                                        <div className="flex items-center space-x-3">
-                                            <button
-                                                onClick={() => setTravellers(p => ({ ...p, children: Math.max(0, p.children - 1) }))}
-                                                className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"
-                                            >-</button>
-                                            <span className="font-bold w-4 text-center">{travellers.children}</span>
-                                            <button
-                                                onClick={() => setTravellers(p => ({ ...p, children: p.children + 1 }))}
-                                                className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"
-                                            >+</button>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center justify-between">
-                                        <div>
-                                            <div className="font-bold text-slate-800">Infants</div>
-                                            <div className="text-xs text-slate-500">0-2 years</div>
-                                        </div>
-                                        <div className="flex items-center space-x-3">
-                                            <button
-                                                onClick={() => setTravellers(p => ({ ...p, infants: Math.max(0, p.infants - 1) }))}
-                                                className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"
-                                            >-</button>
-                                            <span className="font-bold w-4 text-center">{travellers.infants}</span>
-                                            <button
-                                                onClick={() => setTravellers(p => ({ ...p, infants: p.infants + 1 }))}
-                                                className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"
-                                            >+</button>
+                                        <div className="flex items-center justify-between">
+                                            <div>
+                                                <div className="font-bold text-slate-800">Infants</div>
+                                                <div className="text-xs text-slate-500">0-2 years</div>
+                                            </div>
+                                            <div className="flex items-center space-x-3">
+                                                <button
+                                                    onClick={() => setTravellers(p => ({ ...p, infants: Math.max(0, p.infants - 1) }))}
+                                                    className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"
+                                                >-</button>
+                                                <span className="font-bold w-4 text-center">{travellers.infants}</span>
+                                                <button
+                                                    onClick={() => setTravellers(p => ({ ...p, infants: p.infants + 1 }))}
+                                                    className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"
+                                                >+</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -421,16 +438,18 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
                             <ChevronDown size={14} />
                         </div>
                         {openDropdown === 'class' && (
-                            <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden animate-subtle-down">
-                                {['Economy', 'Premium Economy', 'Business', 'First Class'].map((cls) => (
-                                    <div
-                                        key={cls}
-                                        onClick={() => { setTravelClass(cls); setOpenDropdown(null); }}
-                                        className={`px-4 py-2 hover:bg-slate-50 cursor-pointer ${travelClass === cls ? 'bg-slate-50 font-black text-black' : ''}`}
-                                    >
-                                        {cls}
-                                    </div>
-                                ))}
+                            <div className="absolute top-full right-0 mt-2 z-50 w-48">
+                                <div className="bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden animate-subtle-down">
+                                    {['Economy', 'Premium Economy', 'Business', 'First Class'].map((cls) => (
+                                        <div
+                                            key={cls}
+                                            onClick={() => { setTravelClass(cls); setOpenDropdown(null); }}
+                                            className={`px-4 py-2 hover:bg-slate-50 cursor-pointer ${travelClass === cls ? 'bg-slate-50 font-black text-black' : ''}`}
+                                        >
+                                            {cls}
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         )}
                     </div>
@@ -451,74 +470,108 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
                                 {/* Origin */}
                                 <div
                                     onClick={() => openSearch('from')}
-                                    className="w-full bg-slate-100/50 border border-slate-200/60 rounded-[14px] md:rounded-[clamp(1rem,1.5vw,1.5rem)] p-1.5 md:p-[clamp(0.75rem,2vw,1.25rem)] flex flex-col justify-center cursor-pointer transition-all hover:bg-white hover:shadow-md hover:border-slate-300 group/field"
+                                    className="w-full bg-slate-50 border border-slate-200/80 rounded-2xl md:rounded-[clamp(1rem,1.5vw,1.5rem)] p-3 md:p-[clamp(0.75rem,2vw,1.25rem)] flex flex-col justify-center cursor-pointer transition-all hover:bg-white hover:shadow-md hover:border-slate-300 group/field min-h-[70px]"
                                 >
-                                    <div className="flex items-center space-x-1 text-slate-400 mb-0 transition-colors group-hover/field:text-slate-600">
-                                        <MapPin size={9} className="md:w-3 md:h-3" />
-                                        <span className="text-[9px] md:text-[clamp(0.6rem,0.8vw,0.75rem)] font-bold uppercase tracking-wider">From</span>
+                                    <div className="flex items-center space-x-1 text-slate-400 mb-0.5 transition-colors group-hover/field:text-slate-600">
+                                        <MapPin size={11} className="md:w-3 md:h-3" />
+                                        <span className="text-[10px] md:text-[clamp(0.6rem,0.8vw,0.75rem)] font-bold uppercase tracking-wider">From</span>
                                     </div>
-                                    <div className="text-base md:text-[clamp(1.25rem,2.5vw,1.875rem)] font-black text-slate-900 tracking-tight group-hover/field:text-black">{flightData.from.city}</div>
-                                    <div className="text-[8px] md:text-[clamp(0.65rem,0.8vw,0.75rem)] font-semibold text-slate-500 truncate mt-0 md:mt-0.5">{flightData.from.code}, {flightData.from.country}</div>
+                                    <AnimatePresence mode="wait">
+                                        <motion.div
+                                            key={flightData.from.code}
+                                            initial={{ opacity: 0, x: -10 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            exit={{ opacity: 0, x: 10 }}
+                                            transition={{ duration: 0.15 }}
+                                        >
+                                            <div className="text-lg md:text-[clamp(1.25rem,2.5vw,1.875rem)] font-black text-slate-900 tracking-tight group-hover/field:text-black truncate">{flightData.from.city}</div>
+                                            <div className="text-[10px] md:text-[clamp(0.65rem,0.8vw,0.75rem)] font-semibold text-slate-500 truncate mt-0 md:mt-0.5">{flightData.from.code}, {flightData.from.country}</div>
+                                        </motion.div>
+                                    </AnimatePresence>
                                 </div>
 
                                 {/* Swap Icon */}
                                 <div className="flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
-                                    <button
+                                    <motion.button
+                                        animate={{ rotate: rotation }}
+                                        transition={{ type: "spring", stiffness: 260, damping: 20 }}
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             handleSwap();
                                         }}
-                                        className="bg-white border text-slate-400 hover:text-black hover:scale-110 hover:shadow-md hover:border-slate-300 active:scale-95 transition-all p-2 rounded-full shadow-sm rotate-90 md:rotate-0"
+                                        className="bg-white border text-slate-400 hover:text-black hover:shadow-md hover:border-slate-300 transition-colors p-2 rounded-full shadow-sm"
                                     >
                                         <ArrowRightLeft size={16} strokeWidth={2.5} />
-                                    </button>
+                                    </motion.button>
                                 </div>
 
                                 {/* Destination */}
                                 <div
                                     onClick={() => openSearch('to')}
-                                    className="w-full bg-slate-100/50 border border-slate-200/60 rounded-[14px] md:rounded-[clamp(1rem,1.5vw,1.5rem)] p-1.5 md:p-[clamp(0.75rem,2vw,1.25rem)] flex flex-col justify-center cursor-pointer transition-all hover:bg-white hover:shadow-md hover:border-slate-300 group/field"
+                                    className="w-full bg-slate-50 border border-slate-200/80 rounded-2xl md:rounded-[clamp(1rem,1.5vw,1.5rem)] p-3 md:p-[clamp(0.75rem,2vw,1.25rem)] flex flex-col justify-center cursor-pointer transition-all hover:bg-white hover:shadow-md hover:border-slate-300 group/field min-h-[70px]"
                                 >
-                                    <div className="flex items-center space-x-1 text-slate-400 mb-0 transition-colors group-hover/field:text-slate-600">
-                                        <MapPin size={9} className="md:w-3 md:h-3" />
-                                        <span className="text-[9px] md:text-[clamp(0.6rem,0.8vw,0.75rem)] font-bold uppercase tracking-wider">To</span>
+                                    <div className="flex items-center space-x-1 text-slate-400 mb-0.5 transition-colors group-hover/field:text-slate-600">
+                                        <MapPin size={11} className="md:w-3 md:h-3" />
+                                        <span className="text-[10px] md:text-[clamp(0.6rem,0.8vw,0.75rem)] font-bold uppercase tracking-wider">To</span>
                                     </div>
-                                    <div className="text-base md:text-[clamp(1.25rem,2.5vw,1.875rem)] font-black text-slate-900 tracking-tight group-hover/field:text-black">{flightData.to.city}</div>
-                                    <div className="text-[8px] md:text-[clamp(0.65rem,0.8vw,0.75rem)] font-semibold text-slate-500 truncate mt-0 md:mt-0.5">{flightData.to.code}, {flightData.to.country}</div>
+                                    <AnimatePresence mode="wait">
+                                        <motion.div
+                                            key={flightData.to.code}
+                                            initial={{ opacity: 0, x: 10 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            exit={{ opacity: 0, x: -10 }}
+                                            transition={{ duration: 0.15 }}
+                                        >
+                                            <div className="text-lg md:text-[clamp(1.25rem,2.5vw,1.875rem)] font-black text-slate-900 tracking-tight group-hover/field:text-black truncate">{flightData.to.city}</div>
+                                            <div className="text-[10px] md:text-[clamp(0.65rem,0.8vw,0.75rem)] font-semibold text-slate-500 truncate mt-0 md:mt-0.5">{flightData.to.code}, {flightData.to.country}</div>
+                                        </motion.div>
+                                    </AnimatePresence>
                                 </div>
                             </div>
 
                             {/* Dates */}
-                            <div className="lg:col-span-12 flex flex-col md:flex-row items-center gap-1.5 md:gap-4 h-full lg:col-start-8 lg:col-end-13">
+                            <div className={`lg:col-span-12 flex flex-row items-center gap-2 md:gap-4 h-full lg:col-start-8 lg:col-end-13`}>
                                 <div
                                     onClick={() => openDatePicker('departure')}
-                                    className="relative flex-1 w-full bg-slate-50/80 border border-slate-200/60 rounded-[14px] md:rounded-[clamp(1rem,1.5vw,1.5rem)] p-1.5 md:p-[clamp(0.75rem,2vw,1.25rem)] flex flex-col justify-center cursor-pointer transition-all duration-300 hover:border-slate-300 hover:shadow-md hover:bg-white group/date h-full min-h-[50px] md:min-h-[clamp(80px,12vh,110px)] overflow-hidden"
+                                    className="relative flex-1 w-full bg-slate-50 border border-slate-200/80 rounded-2xl md:rounded-[clamp(1rem,1.5vw,1.5rem)] p-3 md:p-[clamp(0.75rem,2vw,1.25rem)] flex flex-col justify-center cursor-pointer transition-all duration-300 hover:border-slate-300 hover:shadow-md hover:bg-white group/date h-full min-h-[70px] md:min-h-[clamp(80px,12vh,110px)] overflow-hidden"
                                 >
-                                    <div className="flex items-center space-x-1 text-slate-400 mb-0 transition-colors group-hover/date:text-slate-600">
-                                        <Calendar size={9} className="md:w-3 md:h-3" />
-                                        <span className="text-[9px] md:text-[clamp(0.6rem,0.8vw,0.75rem)] font-bold uppercase tracking-wider">Departure</span>
+                                    <div className="flex items-center space-x-1 text-slate-400 mb-0.5 transition-colors group-hover/date:text-slate-600">
+                                        <Calendar size={11} className="md:w-3 md:h-3" />
+                                        <span className="text-[10px] md:text-[clamp(0.6rem,0.8vw,0.75rem)] font-bold uppercase tracking-wider">Departure</span>
                                     </div>
                                     <div className="flex items-center justify-between mt-auto">
-                                        <div className={`text-xs md:text-[clamp(1rem,1.5vw,1.5rem)] font-black tracking-tight ${dates.departure ? 'text-slate-900' : 'text-slate-300'}`}>
+                                        <div className={`text-sm md:text-[clamp(1rem,1.5vw,1.5rem)] font-black tracking-tight ${dates.departure ? 'text-slate-900' : 'text-slate-300'}`}>
                                             {formatDate(dates.departure)}
                                         </div>
                                     </div>
                                 </div>
 
-                                <div
-                                    onClick={() => tripType !== 'One Way' && openDatePicker('return')}
-                                    className={`relative flex-1 w-full bg-slate-50/80 border border-slate-200/60 rounded-[14px] md:rounded-[clamp(1rem,1.5vw,1.5rem)] p-1.5 md:p-[clamp(0.75rem,2vw,1.25rem)] flex flex-col justify-center cursor-pointer transition-all duration-300 hover:border-slate-300 hover:shadow-md hover:bg-white group/date h-full min-h-[50px] md:min-h-[clamp(80px,12vh,110px)] overflow-hidden ${tripType === 'One Way' ? 'opacity-50 cursor-not-allowed bg-slate-100' : ''}`}
-                                >
-                                    <div className="flex items-center space-x-1 text-slate-400 mb-0 transition-colors group-hover/date:text-slate-600">
-                                        <Calendar size={9} className="md:w-3 md:h-3" />
-                                        <span className="text-[9px] md:text-[clamp(0.6rem,0.8vw,0.75rem)] font-bold uppercase tracking-wider">Return</span>
-                                    </div>
-                                    <div className="flex items-center justify-between mt-auto">
-                                        <div className={`text-xs md:text-[clamp(1rem,1.5vw,1.5rem)] font-black tracking-tight ${dates.return ? 'text-slate-900' : 'text-slate-300'}`}>
-                                            {tripType === 'One Way' ? 'One Way' : formatDate(dates.return)}
-                                        </div>
-                                    </div>
-                                </div>
+                                <AnimatePresence initial={false}>
+                                    {tripType !== 'One Way' && (
+                                        <motion.div
+                                            initial={{ width: 0, opacity: 0 }}
+                                            animate={{ width: "100%", opacity: 1 }}
+                                            exit={{ width: 0, opacity: 0 }}
+                                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                            className="flex-1 overflow-hidden h-full"
+                                        >
+                                            <div
+                                                onClick={() => openDatePicker('return')}
+                                                className="relative w-full h-full bg-slate-50 border border-slate-200/80 rounded-2xl md:rounded-[clamp(1rem,1.5vw,1.5rem)] p-3 md:p-[clamp(0.75rem,2vw,1.25rem)] flex flex-col justify-center cursor-pointer transition-all duration-300 hover:border-slate-300 hover:shadow-md hover:bg-white group/date min-h-[70px] md:min-h-[clamp(80px,12vh,110px)] whitespace-nowrap"
+                                            >
+                                                <div className="flex items-center space-x-1 text-slate-400 mb-0.5 transition-colors group-hover/date:text-slate-600">
+                                                    <Calendar size={11} className="md:w-3 md:h-3" />
+                                                    <span className="text-[10px] md:text-[clamp(0.6rem,0.8vw,0.75rem)] font-bold uppercase tracking-wider">Return</span>
+                                                </div>
+                                                <div className="flex items-center justify-between mt-auto">
+                                                    <div className={`text-sm md:text-[clamp(1rem,1.5vw,1.5rem)] font-black tracking-tight ${dates.return ? 'text-slate-900' : 'text-slate-300'}`}>
+                                                        {formatDate(dates.return)}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
                             </div>
                         </motion.div>
                     )}
@@ -726,7 +779,7 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
 
                             window.location.href = `/search?${params.toString()}`;
                         }}
-                        className="w-full md:w-auto bg-black text-white px-8 py-3 md:py-3.5 rounded-xl md:rounded-2xl font-bold text-sm md:text-base shadow-xl shadow-slate-900/20 hover:bg-slate-800 transition-all active:scale-95 flex items-center justify-center space-x-2"
+                        className="w-full md:w-auto bg-gradient-to-r from-slate-900 to-slate-800 text-white px-8 py-3.5 md:py-3.5 rounded-2xl md:rounded-2xl font-bold text-base md:text-base shadow-xl shadow-slate-900/20 hover:shadow-slate-900/30 hover:scale-[1.02] transition-all active:scale-95 flex items-center justify-center space-x-2"
                     >
                         <span>Search {activeTab === 'flight' ? 'Flights' : activeTab === 'hotel' ? 'Hotels' : 'Cars'}</span>
                         <ArrowRight size={18} strokeWidth={3} />

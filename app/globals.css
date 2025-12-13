@@ -1,68 +1,60 @@
 @import "tailwindcss";
 
-
-@theme {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-
-  --animate-subtle-down: subtle-slide-down 1s cubic-bezier(0.2, 0.8, 0.2, 1) both;
-  --animate-subtle-up: subtle-slide-up 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s both;
-  --animate-subtle-right: subtle-slide-right 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s both;
-  --animate-subtle-pop: subtle-pop 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s both;
-  --animate-subtle-zoom: subtle-zoom 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
-
-  @keyframes subtle-zoom {
-    0% {
-      transform: scale(1.05);
-      opacity: 0;
-    }
-
-    100% {
-      transform: scale(1);
-      opacity: 1;
-    }
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
 
-  @keyframes subtle-slide-down {
-    0% {
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .mask-linear-fade {
+    mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+  }
+}
+
+@layer components {
+
+  /* Subtle Animations */
+  @keyframes subtle-up {
+    from {
       opacity: 0;
-      transform: translateY(-12px);
+      transform: translateY(10px);
     }
 
-    100% {
+    to {
       opacity: 1;
       transform: translateY(0);
     }
   }
 
-  @keyframes subtle-slide-up {
-    0% {
+  .animate-subtle-up {
+    animation: subtle-up 0.5s ease-out forwards;
+  }
+
+  @keyframes subtle-down {
+    from {
       opacity: 0;
-      transform: translateY(12px);
+      transform: translateY(-10px);
     }
 
-    100% {
+    to {
       opacity: 1;
       transform: translateY(0);
     }
   }
 
-  @keyframes subtle-slide-right {
-    0% {
-      opacity: 0;
-      transform: translateX(-12px);
-    }
-
-    100% {
-      opacity: 1;
-      transform: translateX(0);
-    }
+  .animate-subtle-down {
+    animation: subtle-down 0.3s ease-out forwards;
   }
 
   @keyframes subtle-pop {
     0% {
       opacity: 0;
-      transform: scale(0.98);
+      transform: scale(0.95);
     }
 
     100% {
@@ -70,54 +62,8 @@
       transform: scale(1);
     }
   }
-}
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
-}
-
-html.lenis,
-html.lenis body {
-  height: auto;
-}
-
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
-
-.lenis.lenis-scrolling iframe {
-  pointer-events: none;
-}
-
-/* Custom Scrollbar */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #e2e8f0;
-  border-radius: 20px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: #cbd5e1;
+  .animate-subtle-pop {
+    animation: subtle-pop 0.5s ease-out forwards;
+  }
 }
