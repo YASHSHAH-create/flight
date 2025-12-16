@@ -41,14 +41,14 @@ const Footer = () => {
                             <span className="ml-2 w-12 h-0.5 bg-blue-500 rounded-full"></span>
                         </h3>
                         <ul className="space-y-3">
-                            {['About Us', 'Contact Us'].map((item) => (
+                            {['About', 'Contact'].map((item) => (
                                 <li key={item}>
                                     <Link
-                                        href={`/${item.toLowerCase().replace(' ', '-')}`}
+                                        href={`/${item.toLowerCase()}`}
                                         className="text-slate-400 hover:text-blue-400 transition-colors flex items-center group"
                                     >
                                         <span className="w-1.5 h-1.5 rounded-full bg-slate-600 mr-2 group-hover:bg-blue-400 transition-colors"></span>
-                                        {item}
+                                        {item} Us
                                     </Link>
                                 </li>
                             ))}

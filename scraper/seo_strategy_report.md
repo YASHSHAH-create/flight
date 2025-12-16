@@ -2,19 +2,39 @@
 {
   "verdict": "Needs Work",
   "competitor_gap_analysis": [
-    "Core Web Vitals Disparity: Ixigo and Goibibo consistently maintain mobile performance scores of 85+. Your score of ~57 indicates a slow Largest Contentful Paint (LCP) and high Total Blocking Time (TBT), likely caused by unoptimized JavaScript bundles in your booking engine.",
-    "Programmatic SEO Architecture: Giants like Ixigo do not rank the homepage for flight queries; they rank dynamic route pages (e.g., 'flights-from-delhi-to-dubai'). Your content suggests a generic homepage focus, missing the millions of long-tail keywords captured by specific route landing pages.",
-    "Content Depth & Semantic Relevance: Your first 1000 characters are navigational and functional (UI elements). Competitors place rich text content 'below the fold' covering airport details, baggage policies, and weather trends to satisfy Google's 'Helpful Content' guidelines. Your page lacks this topical authority.",
-    "Schema Markup Ecosystem: Goibibo utilizes extensive JSON-LD Schema (FAQPage, BreadcrumbList, Product, AggregateRating, SoftwareApplication). Your current setup appears to lack the nested structured data required to generate 'Rich Snippets' (star ratings and price ranges) in search results.",
-    "Internal Linking Structure: Competitors use massive footer matrices connecting airlines to destinations (e.g., 'Indigo flights to Goa'). Your content snippet relies on 'Featured Destinations' cards, which is insufficient for passing link equity to deep pages."
+    "**Programmatic SEO Architecture**: Ixigo and Goibibo do not rely on the homepage alone. They have thousands of auto-generated, high-quality landing pages for specific routes (e.g., 'Delhi to Mumbai Flights', 'Flights under 5000'). Your data suggests a single-page or limited structure.",
+    "**Core Web Vitals (Speed)**: Your Performance score is 62. Ixigo typically scores 90+ on mobile. In the travel niche, users bounce if LCP (Largest Contentful Paint) exceeds 2.5 seconds. You are likely losing mobile users before they even search.",
+    "**Schema Markup Depth**: Competitors utilize advanced 'FlightReservation', 'AggregateOffer', and 'FAQPage' schema to dominate rich snippets. Your current data suggests basic metadata but likely lacks specific structured data for flight inventory.",
+    "**Topical Authority & Content**: Your testimonials ('Sarah Jenkins') and destination cards appear generic. Ixigo provides historical price trends, weather data, and PNR prediction for every destination. Google E-E-A-T (Experience, Expertise, Authoritativeness, Trustworthiness) is currently low compared to the historical data held by giants.",
+    "**Internal Linking Strategy**: Giants use a 'hub and spoke' model linking popular routes from the footer and body content. Your current 1000 chars show a linear flow without deep interconnectivity."
   ],
-  "estimated_time_to_rank": "12-18 months",
+  "estimated_time_to_rank": 12,
   "action_plan": [
-    "Fix Core Web Vitals (Dev): Increase performance from 57 to 90+ by implementing Server-Side Rendering (SSR) or Static Generation (SSG) for landing pages. Defer off-screen images and minimize main-thread work by code-splitting the JavaScript booking widget.",
-    "Deploy Programmatic Landing Pages (SEO/Dev): Build a template to auto-generate pages for the top 500 routes (e.g., /flights/del-dxb). Ensure unique H1s, Meta Titles, and dynamic pricing blocks for each to capture long-tail traffic.",
-    "Implement Advanced Schema (Tech SEO): Add 'SearchAction' schema to the homepage (to get the Sitelinks Search Box in Google) and 'FAQPage' schema on all route pages to monopolize SERP real estate.",
-    "Content Expansion (Content): Add 800+ words of static content below the booking widget. Topics must include 'How to book', 'Cancellation Policies', and 'Top Airlines for [Route]' to provide text for Google to index.",
-    "Canonicalization Strategy (Tech SEO): Ensure your search result pages (dynamic URLs with query parameters like ?date=...) are canonicalized to the static route pages to prevent crawl budget waste and duplicate content penalties."
+    {
+      "priority": "Critical",
+      "area": "Performance Engineering",
+      "task": "Increase Performance Score from 62 to 90+. Compress the hero background images (NextGen formats like WebP), defer off-screen images, and minimize JavaScript payload (hydration issues). The booking widget must load instantly."
+    },
+    {
+      "priority": "High",
+      "area": "Site Architecture",
+      "task": "Implement Programmatic SEO. Create dynamic templates to generate pages for the top 500 Indian flight routes (e.g., /flights/delhi-to-dubai). Populate these with specific pricing data, flight duration, and airline info, rather than generic text."
+    },
+    {
+      "priority": "High",
+      "area": "Structured Data",
+      "task": "Inject 'Product' and 'Flight' Schema markup. Since you cannot compete on Domain Authority yet, you must compete on Rich Snippets to get click-throughs from position 5-10."
+    },
+    {
+      "priority": "Medium",
+      "area": "Content Localization",
+      "task": "Replace generic 'Sarah Jenkins' testimonials with real, verifiable Indian user reviews or dynamic 'Recent Bookings' notifications (e.g., 'Rohan just booked DEL-BOM'). Google penalizes fake or generic boilerplate content."
+    },
+    {
+      "priority": "Medium",
+      "area": "Keyword Strategy",
+      "task": "Pivot from 'Book Cheap Flights' (Head Term, impossible difficulty) to Long-Tail Intent. Optimize h1s and titles for specific queries like 'Last minute flights to Dubai from Delhi' or 'Student discount flights India'."
+    }
   ]
 }
 ```
