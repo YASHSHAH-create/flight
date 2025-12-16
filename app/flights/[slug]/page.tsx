@@ -80,12 +80,11 @@ export default async function FlightRoutePage({ params }: Props) {
 
     const { originCode, destCode } = data;
 
-    // Calculate tomorrow's date for a valid search
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    const d = tomorrow.getDate().toString().padStart(2, '0');
-    const m = (tomorrow.getMonth() + 1).toString().padStart(2, '0');
-    const y = tomorrow.getFullYear();
+    // Calculate today's date for a valid search
+    const today = new Date();
+    const d = today.getDate().toString().padStart(2, '0');
+    const m = (today.getMonth() + 1).toString().padStart(2, '0');
+    const y = today.getFullYear();
     const dateParam = `${d}${m}${y}`;
 
     // Redirect to the actual search page
