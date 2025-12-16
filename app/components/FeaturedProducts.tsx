@@ -1,13 +1,15 @@
+"use client";
 
 import { Heart, Tag, Plane, Search } from 'lucide-react';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 const products = [
     {
         id: 1,
         title: "New York",
         image: "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?q=80&w=2671&auto=format&fit=crop",
-        price: "$120",
+        price: "Check Price",
         rating: "4.9",
         code: "JFK"
     },
@@ -15,7 +17,7 @@ const products = [
         id: 2,
         title: "Paris",
         image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=2673&auto=format&fit=crop",
-        price: "$240",
+        price: "Check Price",
         rating: "5.0",
         code: "CDG"
     },
@@ -23,7 +25,7 @@ const products = [
         id: 3,
         title: "Cape Town",
         image: "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?q=80&w=2671&auto=format&fit=crop",
-        price: "$900",
+        price: "Check Price",
         rating: "4.8",
         code: "CPT"
     },
@@ -31,7 +33,7 @@ const products = [
         id: 4,
         title: "Tokyo",
         image: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?q=80&w=2671&auto=format&fit=crop",
-        price: "$450",
+        price: "Check Price",
         rating: "4.8",
         code: "HND"
     }
@@ -59,11 +61,12 @@ const FeaturedProducts = () => {
                         {/* Image Container */}
                         <div className="relative w-full h-64 md:h-full rounded-xl md:rounded-2xl overflow-hidden transition-all duration-500 ease-in-out md:group-hover:h-[65%] shrink-0">
                             {/* Background Image */}
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
+                            <Image
                                 src={product.image}
                                 alt={product.title}
-                                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                fill
+                                className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                             />
 
                             {/* Gradient Overlay - Desktop Only for readability of overlay text */}

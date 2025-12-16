@@ -23,8 +23,8 @@ export default function SEOHiddenContent() {
                 const fromCity = AIRPORT_MAP[from].city;
                 const toCity = AIRPORT_MAP[to].city;
                 const slug = `${fromCity.toLowerCase().replace(/\s+/g, '-')}-to-${toCity.toLowerCase().replace(/\s+/g, '-')}`;
-                const price = Math.floor(Math.random() * (15000 - 3000) + 3000); // Dummy price
-                routes.push({ from: fromCity, to: toCity, slug, price });
+                // const price = Math.floor(Math.random() * (15000 - 3000) + 3000); // Removed fake price
+                routes.push({ from: fromCity, to: toCity, slug, price: 0 }); // price 0 as indicator for "Check Price"
             }
         });
     });
@@ -71,7 +71,7 @@ export default function SEOHiddenContent() {
                                 </a>
                             </td>
                             <td>{airlines[i % airlines.length]}</td>
-                            <td>Starting from ₹{route.price}</td>
+                            <td>Check Price</td>
                         </tr>
                     ))}
                 </tbody>

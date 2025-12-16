@@ -1,6 +1,3 @@
-"use client";
-import { useState, useEffect } from "react";
-
 import Image from "next/image";
 import Navbar from "./components/Navbar";
 import SearchWidget from "./components/SearchWidget";
@@ -8,13 +5,14 @@ import FeaturedProducts from "./components/FeaturedProducts";
 import Testimonials from "./components/Testimonials";
 import BottomNav from "./components/BottomNav";
 import { MoveRight } from 'lucide-react';
-import { motion } from "framer-motion";
-
+import AnimatedSection from "./components/AnimatedSection";
+import JsonLd from "./components/JsonLd";
 import SEOHiddenContent from "./components/SEOHiddenContent";
 
 export default function Home() {
   return (
     <div className="relative min-h-screen w-full bg-slate-50 font-sans selection:bg-black selection:text-white">
+      <JsonLd />
 
       {/* Sticky Navbar (Common across all sections) - Navbar handles its own scroll state */}
       <Navbar />
@@ -29,6 +27,7 @@ export default function Home() {
             fill
             className="object-cover object-center animate-subtle-zoom"
             priority
+            sizes="100vw"
           />
         </div>
 
@@ -46,7 +45,7 @@ export default function Home() {
 
             <h1 className="text-[clamp(2.5rem,6vw,5.5rem)] [@media(max-height:800px)]:text-[clamp(2rem,5vw,4.5rem)] font-bold text-slate-900 leading-[1.1] tracking-tight drop-shadow-sm">
               <span className="relative inline-block">
-                Flying to?
+                Book Cheap Flights & Air Tickets from India
               </span>
             </h1>
 
@@ -59,15 +58,8 @@ export default function Home() {
       </section>
 
       {/* Frame 2: Content Section */}
-      {/* Frame 2: Content Section */}
       <section className="relative w-full bg-white flex flex-col justify-center py-20 px-0 md:px-0">
-        <motion.div
-          className="flex flex-col justify-evenly max-w-7xl mx-auto w-full gap-20"
-          initial={{ opacity: 0, y: 100, scale: 0.95 }}
-          whileInView={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          viewport={{ once: false, amount: 0.1 }}
-        >
+        <AnimatedSection>
           <FeaturedProducts />
           <Testimonials />
 
@@ -76,7 +68,7 @@ export default function Home() {
             <p className="mb-[2vh] text-slate-400 text-[clamp(0.875rem,1.2vw,1rem)]">Join millions of travelers today.</p>
             <button className="bg-white text-black px-[6vw] md:px-8 py-[1.5vh] md:py-3 rounded-full font-bold text-[clamp(0.875rem,1.2vw,1rem)] hover:bg-slate-200 transition-colors transform hover:scale-105 active:scale-95">Get Started</button>
           </div>
-        </motion.div>
+        </AnimatedSection>
       </section>
 
       {/* Spacer for Mobile Bottom Nav */}

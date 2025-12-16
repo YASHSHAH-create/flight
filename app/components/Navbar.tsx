@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ChevronDown, Menu, LogOut, User, Globe, Package, CalendarDays, Settings, Briefcase, X } from 'lucide-react';

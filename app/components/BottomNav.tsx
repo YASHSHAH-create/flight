@@ -1,4 +1,5 @@
 
+"use client";
 import React, { useState } from 'react';
 import { Home, Search, Calendar, User } from 'lucide-react';
 
