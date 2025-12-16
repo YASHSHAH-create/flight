@@ -11,6 +11,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { SearchResponse, FlightResult } from '../../types/api';
 import SearchWidget from '../components/SearchWidget';
+import Link from "next/link"; // Ensure Link is imported or use <a> tag in SEOHiddenContent
+import SEOHiddenContent from "../components/SEOHiddenContent";
 import BottomNav from '../components/BottomNav';
 import { useAuth } from '../../context/AuthContext';
 
@@ -1047,6 +1049,7 @@ function SearchResultsContent() {
                     </div>
                 )}
             </AnimatePresence>
+            <SEOHiddenContent />
         </div >
     );
 }

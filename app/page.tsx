@@ -10,6 +10,8 @@ import BottomNav from "./components/BottomNav";
 import { MoveRight } from 'lucide-react';
 import { motion } from "framer-motion";
 
+import SEOHiddenContent from "./components/SEOHiddenContent";
+
 export default function Home() {
   return (
     <div className="relative min-h-screen w-full bg-slate-50 font-sans selection:bg-black selection:text-white">
@@ -82,7 +84,7 @@ export default function Home() {
 
       {/* Mobile Bottom Navigation */}
       <BottomNav />
-
+      <SEOHiddenContent />
     </div>
   );
 }
