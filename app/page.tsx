@@ -12,7 +12,7 @@ const SearchWidget = dynamic(() => import('./components/SearchWidget'), {
 });
 const FeaturedProducts = dynamic(() => import('./components/FeaturedProducts'));
 const Testimonials = dynamic(() => import('./components/Testimonials'));
-const BottomNav = dynamic(() => import('./components/BottomNav'), { ssr: false });
+const BottomNav = dynamic(() => import('./components/ClientBottomNav'));
 
 
 export default function Home() {
