@@ -155,6 +155,24 @@ function SearchResultsContent() {
     };
 
     useEffect(() => {
+        const from = searchParams.get('from');
+        const to = searchParams.get('to');
+        const date = searchParams.get('date');
+
+        if (!from || !to || !date) {
+            // Calculate today's date
+            const today = new Date();
+            const d = today.getDate().toString().padStart(2, '0');
+            const m = (today.getMonth() + 1).toString().padStart(2, '0');
+            const y = today.getFullYear();
+            const dateParam = `${d}${m}${y}`;
+
+            // Default Route: DEL -> BLR
+            const defaultUrl = `/search?from=DEL&to=BLR&date=${dateParam}&adults=1&children=0&infants=0&class=e&journeyType=1`;
+            router.replace(defaultUrl);
+            return; // Stop further execution
+        }
+
         const fetchFlights = async () => {
             setLoading(true);
             setError(null);
