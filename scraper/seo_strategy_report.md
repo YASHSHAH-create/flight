@@ -2,49 +2,19 @@
 {
   "verdict": "Needs Work",
   "competitor_gap_analysis": [
-    {
-      "area": "Core Web Vitals & Performance",
-      "gap": "Your Performance score is 27 (Critical). Ixigo and Goibibo average 85-95 on mobile. They utilize Server-Side Rendering (SSR) with aggressive caching and CDNs (Cloudflare/Akamai) to load LCP (Largest Contentful Paint) in under 1.5 seconds. Your site likely suffers from heavy JavaScript execution or unoptimized image assets."
-    },
-    {
-      "area": "Semantic Structure (H1 Tags)",
-      "gap": "Your H1 is 'Flying to?'. This is a navigational query, not a keyword. Ixigo/Goibibo use H1s like 'Cheap Flights', 'Flight Booking', or dynamic headers like 'New Delhi to Dubai Flights'. Google places heavy weight on the H1 for understanding the page topic."
-    },
-    {
-      "area": "Programmatic SEO & Content Depth",
-      "gap": "Ixigo/Goibibo have millions of landing pages generated programmatically (e.g., /flights/delhi-to-mumbai). Your content appears to be a single-page application (SPA) style or a generic template. The displayed fares ($120 for JFK Premium Economy) seem to be placeholder data (Lorem Ipsum equivalent), which Google views as 'Thin Content' or 'Low Quality'."
-    },
-    {
-      "area": "Schema Markup",
-      "gap": "Competitors utilize 'Flight', 'Product', 'AggregateRating', and 'FAQPage' schemas. This allows them to show star ratings and price snippets directly in Google Search results (Rich Snippets), increasing CTR. Your data suggests a lack of structured data integration."
-    },
-    {
-      "area": "Internal Linking Architecture",
-      "gap": "Giants use massive footer link blocks ('Flights to Goa', 'Flights to Bangalore') to pass authority to specific route pages. Your sample shows limited navigation, relying on user interaction (search) rather than crawlable HTML links."
-    }
+    "Core Web Vitals Disparity: Ixigo and Goibibo consistently maintain mobile performance scores of 85+. Your score of ~57 indicates a slow Largest Contentful Paint (LCP) and high Total Blocking Time (TBT), likely caused by unoptimized JavaScript bundles in your booking engine.",
+    "Programmatic SEO Architecture: Giants like Ixigo do not rank the homepage for flight queries; they rank dynamic route pages (e.g., 'flights-from-delhi-to-dubai'). Your content suggests a generic homepage focus, missing the millions of long-tail keywords captured by specific route landing pages.",
+    "Content Depth & Semantic Relevance: Your first 1000 characters are navigational and functional (UI elements). Competitors place rich text content 'below the fold' covering airport details, baggage policies, and weather trends to satisfy Google's 'Helpful Content' guidelines. Your page lacks this topical authority.",
+    "Schema Markup Ecosystem: Goibibo utilizes extensive JSON-LD Schema (FAQPage, BreadcrumbList, Product, AggregateRating, SoftwareApplication). Your current setup appears to lack the nested structured data required to generate 'Rich Snippets' (star ratings and price ranges) in search results.",
+    "Internal Linking Structure: Competitors use massive footer matrices connecting airlines to destinations (e.g., 'Indigo flights to Goa'). Your content snippet relies on 'Featured Destinations' cards, which is insufficient for passing link equity to deep pages."
   ],
-  "estimated_time_to_rank": "8-12 months for long-tail keywords (specific low-competition routes). 18-24 months for head terms (e.g., 'Book Flights') due to the high Domain Authority (DA) of competitors.",
+  "estimated_time_to_rank": "12-18 months",
   "action_plan": [
-    {
-      "priority": "Critical Technical Fix",
-      "action": "Address the Performance Score of 27 immediately. Implement Next.jsServer-Side Rendering (SSR). Defer off-screen images, minify CSS/JS bundles, and ensure your LCP is under 2.5 seconds. Speed is a confirmed ranking factor."
-    },
-    {
-      "priority": "On-Page Optimization",
-      "action": "Change your H1 tag from 'Flying to?' to a primary keyword string: 'Book Cheap Flights & Air Tickets from India'. Ensure the H1 contains the core intent of the user."
-    },
-    {
-      "priority": "Architecture",
-      "action": "Build a Programmatic SEO strategy. Do not rely solely on the homepage search bar. Create static landing pages for your top 100 routes (e.g., paymm.in/flights/del-to-dxb) so Google can index specific inventory."
-    },
-    {
-      "priority": "Content Integrity",
-      "action": "Replace placeholder pricing (e.g., $120 to New York) with real-time API data or realistic 'starting from' prices in INR. Google penalizes misleading content. If the bot crawls $120 for a flight that costs $800, it signals a low-trust site."
-    },
-    {
-      "priority": "Structured Data",
-      "action": "Inject JSON-LD Schema markup. Specifically, add 'SearchAction' schema so users can search your site directly from Google, and 'FAQPage' schema below the fold to capture 'People Also Ask' snippets."
-    }
+    "Fix Core Web Vitals (Dev): Increase performance from 57 to 90+ by implementing Server-Side Rendering (SSR) or Static Generation (SSG) for landing pages. Defer off-screen images and minimize main-thread work by code-splitting the JavaScript booking widget.",
+    "Deploy Programmatic Landing Pages (SEO/Dev): Build a template to auto-generate pages for the top 500 routes (e.g., /flights/del-dxb). Ensure unique H1s, Meta Titles, and dynamic pricing blocks for each to capture long-tail traffic.",
+    "Implement Advanced Schema (Tech SEO): Add 'SearchAction' schema to the homepage (to get the Sitelinks Search Box in Google) and 'FAQPage' schema on all route pages to monopolize SERP real estate.",
+    "Content Expansion (Content): Add 800+ words of static content below the booking widget. Topics must include 'How to book', 'Cancellation Policies', and 'Top Airlines for [Route]' to provide text for Google to index.",
+    "Canonicalization Strategy (Tech SEO): Ensure your search result pages (dynamic URLs with query parameters like ?date=...) are canonicalized to the static route pages to prevent crawl budget waste and duplicate content penalties."
   ]
 }
 ```

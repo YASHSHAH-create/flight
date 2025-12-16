@@ -1,13 +1,19 @@
 import Image from "next/image";
 import Navbar from "./components/Navbar";
-import SearchWidget from "./components/SearchWidget";
-import FeaturedProducts from "./components/FeaturedProducts";
-import Testimonials from "./components/Testimonials";
-import BottomNav from "./components/BottomNav";
 import { MoveRight } from 'lucide-react';
 import AnimatedSection from "./components/AnimatedSection";
 import JsonLd from "./components/JsonLd";
 import SEOHiddenContent from "./components/SEOHiddenContent";
+import dynamic from 'next/dynamic';
+
+const SearchWidget = dynamic(() => import('./components/SearchWidget'), {
+  ssr: true,
+  loading: () => <div className="h-[400px] w-full bg-white/50 animate-pulse rounded-[24px]" />
+});
+const FeaturedProducts = dynamic(() => import('./components/FeaturedProducts'));
+const Testimonials = dynamic(() => import('./components/Testimonials'));
+const BottomNav = dynamic(() => import('./components/BottomNav'), { ssr: false });
+
 
 export default function Home() {
   return (

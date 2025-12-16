@@ -1,8 +1,11 @@
 import { Metadata } from "next";
 import { AIRPORT_MAP } from "@/app/lib/airports";
 import Navbar from "@/app/components/Navbar";
-import SearchWidget from "@/app/components/SearchWidget";
+import dynamic from 'next/dynamic';
 import Footer from "@/app/components/Footer";
+import SEOContentBlock from "@/app/components/SEOContentBlock";
+
+const SearchWidget = dynamic(() => import('@/app/components/SearchWidget'), { ssr: true });
 
 type Props = {
     params: Promise<{ slug: string }>;
@@ -48,13 +51,13 @@ export async function generateMetadata(
     const { originName, destName } = data;
 
     return {
-        title: `Cheap Flights from ${originName} to ${destName} | Paymm`,
+        title: `Book Flights from ${originName} to ${destName} | Paymm`,
         description: `Book the cheapest flights from ${originName} to ${destName} on Paymm. Compare prices, check schedules, and get exclusive deals on air tickets.`,
         alternates: {
             canonical: `https://paymm.in/flights/${slug}`
         },
         openGraph: {
-            title: `Cheap Flights from ${originName} to ${destName}`,
+            title: `Book Flights from ${originName} to ${destName}`,
             description: `Compare and book best flight tickets from ${originName} to ${destName}.`,
         }
     };
@@ -77,7 +80,6 @@ export default async function FlightRoutePage({ params }: Props) {
     const { originCode, destCode, originName, destName } = data;
 
     const today = new Date();
-    // Default to tomorrow for booking
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
@@ -93,13 +95,61 @@ export default async function FlightRoutePage({ params }: Props) {
         journeyType: '1'
     };
 
+    // JSON-LD for Breadcrumb and FAQ
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [{
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://paymm.in"
+                }, {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Flights",
+                    "item": "https://paymm.in/flights"
+                }, {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": `Flights from ${originName} to ${destName}`,
+                    "item": `https://paymm.in/flights/${slug}`
+                }]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [{
+                    "@type": "Question",
+                    "name": `How long is the flight from ${originName} to ${destName}?`,
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": `The flight duration from ${originName} to ${destName} varies depending on the airline and whether it is a direct or connecting flight. Direct flights are usually faster.`
+                    }
+                }, {
+                    "@type": "Question",
+                    "name": `What is the cheapest month to fly to ${destName}?`,
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Flight prices fluctuate. It is generally recommended to book in advance and avoid peak travel seasons for the best rates."
+                    }
+                }]
+            }
+        ]
+    };
+
     return (
         <div className="min-h-screen w-full bg-slate-50 font-sans">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
             <Navbar />
             <div className="relative pt-32 pb-20 px-4 w-full bg-slate-900 flex flex-col items-center">
                 <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col items-center gap-8">
                     <h1 className="text-3xl md:text-5xl font-bold text-white text-center leading-tight">
-                        Flights from {originName} to {destName}
+                        Book Flights from {originName} to {destName}
                     </h1>
                     <div className="w-full">
                         <SearchWidget initialState={initialState} />
@@ -107,55 +157,10 @@ export default async function FlightRoutePage({ params }: Props) {
                 </div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-4 py-16 grid grid-cols-1 md:grid-cols-3 gap-12">
-                <div className="md:col-span-2 space-y-8 text-slate-700">
-                    <section>
-                        <h2 className="text-2xl font-bold text-slate-900 mb-4">About the Route</h2>
-                        <p className="leading-relaxed">
-                            Looking for cheap flights from {originName} ({originCode}) to {destName} ({destCode})?
-                            You are at the right place. Paymm offers the best deals on air tickets for this route.
-                            Whether you are traveling for business or leisure, find the most convenient flight schedules and lowest fares here.
-                        </p>
-                    </section>
+            <SEOContentBlock origin={originName} destination={destName} />
 
-                    <section>
-                        <h2 className="text-2xl font-bold text-slate-900 mb-4">FAQs for {originName} to {destName} Flights</h2>
-                        <div className="space-y-4">
-                            <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
-                                <h3 className="font-bold text-lg mb-2">How to get the cheapest flight from {originName} to {destName}?</h3>
-                                <p className="text-sm">To get the best price, it is recommended to book your tickets at least 2-3 weeks in advance. Weekday flights are often cheaper than weekend flights.</p>
-                            </div>
-                            <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
-                                <h3 className="font-bold text-lg mb-2">Which airlines fly from {originName} to {destName}?</h3>
-                                <p className="text-sm">Major airlines like Indigo, Air India, Vistara, and others operate flights on this route. Use the search widget above to check availability.</p>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-
-                <div className="space-y-6">
-                    <div className="bg-white p-6 rounded-2xl shadow-lg border border-slate-100">
-                        <h3 className="font-bold text-xl mb-4 text-slate-900">Why Book with Paymm?</h3>
-                        <ul className="space-y-3 text-sm text-slate-600">
-                            <li className="flex items-center gap-2">
-                                <span className="text-green-500">✓</span> No Hidden Charges
-                            </li>
-                            <li className="flex items-center gap-2">
-                                <span className="text-green-500">✓</span> Secure Payments
-                            </li>
-                            <li className="flex items-center gap-2">
-                                <span className="text-green-500">✓</span> 24/7 Customer Support
-                            </li>
-                            <li className="flex items-center gap-2">
-                                <span className="text-green-500">✓</span> Best Price Guarantee
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div className="text-center pb-10 text-xs text-slate-400">
-                <p>Prices are subject to change. Check real-time fares on the search result page.</p>
+            <div className="max-w-7xl mx-auto px-4 py-8">
+                <Footer />
             </div>
         </div>
     );

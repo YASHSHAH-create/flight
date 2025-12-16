@@ -5,7 +5,7 @@ import * as chromeLauncher from 'chrome-launcher';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
 // --- CONFIGURATION ---
-const URL_TO_AUDIT = 'https://www.ixigo.com/'; 
+const URL_TO_AUDIT = 'https://paymm.in'; 
 const GEMINI_API_KEY = "AIzaSyDRq1vtdesyVoejO7VhP3gnT7uTFEeYre4"; // Yahan apni key dalo
 // ---------------------
 
