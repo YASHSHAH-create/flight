@@ -485,7 +485,7 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
                                             exit={{ opacity: 0, x: 10 }}
                                             transition={{ duration: 0.15 }}
                                         >
-                                            <div className="text-lg md:text-[clamp(1.25rem,2.5vw,1.875rem)] font-black text-slate-900 tracking-tight group-hover/field:text-black truncate">{flightData.from.city}</div>
+                                            <div className="text-lg md:text-[clamp(1.25rem,2vw,1.5rem)] font-black text-slate-900 tracking-tight group-hover/field:text-black truncate">{flightData.from.city}</div>
                                             <div className="text-[10px] md:text-[clamp(0.65rem,0.8vw,0.75rem)] font-semibold text-slate-500 truncate mt-0 md:mt-0.5">{flightData.from.code}, {flightData.from.country}</div>
                                         </motion.div>
                                     </AnimatePresence>
@@ -523,7 +523,7 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
                                             exit={{ opacity: 0, x: -10 }}
                                             transition={{ duration: 0.15 }}
                                         >
-                                            <div className="text-lg md:text-[clamp(1.25rem,2.5vw,1.875rem)] font-black text-slate-900 tracking-tight group-hover/field:text-black truncate">{flightData.to.city}</div>
+                                            <div className="text-lg md:text-[clamp(1.25rem,2vw,1.5rem)] font-black text-slate-900 tracking-tight group-hover/field:text-black truncate">{flightData.to.city}</div>
                                             <div className="text-[10px] md:text-[clamp(0.65rem,0.8vw,0.75rem)] font-semibold text-slate-500 truncate mt-0 md:mt-0.5">{flightData.to.code}, {flightData.to.country}</div>
                                         </motion.div>
                                     </AnimatePresence>
@@ -541,7 +541,7 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
                                         <span className="text-[10px] md:text-[clamp(0.6rem,0.8vw,0.75rem)] font-bold uppercase tracking-wider">Departure</span>
                                     </div>
                                     <div className="flex items-center justify-between mt-auto">
-                                        <div className={`text-sm md:text-[clamp(1rem,1.5vw,1.5rem)] font-black tracking-tight ${dates.departure ? 'text-slate-900' : 'text-slate-300'}`}>
+                                        <div className={`text-sm md:text-[clamp(1rem,1.5vw,1.25rem)] font-black tracking-tight ${dates.departure ? 'text-slate-900' : 'text-slate-300'}`}>
                                             {formatDate(dates.departure)}
                                         </div>
                                     </div>
@@ -565,7 +565,7 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
                                                     <span className="text-[10px] md:text-[clamp(0.6rem,0.8vw,0.75rem)] font-bold uppercase tracking-wider">Return</span>
                                                 </div>
                                                 <div className="flex items-center justify-between mt-auto">
-                                                    <div className={`text-sm md:text-[clamp(1rem,1.5vw,1.5rem)] font-black tracking-tight ${dates.return ? 'text-slate-900' : 'text-slate-300'}`}>
+                                                    <div className={`text-sm md:text-[clamp(1rem,1.5vw,1.25rem)] font-black tracking-tight ${dates.return ? 'text-slate-900' : 'text-slate-300'}`}>
                                                         {formatDate(dates.return)}
                                                     </div>
                                                 </div>

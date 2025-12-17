@@ -49,7 +49,7 @@ export default function Home() {
               </button>
             </div>
 
-            <h1 className="text-[clamp(2.5rem,6vw,5.5rem)] [@media(max-height:800px)]:text-[clamp(2rem,5vw,4.5rem)] font-bold text-slate-900 leading-[1.1] tracking-tight drop-shadow-sm">
+            <h1 className="text-[clamp(2.25rem,5vw,3.5rem)] [@media(max-height:800px)]:text-[clamp(2rem,4vw,3rem)] font-bold text-slate-900 leading-[1.1] tracking-tight drop-shadow-sm">
               <span className="relative inline-block">
                 Book Cheap Flights & Air Tickets from India
               </span>
