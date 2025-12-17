@@ -33,8 +33,8 @@ const Navbar = () => {
             <nav className="max-w-[1440px] mx-auto px-4 md:px-8 flex items-center justify-between">
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-2 group">
-                    <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-slate-900 text-white overflow-hidden shadow-lg group-hover:scale-105 transition-transform">
-                        <span className="font-black italic text-xl">P</span>
+                    <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-white overflow-hidden shadow-lg group-hover:scale-105 transition-transform border border-slate-200">
+                        <img src="/favicon.ico" alt="Paymm Logo" className="w-6 h-6 object-contain" />
                     </div>
                     <span className={`text-2xl font-black tracking-tighter transition-colors ${scrolled ? 'text-slate-900' : 'text-slate-900'}`}>
                         paymm

@@ -25,6 +25,9 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://paymm.in"),
+  icons: {
+    icon: "/favicon.ico",
+  },
   title: {
     default: "Paymm - Book Cheap Flights & Air Tickets Online",
     template: "%s | Paymm",
