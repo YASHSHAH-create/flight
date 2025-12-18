@@ -291,7 +291,7 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
     const totalPassengers = travellers.adults + travellers.children + travellers.infants;
 
     return (
-        <div className={`w-full max-w-5xl mx-auto mt-4 md:mt-10 relative animate-subtle-up ${className || ''}`} onClick={() => setOpenDropdown(null)}>
+        <div className={`w-full max-w-5xl mx-auto mt-2 md:mt-10 relative animate-subtle-up ${className || ''}`} onClick={() => setOpenDropdown(null)}>
             {/* Tabs */}
             <div className="flex items-center justify-center space-x-2 mb-4 relative z-10 py-1">
                 <button
@@ -318,143 +318,145 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
             </div>
 
             {/* Main Search Container - Premium Glass Card */}
-            <div className="bg-white/95 md:bg-white rounded-[24px] md:rounded-[clamp(1.5rem,2vw,2rem)] p-4 md:p-[clamp(0.75rem,2vw,2rem)] shadow-2xl shadow-slate-900/10 text-slate-800 relative z-0 backdrop-blur-xl border border-white/50 min-h-auto md:min-h-[clamp(300px,35vh,400px)]">
+            <div className="bg-white/95 md:bg-white rounded-[20px] md:rounded-[clamp(1.5rem,2vw,2rem)] p-3 md:p-[clamp(0.75rem,2vw,2rem)] shadow-2xl shadow-slate-900/10 text-slate-800 relative z-0 backdrop-blur-xl border border-white/50 min-h-auto md:min-h-[clamp(300px,35vh,400px)]">
 
-                {/* Top Options Row - Compact */}
-                <div className="flex flex-wrap justify-center md:justify-start items-center gap-2 md:gap-8 mb-4 md:mb-8 text-xs md:text-sm font-bold text-slate-600 relative z-20">
+                {/* Top Options Row - Compact - Only show for flights */}
+                {activeTab === 'flight' && (
+                    <div className="flex flex-wrap justify-center md:justify-start items-center gap-2 md:gap-8 mb-4 md:mb-8 text-xs md:text-sm font-bold text-slate-600 relative z-20">
 
-                    {/* Trip Type Dropdown */}
-                    <div className="relative">
-                        <div
-                            onClick={(e) => { e.stopPropagation(); toggleDropdown('tripType'); }}
-                            className="flex items-center space-x-1 bg-slate-100/50 px-2 md:px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors select-none whitespace-nowrap"
-                        >
-                            <span>{tripType}</span>
-                            <ChevronDown size={14} />
-                        </div>
-                        {openDropdown === 'tripType' && (
-                            <div className="absolute top-full left-0 mt-2 z-50 w-40">
-                                <div className="bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden animate-subtle-down">
-                                    {['Round Trip', 'One Way'].map((type) => (
-                                        <div
-                                            key={type}
-                                            onClick={() => {
-                                                setTripType(type);
-                                                setOpenDropdown(null);
-                                                if (type === 'Round Trip' && !dates.return) {
-                                                    const nextDay = new Date(new Date(dates.departure).getTime() + 86400000);
-                                                    setDates(prev => ({
-                                                        ...prev,
-                                                        return: nextDay.toISOString().split('T')[0]
-                                                    }));
-                                                }
-                                            }}
-                                            className={`px-4 py-2 hover:bg-slate-50 cursor-pointer ${tripType === type ? 'bg-slate-50 font-black text-black' : ''}`}
-                                        >
-                                            {type}
-                                        </div>
-                                    ))}
-                                </div>
+                        {/* Trip Type Dropdown */}
+                        <div className="relative">
+                            <div
+                                onClick={(e) => { e.stopPropagation(); toggleDropdown('tripType'); }}
+                                className="flex items-center space-x-1 bg-slate-100/50 px-2 md:px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors select-none whitespace-nowrap"
+                            >
+                                <span>{tripType}</span>
+                                <ChevronDown size={14} />
                             </div>
-                        )}
-                    </div>
-
-                    {/* Travellers Dropdown */}
-                    <div className="relative">
-                        <div
-                            onClick={(e) => { e.stopPropagation(); toggleDropdown('travellers'); }}
-                            className="flex items-center space-x-1 bg-slate-100/50 px-2 md:px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors select-none whitespace-nowrap"
-                        >
-                            <span>{totalPassengers.toString().padStart(2, '0')} Passengers</span>
-                            <ChevronDown size={14} />
+                            {openDropdown === 'tripType' && (
+                                <div className="absolute top-full left-0 mt-2 z-50 w-40">
+                                    <div className="bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden animate-subtle-down">
+                                        {['Round Trip', 'One Way'].map((type) => (
+                                            <div
+                                                key={type}
+                                                onClick={() => {
+                                                    setTripType(type);
+                                                    setOpenDropdown(null);
+                                                    if (type === 'Round Trip' && !dates.return) {
+                                                        const nextDay = new Date(new Date(dates.departure).getTime() + 86400000);
+                                                        setDates(prev => ({
+                                                            ...prev,
+                                                            return: nextDay.toISOString().split('T')[0]
+                                                        }));
+                                                    }
+                                                }}
+                                                className={`px-4 py-2 hover:bg-slate-50 cursor-pointer ${tripType === type ? 'bg-slate-50 font-black text-black' : ''}`}
+                                            >
+                                                {type}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                         </div>
-                        {openDropdown === 'travellers' && (
-                            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 z-50 w-64" onClick={(e) => e.stopPropagation()}>
-                                <div className="bg-white rounded-xl shadow-xl border border-slate-100 p-4 animate-subtle-down">
-                                    <div className="space-y-4">
-                                        <div className="flex items-center justify-between">
-                                            <div>
-                                                <div className="font-bold text-slate-800">Adults</div>
-                                                <div className="text-xs text-slate-500">12+ years</div>
+
+                        {/* Travellers Dropdown */}
+                        <div className="relative">
+                            <div
+                                onClick={(e) => { e.stopPropagation(); toggleDropdown('travellers'); }}
+                                className="flex items-center space-x-1 bg-slate-100/50 px-2 md:px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors select-none whitespace-nowrap"
+                            >
+                                <span>{totalPassengers.toString().padStart(2, '0')} Passengers</span>
+                                <ChevronDown size={14} />
+                            </div>
+                            {openDropdown === 'travellers' && (
+                                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 z-50 w-64" onClick={(e) => e.stopPropagation()}>
+                                    <div className="bg-white rounded-xl shadow-xl border border-slate-100 p-4 animate-subtle-down">
+                                        <div className="space-y-4">
+                                            <div className="flex items-center justify-between">
+                                                <div>
+                                                    <div className="font-bold text-slate-800">Adults</div>
+                                                    <div className="text-xs text-slate-500">12+ years</div>
+                                                </div>
+                                                <div className="flex items-center space-x-3">
+                                                    <button
+                                                        onClick={() => setTravellers(p => ({ ...p, adults: Math.max(1, p.adults - 1) }))}
+                                                        className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"
+                                                    >-</button>
+                                                    <span className="font-bold w-4 text-center">{travellers.adults}</span>
+                                                    <button
+                                                        onClick={() => setTravellers(p => ({ ...p, adults: p.adults + 1 }))}
+                                                        className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"
+                                                    >+</button>
+                                                </div>
                                             </div>
-                                            <div className="flex items-center space-x-3">
-                                                <button
-                                                    onClick={() => setTravellers(p => ({ ...p, adults: Math.max(1, p.adults - 1) }))}
-                                                    className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"
-                                                >-</button>
-                                                <span className="font-bold w-4 text-center">{travellers.adults}</span>
-                                                <button
-                                                    onClick={() => setTravellers(p => ({ ...p, adults: p.adults + 1 }))}
-                                                    className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"
-                                                >+</button>
+                                            <div className="flex items-center justify-between">
+                                                <div>
+                                                    <div className="font-bold text-slate-800">Children</div>
+                                                    <div className="text-xs text-slate-500">2-12 years</div>
+                                                </div>
+                                                <div className="flex items-center space-x-3">
+                                                    <button
+                                                        onClick={() => setTravellers(p => ({ ...p, children: Math.max(0, p.children - 1) }))}
+                                                        className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"
+                                                    >-</button>
+                                                    <span className="font-bold w-4 text-center">{travellers.children}</span>
+                                                    <button
+                                                        onClick={() => setTravellers(p => ({ ...p, children: p.children + 1 }))}
+                                                        className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"
+                                                    >+</button>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className="flex items-center justify-between">
-                                            <div>
-                                                <div className="font-bold text-slate-800">Children</div>
-                                                <div className="text-xs text-slate-500">2-12 years</div>
-                                            </div>
-                                            <div className="flex items-center space-x-3">
-                                                <button
-                                                    onClick={() => setTravellers(p => ({ ...p, children: Math.max(0, p.children - 1) }))}
-                                                    className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"
-                                                >-</button>
-                                                <span className="font-bold w-4 text-center">{travellers.children}</span>
-                                                <button
-                                                    onClick={() => setTravellers(p => ({ ...p, children: p.children + 1 }))}
-                                                    className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"
-                                                >+</button>
-                                            </div>
-                                        </div>
-                                        <div className="flex items-center justify-between">
-                                            <div>
-                                                <div className="font-bold text-slate-800">Infants</div>
-                                                <div className="text-xs text-slate-500">0-2 years</div>
-                                            </div>
-                                            <div className="flex items-center space-x-3">
-                                                <button
-                                                    onClick={() => setTravellers(p => ({ ...p, infants: Math.max(0, p.infants - 1) }))}
-                                                    className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"
-                                                >-</button>
-                                                <span className="font-bold w-4 text-center">{travellers.infants}</span>
-                                                <button
-                                                    onClick={() => setTravellers(p => ({ ...p, infants: p.infants + 1 }))}
-                                                    className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"
-                                                >+</button>
+                                            <div className="flex items-center justify-between">
+                                                <div>
+                                                    <div className="font-bold text-slate-800">Infants</div>
+                                                    <div className="text-xs text-slate-500">0-2 years</div>
+                                                </div>
+                                                <div className="flex items-center space-x-3">
+                                                    <button
+                                                        onClick={() => setTravellers(p => ({ ...p, infants: Math.max(0, p.infants - 1) }))}
+                                                        className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"
+                                                    >-</button>
+                                                    <span className="font-bold w-4 text-center">{travellers.infants}</span>
+                                                    <button
+                                                        onClick={() => setTravellers(p => ({ ...p, infants: p.infants + 1 }))}
+                                                        className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"
+                                                    >+</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Class Dropdown */}
-                    <div className="relative">
-                        <div
-                            onClick={(e) => { e.stopPropagation(); toggleDropdown('class'); }}
-                            className="flex items-center space-x-1 bg-slate-100/50 px-2 md:px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors select-none whitespace-nowrap"
-                        >
-                            <span>{travelClass}</span>
-                            <ChevronDown size={14} />
+                            )}
                         </div>
-                        {openDropdown === 'class' && (
-                            <div className="absolute top-full right-0 mt-2 z-50 w-48">
-                                <div className="bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden animate-subtle-down">
-                                    {['Economy', 'Premium Economy', 'Business', 'First Class'].map((cls) => (
-                                        <div
-                                            key={cls}
-                                            onClick={() => { setTravelClass(cls); setOpenDropdown(null); }}
-                                            className={`px-4 py-2 hover:bg-slate-50 cursor-pointer ${travelClass === cls ? 'bg-slate-50 font-black text-black' : ''}`}
-                                        >
-                                            {cls}
-                                        </div>
-                                    ))}
-                                </div>
+
+                        {/* Class Dropdown */}
+                        <div className="relative">
+                            <div
+                                onClick={(e) => { e.stopPropagation(); toggleDropdown('class'); }}
+                                className="flex items-center space-x-1 bg-slate-100/50 px-2 md:px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors select-none whitespace-nowrap"
+                            >
+                                <span>{travelClass}</span>
+                                <ChevronDown size={14} />
                             </div>
-                        )}
+                            {openDropdown === 'class' && (
+                                <div className="absolute top-full right-0 mt-2 z-50 w-48">
+                                    <div className="bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden animate-subtle-down">
+                                        {['Economy', 'Premium Economy', 'Business', 'First Class'].map((cls) => (
+                                            <div
+                                                key={cls}
+                                                onClick={() => { setTravelClass(cls); setOpenDropdown(null); }}
+                                                className={`px-4 py-2 hover:bg-slate-50 cursor-pointer ${travelClass === cls ? 'bg-slate-50 font-black text-black' : ''}`}
+                                            >
+                                                {cls}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                     </div>
-                </div>
+                )}
 
                 <AnimatePresence mode="wait">
                     {activeTab === 'flight' && tripType !== 'Multi City' && (
@@ -471,7 +473,7 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
                                 {/* Origin */}
                                 <div
                                     onClick={() => openSearch('from')}
-                                    className="w-full bg-slate-50 border border-slate-200/80 rounded-2xl md:rounded-[clamp(1rem,1.5vw,1.5rem)] p-3 md:p-[clamp(0.75rem,2vw,1.25rem)] flex flex-col justify-center cursor-pointer transition-all hover:bg-white hover:shadow-md hover:border-slate-300 group/field min-h-[70px]"
+                                    className="w-full bg-slate-50 border border-slate-200/80 rounded-2xl md:rounded-[clamp(1rem,1.5vw,1.5rem)] p-2.5 md:p-[clamp(0.75rem,2vw,1.25rem)] flex flex-col justify-center cursor-pointer transition-all hover:bg-white hover:shadow-md hover:border-slate-300 group/field min-h-[60px] md:min-h-[70px]"
                                 >
                                     <div className="flex items-center space-x-1 text-slate-400 mb-0.5 transition-colors group-hover/field:text-slate-600">
                                         <MapPin size={11} className="md:w-3 md:h-3" />
@@ -485,7 +487,7 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
                                             exit={{ opacity: 0, x: 10 }}
                                             transition={{ duration: 0.15 }}
                                         >
-                                            <div className="text-lg md:text-[clamp(1.25rem,2vw,1.5rem)] font-black text-slate-900 tracking-tight group-hover/field:text-black truncate">{flightData.from.city}</div>
+                                            <div className="text-base md:text-[clamp(1.25rem,2vw,1.5rem)] font-black text-slate-900 tracking-tight group-hover/field:text-black truncate">{flightData.from.city}</div>
                                             <div className="text-[10px] md:text-[clamp(0.65rem,0.8vw,0.75rem)] font-semibold text-slate-500 truncate mt-0 md:mt-0.5">{flightData.from.code}, {flightData.from.country}</div>
                                         </motion.div>
                                     </AnimatePresence>
@@ -509,7 +511,7 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
                                 {/* Destination */}
                                 <div
                                     onClick={() => openSearch('to')}
-                                    className="w-full bg-slate-50 border border-slate-200/80 rounded-2xl md:rounded-[clamp(1rem,1.5vw,1.5rem)] p-3 md:p-[clamp(0.75rem,2vw,1.25rem)] flex flex-col justify-center cursor-pointer transition-all hover:bg-white hover:shadow-md hover:border-slate-300 group/field min-h-[70px]"
+                                    className="w-full bg-slate-50 border border-slate-200/80 rounded-2xl md:rounded-[clamp(1rem,1.5vw,1.5rem)] p-2.5 md:p-[clamp(0.75rem,2vw,1.25rem)] flex flex-col justify-center cursor-pointer transition-all hover:bg-white hover:shadow-md hover:border-slate-300 group/field min-h-[60px] md:min-h-[70px]"
                                 >
                                     <div className="flex items-center space-x-1 text-slate-400 mb-0.5 transition-colors group-hover/field:text-slate-600">
                                         <MapPin size={11} className="md:w-3 md:h-3" />
@@ -523,7 +525,7 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
                                             exit={{ opacity: 0, x: -10 }}
                                             transition={{ duration: 0.15 }}
                                         >
-                                            <div className="text-lg md:text-[clamp(1.25rem,2vw,1.5rem)] font-black text-slate-900 tracking-tight group-hover/field:text-black truncate">{flightData.to.city}</div>
+                                            <div className="text-base md:text-[clamp(1.25rem,2vw,1.5rem)] font-black text-slate-900 tracking-tight group-hover/field:text-black truncate">{flightData.to.city}</div>
                                             <div className="text-[10px] md:text-[clamp(0.65rem,0.8vw,0.75rem)] font-semibold text-slate-500 truncate mt-0 md:mt-0.5">{flightData.to.code}, {flightData.to.country}</div>
                                         </motion.div>
                                     </AnimatePresence>
@@ -534,7 +536,7 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
                             <div className={`lg:col-span-12 flex flex-row items-center gap-2 md:gap-4 h-full lg:col-start-8 lg:col-end-13`}>
                                 <div
                                     onClick={() => openDatePicker('departure')}
-                                    className="relative flex-1 w-full bg-slate-50 border border-slate-200/80 rounded-2xl md:rounded-[clamp(1rem,1.5vw,1.5rem)] p-3 md:p-[clamp(0.75rem,2vw,1.25rem)] flex flex-col justify-center cursor-pointer transition-all duration-300 hover:border-slate-300 hover:shadow-md hover:bg-white group/date h-full min-h-[70px] md:min-h-[clamp(80px,12vh,110px)] overflow-hidden"
+                                    className="relative flex-1 w-full bg-slate-50 border border-slate-200/80 rounded-2xl md:rounded-[clamp(1rem,1.5vw,1.5rem)] p-2.5 md:p-[clamp(0.75rem,2vw,1.25rem)] flex flex-col justify-center cursor-pointer transition-all duration-300 hover:border-slate-300 hover:shadow-md hover:bg-white group/date h-full min-h-[60px] md:min-h-[clamp(80px,12vh,110px)] overflow-hidden"
                                 >
                                     <div className="flex items-center space-x-1 text-slate-400 mb-0.5 transition-colors group-hover/date:text-slate-600">
                                         <Calendar size={11} className="md:w-3 md:h-3" />
@@ -558,7 +560,7 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
                                         >
                                             <div
                                                 onClick={() => openDatePicker('return')}
-                                                className="relative w-full h-full bg-slate-50 border border-slate-200/80 rounded-2xl md:rounded-[clamp(1rem,1.5vw,1.5rem)] p-3 md:p-[clamp(0.75rem,2vw,1.25rem)] flex flex-col justify-center cursor-pointer transition-all duration-300 hover:border-slate-300 hover:shadow-md hover:bg-white group/date min-h-[70px] md:min-h-[clamp(80px,12vh,110px)] whitespace-nowrap"
+                                                className="relative w-full h-full bg-slate-50 border border-slate-200/80 rounded-2xl md:rounded-[clamp(1rem,1.5vw,1.5rem)] p-2.5 md:p-[clamp(0.75rem,2vw,1.25rem)] flex flex-col justify-center cursor-pointer transition-all duration-300 hover:border-slate-300 hover:shadow-md hover:bg-white group/date min-h-[60px] md:min-h-[clamp(80px,12vh,110px)] whitespace-nowrap"
                                             >
                                                 <div className="flex items-center space-x-1 text-slate-400 mb-0.5 transition-colors group-hover/date:text-slate-600">
                                                     <Calendar size={11} className="md:w-3 md:h-3" />
@@ -734,9 +736,14 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
                 </AnimatePresence>
 
                 {/* Search Button */}
-                <div className="mt-2 md:mt-0 md:absolute md:-bottom-7 md:right-8">
+                <div className="mt-4 md:mt-0 md:absolute md:-bottom-7 md:right-8">
                     <button
                         onClick={() => {
+                            if (activeTab === 'hotel') {
+                                window.location.href = '/hotels/search';
+                                return;
+                            }
+
                             const params = new URLSearchParams();
                             params.append('from', flightData.from.code);
                             params.append('to', flightData.to.code);

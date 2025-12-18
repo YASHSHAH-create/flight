@@ -24,7 +24,7 @@ export default function Home() {
       <Navbar />
 
       {/* Frame 1: Hero Section */}
-      <section className="relative h-screen w-full flex flex-col overflow-hidden">
+      <section className="relative min-h-screen w-full flex flex-col overflow-x-hidden md:overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <Image
@@ -37,10 +37,10 @@ export default function Home() {
           />
         </div>
 
-        <div className="relative z-10 flex-1 flex flex-col justify-center items-center px-[4vw] md:px-[6vw] max-w-7xl mx-auto w-full h-full gap-8 md:gap-12 pointer-events-none md:pointer-events-auto [@media(max-height:800px)]:gap-2 [@media(max-height:800px)]:justify-center">
+        <div className="relative z-10 flex-1 flex flex-col justify-start pt-24 pb-32 md:pb-0 md:justify-center items-center px-4 md:px-[6vw] max-w-7xl mx-auto w-full h-full gap-4 md:gap-12 pointer-events-none md:pointer-events-auto">
           <div className="max-w-[90vw] md:max-w-3xl animate-subtle-up pointer-events-auto flex flex-col items-center text-center">
 
-            <div className="mb-6 block [@media(max-height:800px)]:mb-4">
+            <div className="mb-4 block [@media(max-height:800px)]:mb-2">
               <button className="group flex items-center gap-2 px-6 py-2 bg-white/70 backdrop-blur-md hover:bg-white text-slate-900 rounded-full font-semibold shadow-sm transition-all border border-white/40 hover:-translate-y-0.5 active:translate-y-0">
                 <span>Explore Now</span>
                 <span className="bg-black text-white rounded-full p-1 transition-transform group-hover:translate-x-1">
@@ -49,7 +49,7 @@ export default function Home() {
               </button>
             </div>
 
-            <h1 className="text-[clamp(2.25rem,5vw,3.5rem)] [@media(max-height:800px)]:text-[clamp(2rem,4vw,3rem)] font-bold text-slate-900 leading-[1.1] tracking-tight drop-shadow-sm">
+            <h1 className="text-[clamp(1.75rem,8vw,3.5rem)] leading-[1.1] tracking-tight drop-shadow-sm font-bold text-slate-900">
               <span className="relative inline-block">
                 Book Cheap Flights & Air Tickets from India
               </span>
