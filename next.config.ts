@@ -30,7 +30,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/flights/:path*',
-        destination: `${API_URL}/:path*`, // Proxy other flight requests to root endpoints
+        destination: `${API_URL}/flights/:path*`, // Proxy flight requests to /flights endpoints
       },
     ];
   },
