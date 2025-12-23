@@ -28,8 +28,8 @@ const Footer = () => {
                         <div className="flex items-start space-x-3 p-4 bg-slate-900/50 rounded-xl border border-slate-800/50 backdrop-blur-sm">
                             <MdVerifiedUser className="text-emerald-400 text-xl mt-0.5" />
                             <div>
-                                <p className="text-xs text-slate-500 uppercase tracking-wide font-semibold">GST Registered</p>
-                                <p className="text-sm font-medium text-slate-200 tracking-wider font-mono">10AAMCP7167L1Z1</p>
+                                <p className="text-xs text-slate-500 uppercase tracking-wide font-semibold">PAYMM ADVISORY PRIVATE LIMITED</p>
+                                <p className="text-sm font-medium text-slate-200 tracking-wider font-mono mt-1">GST: 10AAMCP7167L1Z1</p>
                             </div>
                         </div>
                     </div>
