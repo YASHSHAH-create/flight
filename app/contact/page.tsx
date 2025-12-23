@@ -41,8 +41,8 @@ const ContactPage = () => {
                             <FaMapMarkerAlt />
                         </div>
                         <h3 className="font-semibold text-white mb-2">Legal Entity</h3>
-                        <p className="text-slate-400 text-sm mb-4">Registered for GST</p>
-                        <p className="text-purple-400 font-medium">10AAMCP7167L1Z1</p>
+                        <p className="text-slate-300 text-sm mb-2 px-2">PAYMM ADVISORY PRIVATE LIMITED</p>
+                        <p className="text-purple-400 font-medium">GST: 10AAMCP7167L1Z1</p>
                     </div>
                 </div>
             </div>

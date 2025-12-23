@@ -64,7 +64,7 @@ const AboutPage = () => {
                     <div className="grid md:grid-cols-2 gap-8 text-center md:text-left">
                         <div>
                             <p className="text-slate-400 mb-1 uppercase text-xs tracking-wider">Registered Entity</p>
-                            <p className="text-xl font-medium text-white">paymm</p>
+                            <p className="text-xl font-medium text-white">PAYMM ADVISORY PRIVATE LIMITED</p>
                         </div>
                         <div>
                             <p className="text-slate-400 mb-1 uppercase text-xs tracking-wider">GST Registration</p>
