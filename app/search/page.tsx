@@ -162,13 +162,188 @@ function SearchResultsContent() {
         });
     };
 
+    const fetchFlights = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const adults = searchParams.get('adults') || '1';
+            const children = searchParams.get('children') || '0';
+            const infants = searchParams.get('infants') || '0';
+            const cabinClass = searchParams.get('class') || 'e';
+            const journeyType = searchParams.get('journeyType') || '1';
+
+            const from = searchParams.get('from');
+            const to = searchParams.get('to');
+            const date = searchParams.get('date');
+
+            let apiUrl = `/flights/search?adults=${adults}&children=${children}&infants=${infants}&class=${cabinClass}&journeyType=${journeyType}`;
+
+            if (journeyType === '3') {
+                const froms = searchParams.getAll('from');
+                const tos = searchParams.getAll('to');
+                const dates = searchParams.getAll('date');
+                if (froms.length === 0) throw new Error("Missing flight segments");
+                froms.forEach((f, i) => {
+                    apiUrl += `&from=${f}`;
+                    if (tos[i]) apiUrl += `&to=${tos[i]}`;
+                    if (dates[i]) apiUrl += `&date=${dates[i]}`;
+                });
+            } else {
+                apiUrl += `&from=${from}&to=${to}&date=${date}`;
+                if (journeyType === '2') {
+                    const returnDate = searchParams.get('returnDate');
+                    if (returnDate) apiUrl += `&returnDate=${returnDate}`;
+                }
+            }
+
+            const response = await fetch(apiUrl);
+            if (!response.ok) throw new Error("Failed to fetch flights");
+            const data: any = await response.json();
+
+            // Validate error in old format if present
+            if (data.Response && data.Response.Error && data.Response.Error.ErrorCode !== 0) {
+                throw new Error(data.Response.Error.ErrorMessage);
+            }
+
+            let results: any[] = [];
+            let globalTraceId = "";
+
+            if (Array.isArray(data)) {
+                results = data;
+            } else if (data.Response && data.Response.Results) {
+                results = data.Response.Results[0];
+                globalTraceId = data.Response.TraceId;
+            }
+
+            if (results && results.length > 0) {
+                const mappedFlights = results.map((res: any, index: number) => {
+                    let depDate, arrDate;
+                    let airline, airlineCode, flightNumber;
+                    let originCode, originCity, destCode, destCity;
+                    let duration, stops, price, isLCC, isRefundable, seatsLeft;
+                    let resultIndex, traceIdValue;
+
+                    // NEW API FORMAT
+                    if (res.flights && res.flights.outbound) {
+                        const outbound = res.flights.outbound;
+                        const segments = outbound.segments;
+                        const firstSeg = segments[0];
+                        const lastSeg = segments[segments.length - 1];
+
+                        depDate = new Date(firstSeg.depTime);
+                        arrDate = new Date(lastSeg.arrTime);
+
+                        airline = outbound.airlineName || firstSeg.airlineName;
+                        airlineCode = firstSeg.airlineCode;
+                        flightNumber = segments.map((s: any) => `${s.airlineCode}-${s.flightNumber}`).join(', ');
+
+                        originCode = firstSeg.origin;
+                        originCity = firstSeg.originCity;
+                        destCode = lastSeg.destination;
+                        destCity = lastSeg.destinationCity;
+
+                        duration = formatDuration(outbound.duration);
+                        stops = outbound.stops === 0 ? "Non-stop" : `${outbound.stops} Stop${outbound.stops > 1 ? 's' : ''}`;
+
+                        price = Math.round(res.price.total);
+                        isLCC = res.isLCC;
+                        isRefundable = res.isRefundable;
+                        seatsLeft = 9;
+
+                        resultIndex = res.resultIndex;
+                        traceIdValue = res.searchId;
+                    }
+                    // OLD API FORMAT
+                    else if (res.Segments && res.Segments[0]) {
+                        const segment = res.Segments[0][0];
+                        const allSegments = res.Segments[0]; // Assuming one leg, but accessing first array of Segments
+                        // In old API Segments is Segment[][]. 
+                        // Usually Segments[0] is outbound, Segments[1] is return.
+                        // Here we are likely looking at one way or just flattening.
+                        const lastSegment = allSegments[allSegments.length - 1];
+
+                        depDate = new Date(segment.Origin.DepTime);
+                        arrDate = new Date(lastSegment.Destination.ArrTime);
+
+                        airline = segment.Airline.AirlineName;
+                        airlineCode = segment.Airline.AirlineCode;
+                        flightNumber = `${segment.Airline.AirlineCode}-${segment.Airline.FlightNumber}`;
+
+                        originCode = segment.Origin.Airport.AirportCode;
+                        originCity = segment.Origin.Airport.CityName;
+                        destCode = lastSegment.Destination.Airport.AirportCode;
+                        destCity = lastSegment.Destination.Airport.CityName;
+
+                        duration = formatDuration(segment.Duration);
+                        stops = segment.StopOver ? "1 Stop" : "Non-stop";
+
+                        price = Math.round(res.Fare.PublishedFare);
+                        isLCC = res.IsLCC;
+                        isRefundable = res.IsRefundable;
+                        seatsLeft = segment.NoOfSeatAvailable;
+
+                        resultIndex = res.ResultIndex;
+                        traceIdValue = globalTraceId;
+                    }
+
+                    return {
+                        id: index,
+                        traceId: traceIdValue,
+                        airline: airline || "Unknown Airline",
+                        airlineCode: airlineCode || "",
+                        flightNumber: flightNumber || "",
+                        departure: {
+                            time: depDate ? depDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) : "",
+                            airport: originCode || "",
+                            city: originCity || ""
+                        },
+                        arrival: {
+                            time: arrDate ? arrDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) : "",
+                            airport: destCode || "",
+                            city: destCity || ""
+                        },
+                        duration: duration || "",
+                        stops: stops || "",
+                        price: price || 0,
+                        tags: isLCC ? ["Economy"] : [],
+                        benefits: isRefundable ? ["Refundable"] : [],
+                        seatsLeft: seatsLeft || 0,
+                        raw: res,
+                        resultIndex: resultIndex,
+                        depDate,
+                        arrDate
+                    };
+                });
+
+                const prices = mappedFlights.map((f: any) => f.price);
+                const minPrice = mappedFlights.length ? Math.min(...prices) : 0;
+                const maxPrice = mappedFlights.length ? Math.max(...prices) : 100000;
+                const airlineMap = new Map();
+                mappedFlights.forEach((f: any) => {
+                    if (f.airline && !airlineMap.has(f.airline)) airlineMap.set(f.airline, f.airlineCode);
+                });
+                const specificAirlines = Array.from(airlineMap.entries()).map(([name, code]) => ({ name, code }));
+
+                setStats({ minPrice, maxPrice, airlines: specificAirlines });
+                setFilters(prev => ({ ...prev, maxPrice: maxPrice }));
+                setFlights(mappedFlights);
+            } else {
+                setFlights([]);
+            }
+        } catch (err: any) {
+            console.error(err);
+            setError(err.message || "An error occurred while searching for flights.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
         const from = searchParams.get('from');
         const to = searchParams.get('to');
         const date = searchParams.get('date');
 
         if (!from || !to || !date) {
-            // Default Route: DEL -> BLR
             const today = new Date();
             const d = today.getDate().toString().padStart(2, '0');
             const m = (today.getMonth() + 1).toString().padStart(2, '0');
@@ -179,108 +354,12 @@ function SearchResultsContent() {
             return;
         }
 
-        const fetchFlights = async () => {
-            setLoading(true);
-            setError(null);
-            try {
-                const adults = searchParams.get('adults') || '1';
-                const children = searchParams.get('children') || '0';
-                const infants = searchParams.get('infants') || '0';
-                const cabinClass = searchParams.get('class') || 'e';
-                const journeyType = searchParams.get('journeyType') || '1';
-
-                const from = searchParams.get('from');
-                const to = searchParams.get('to');
-                const date = searchParams.get('date');
-
-                let apiUrl = `/flights/search?adults=${adults}&children=${children}&infants=${infants}&class=${cabinClass}&journeyType=${journeyType}`;
-
-                if (journeyType === '3') {
-                    const froms = searchParams.getAll('from');
-                    const tos = searchParams.getAll('to');
-                    const dates = searchParams.getAll('date');
-                    if (froms.length === 0) throw new Error("Missing flight segments");
-                    froms.forEach((f, i) => {
-                        apiUrl += `&from=${f}`;
-                        if (tos[i]) apiUrl += `&to=${tos[i]}`;
-                        if (dates[i]) apiUrl += `&date=${dates[i]}`;
-                    });
-                } else {
-                    apiUrl += `&from=${from}&to=${to}&date=${date}`;
-                    if (journeyType === '2') {
-                        const returnDate = searchParams.get('returnDate');
-                        if (returnDate) apiUrl += `&returnDate=${returnDate}`;
-                    }
-                }
-
-                const response = await fetch(apiUrl);
-                if (!response.ok) throw new Error("Failed to fetch flights");
-                const data: SearchResponse = await response.json();
-                if (data.Response.Error.ErrorCode !== 0) throw new Error(data.Response.Error.ErrorMessage);
-
-                if (data.Response.Results && data.Response.Results.length > 0) {
-                    const fltResults = data.Response.Results[0];
-                    const traceId = data.Response.TraceId;
-
-                    const mappedFlights = fltResults.map((res: FlightResult, index: number) => {
-                        const segment = res.Segments[0][0];
-                        const depDate = new Date(segment.Origin.DepTime);
-                        const arrDate = new Date(segment.Destination.ArrTime);
-
-                        return {
-                            id: index,
-                            traceId: traceId,
-                            airline: segment.Airline.AirlineName,
-                            airlineCode: segment.Airline.AirlineCode,
-                            flightNumber: `${segment.Airline.AirlineCode}-${segment.Airline.FlightNumber}`,
-                            departure: {
-                                time: depDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
-                                airport: segment.Origin.Airport.AirportCode,
-                                city: segment.Origin.Airport.CityName
-                            },
-                            arrival: {
-                                time: arrDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
-                                airport: segment.Destination.Airport.AirportCode,
-                                city: segment.Destination.Airport.CityName
-                            },
-                            duration: formatDuration(segment.Duration),
-                            stops: segment.StopOver ? "1 Stop" : "Non-stop",
-                            price: Math.round(res.Fare.PublishedFare),
-                            tags: res.IsLCC ? ["Economy"] : [],
-                            benefits: res.IsRefundable ? ["Refundable"] : [],
-                            seatsLeft: segment.NoOfSeatAvailable,
-                            raw: res
-                        };
-                    });
-
-                    const prices = mappedFlights.map((f: any) => f.price);
-                    const minPrice = Math.min(...prices);
-                    const maxPrice = Math.max(...prices);
-                    const airlineMap = new Map();
-                    mappedFlights.forEach((f: any) => {
-                        if (!airlineMap.has(f.airline)) airlineMap.set(f.airline, f.airlineCode);
-                    });
-                    const specificAirlines = Array.from(airlineMap.entries()).map(([name, code]) => ({ name, code }));
-
-                    setStats({ minPrice, maxPrice, airlines: specificAirlines });
-                    setFilters(prev => ({ ...prev, maxPrice: maxPrice }));
-                    setFlights(mappedFlights);
-                } else {
-                    setFlights([]);
-                }
-            } catch (err: any) {
-                console.error(err);
-                setError(err.message || "An error occurred while searching for flights.");
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchFlights();
     }, [searchParams]);
 
     const handleBook = (flight: any) => {
-        router.push(`/book?traceId=${flight.traceId}&resultIndex=${flight.raw.ResultIndex}`);
+        const resultIndex = flight.resultIndex ?? (flight.raw.ResultIndex || flight.raw.resultIndex);
+        router.push(`/book?traceId=${flight.traceId}&resultIndex=${resultIndex}`);
     };
 
     return (
@@ -518,43 +597,64 @@ function SearchResultsContent() {
                                                 <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
                                                     <div className="md:col-span-2 space-y-3">
                                                         <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Flight Itinerary</h4>
-                                                        <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
-                                                            <div className="flex gap-4">
-                                                                <div className="flex flex-col items-center pt-2">
-                                                                    <div className="w-2.5 h-2.5 rounded-full bg-slate-800 ring-4 ring-slate-100"></div>
-                                                                    <div className="w-0.5 h-full bg-slate-200 min-h-[60px] my-1"></div>
-                                                                    <div className="w-2.5 h-2.5 rounded-full bg-white border-2 border-slate-800"></div>
-                                                                </div>
-                                                                <div className="flex-1 space-y-6">
-                                                                    <div>
-                                                                        <div className="flex items-center gap-2 text-sm font-bold text-slate-900">
-                                                                            <span>{flight.departure.time}</span>
-                                                                            <span className="w-1 h-1 rounded-full bg-slate-300"></span>
-                                                                            <span>{flight.departure.city} ({flight.departure.airport})</span>
+                                                        {(flight.raw.flights?.outbound?.segments || flight.raw.Segments?.[0] || []).map((seg: any, idx: number, arr: any[]) => {
+                                                            const isNew = !!flight.raw.flights;
+                                                            const depTime = isNew ? new Date(seg.depTime) : new Date(seg.Origin.DepTime);
+                                                            const arrTime = isNew ? new Date(seg.arrTime) : new Date(seg.Destination.ArrTime);
+                                                            const duration = isNew ? formatDuration(seg.duration) : formatDuration(seg.Duration);
+                                                            const layover = isNew ? seg.layoverTime : 0;
+
+                                                            return (
+                                                                <div key={idx} className="mb-4 last:mb-0">
+                                                                    <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm relative">
+                                                                        <div className="flex gap-4">
+                                                                            <div className="flex flex-col items-center pt-2">
+                                                                                <div className="w-2.5 h-2.5 rounded-full bg-slate-800 ring-4 ring-slate-100"></div>
+                                                                                <div className="w-0.5 h-full bg-slate-200 min-h-[60px] my-1"></div>
+                                                                                <div className="w-2.5 h-2.5 rounded-full bg-white border-2 border-slate-800"></div>
+                                                                            </div>
+                                                                            <div className="flex-1 space-y-6">
+                                                                                <div>
+                                                                                    <div className="flex items-center gap-2 text-sm font-bold text-slate-900">
+                                                                                        <span>{depTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}</span>
+                                                                                        <span className="w-1 h-1 rounded-full bg-slate-300"></span>
+                                                                                        <span>{isNew ? seg.originCity : seg.Origin.Airport.CityName} ({isNew ? seg.origin : seg.Origin.Airport.AirportCode})</span>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div>
+                                                                                    <div className="flex items-center gap-2 text-sm font-bold text-slate-900">
+                                                                                        <span>{arrTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}</span>
+                                                                                        <span className="w-1 h-1 rounded-full bg-slate-300"></span>
+                                                                                        <span>{isNew ? seg.destinationCity : seg.Destination.Airport.CityName} ({isNew ? seg.destination : seg.Destination.Airport.AirportCode})</span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
-                                                                        <div className="text-xs text-slate-500 mt-1">Devi Ahilyabai Holkar Airport</div>
-                                                                    </div>
-                                                                    <div>
-                                                                        <div className="flex items-center gap-2 text-sm font-bold text-slate-900">
-                                                                            <span>{flight.arrival.time}</span>
-                                                                            <span className="w-1 h-1 rounded-full bg-slate-300"></span>
-                                                                            <span>{flight.arrival.city} ({flight.arrival.airport})</span>
+                                                                        <div className="absolute top-5 right-5 text-right">
+                                                                            <div className="text-xs font-bold text-slate-900">{isNew ? seg.airlineCode : seg.Airline.AirlineCode}-{isNew ? seg.flightNumber : seg.Airline.FlightNumber}</div>
+                                                                            <div className="text-[10px] font-bold text-slate-400 mt-0.5">{duration}</div>
                                                                         </div>
-                                                                        <div className="text-xs text-slate-500 mt-1">Indira Gandhi International Airport</div>
+                                                                        <div className="mt-4 pt-4 border-t border-slate-100 flex gap-4 text-xs font-medium text-slate-500">
+                                                                            <div className="flex items-center gap-1.5 bg-slate-50 px-2 py-1 rounded-md">
+                                                                                <Luggage size={12} />
+                                                                                <span>Check-in: {isNew ? seg.baggage : seg.Baggage}</span>
+                                                                            </div>
+                                                                            <div className="flex items-center gap-1.5 bg-slate-50 px-2 py-1 rounded-md">
+                                                                                <Luggage size={12} />
+                                                                                <span>Cabin: 7kg</span>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
+                                                                    {idx < arr.length - 1 && layover > 0 && (
+                                                                        <div className="flex items-center justify-center py-3">
+                                                                            <div className="bg-slate-100 text-slate-500 text-[10px] font-bold px-3 py-1 rounded-full border border-slate-200">
+                                                                                Layover: {formatDuration(layover)}
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
                                                                 </div>
-                                                            </div>
-                                                            <div className="mt-4 pt-4 border-t border-slate-100 flex gap-4 text-xs font-medium text-slate-500">
-                                                                <div className="flex items-center gap-1.5 bg-slate-50 px-2 py-1 rounded-md">
-                                                                    <Luggage size={12} />
-                                                                    <span>Check-in: 15kg</span>
-                                                                </div>
-                                                                <div className="flex items-center gap-1.5 bg-slate-50 px-2 py-1 rounded-md">
-                                                                    <Luggage size={12} />
-                                                                    <span>Cabin: 7kg</span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                            );
+                                                        })}
                                                     </div>
                                                     <div>
                                                         <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Fare Breakdown</h4>
