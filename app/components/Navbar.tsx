@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ChevronDown, Menu, LogOut, User, Globe, Package, CalendarDays, Settings, Briefcase, X } from 'lucide-react';
+import { ChevronDown, Menu, LogOut, User, Globe, Package, CalendarDays, Settings, Briefcase, X, BookOpen } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 
@@ -47,6 +47,7 @@ const Navbar = () => {
                     {[
                         { name: 'Holiday Packages', href: '#', icon: Package },
                         { name: 'Flight Schedule', href: '#', icon: CalendarDays },
+                        { name: 'Travel Blog', href: '/blog', icon: BookOpen },
                         { name: 'Account Settings', href: '#', icon: Settings },
                         { name: 'My Bookings', href: '/bookings', icon: Briefcase },
                     ].map((item) => (
@@ -173,6 +174,7 @@ const Navbar = () => {
                                 {[
                                     { name: 'Holiday Packages', href: '#', icon: Package },
                                     { name: 'Flight Schedule', href: '#', icon: CalendarDays },
+                                    { name: 'Travel Blog', href: '/blog', icon: BookOpen },
                                     { name: 'Account Settings', href: '#', icon: Settings },
                                     { name: 'My Bookings', href: '/bookings', icon: Briefcase },
                                 ].map((item) => (

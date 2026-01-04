@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 import { AIRPORT_MAP } from './lib/airports';
+import { BLOG_POSTS } from './lib/blog-data';
 
 export default function sitemap(): MetadataRoute.Sitemap {
     const baseUrl = 'https://paymm.in';
@@ -15,6 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         '/refund',
         '/search',
         '/terms',
+        '/blog',
     ];
 
     const staticEntries: MetadataRoute.Sitemap = routes.map((route) => ({
@@ -22,6 +24,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
         lastModified: new Date(),
         changeFrequency: route === '' ? 'daily' : 'weekly',
         priority: route === '' ? 1.0 : 0.8,
+    }));
+
+    // Dynamic Blog Posts
+    const blogEntries: MetadataRoute.Sitemap = BLOG_POSTS.map((post) => ({
+        url: `${baseUrl}/blog/${post.slug}`,
+        lastModified: new Date(post.date),
+        changeFrequency: 'weekly',
+        priority: 0.8,
     }));
 
     // Dynamic Search URLs (SEO Friendly)
@@ -58,5 +68,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
         });
     });
 
-    return [...staticEntries, ...dynamicEntries];
+    return [...staticEntries, ...blogEntries, ...dynamicEntries];
 }
