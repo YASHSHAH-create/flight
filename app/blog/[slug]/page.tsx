@@ -1,3 +1,4 @@
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
@@ -5,7 +6,7 @@ import { BLOG_POSTS, BlogPost } from '@/app/lib/blog-data';
 import { Metadata } from 'next';
 import Navbar from '@/app/components/Navbar';
 import Footer from '@/app/components/Footer';
-import { ArrowLeft, Calendar, Clock, Share2 } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, Share2, ArrowRight, User } from 'lucide-react';
 
 interface Props {
     params: Promise<{ slug: string }>;
@@ -61,30 +62,70 @@ export default async function BlogPostPage({ params }: Props) {
         notFound();
     }
 
+    // Find related posts (same category, excluding current)
+    const relatedPosts = BLOG_POSTS
+        .filter(p => p.category === post.category && p.slug !== post.slug)
+        .slice(0, 3);
+
+    // If not enough related posts, fill with others
+    if (relatedPosts.length < 3) {
+        const others = BLOG_POSTS
+            .filter(p => p.slug !== post.slug && !relatedPosts.includes(p))
+            .slice(0, 3 - relatedPosts.length);
+        relatedPosts.push(...others);
+    }
+
     const jsonLd = {
         '@context': 'https://schema.org',
-        '@type': 'BlogPosting',
-        headline: post.title,
-        image: [post.imageUrl],
-        datePublished: post.date,
-        dateModified: post.date,
-        author: [{
-            '@type': 'Person',
-            name: post.author,
-        }],
-        publisher: {
-            '@type': 'Organization',
-            name: 'Paymm',
-            logo: {
-                '@type': 'ImageObject',
-                url: 'https://paymm.in/logo.png', // Ensure this exists or use a valid URL
+        '@graph': [
+            {
+                '@type': 'BlogPosting',
+                headline: post.title,
+                image: [post.imageUrl],
+                datePublished: post.date,
+                dateModified: post.date,
+                author: [{
+                    '@type': 'Person',
+                    name: post.author,
+                }],
+                publisher: {
+                    '@type': 'Organization',
+                    name: 'Paymm',
+                    logo: {
+                        '@type': 'ImageObject',
+                        url: 'https://paymm.in/logo.png',
+                    },
+                },
+                description: post.excerpt,
+                mainEntityOfPage: {
+                    '@type': 'WebPage',
+                    '@id': `https://paymm.in/blog/${post.slug}`,
+                }
             },
-        },
-        description: post.excerpt,
-        mainEntityOfPage: {
-            '@type': 'WebPage',
-            '@id': `https://paymm.in/blog/${post.slug}`,
-        }
+            {
+                '@type': 'BreadcrumbList',
+                itemListElement: [
+                    {
+                        '@type': 'ListItem',
+                        position: 1,
+                        name: 'Home',
+                        item: 'https://paymm.in'
+                    },
+                    {
+                        '@type': 'ListItem',
+                        position: 2,
+                        name: 'Blog',
+                        item: 'https://paymm.in/blog'
+                    },
+                    {
+                        '@type': 'ListItem',
+                        position: 3,
+                        name: post.title,
+                        item: `https://paymm.in/blog/${post.slug}`
+                    }
+                ]
+            }
+        ]
     };
 
     return (
@@ -101,8 +142,8 @@ export default async function BlogPostPage({ params }: Props) {
                 <article className="max-w-4xl mx-auto px-4 md:px-8">
 
                     <div className="mb-8">
-                        <Link href="/blog" className="inline-flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors font-medium mb-8">
-                            <ArrowLeft size={18} />
+                        <Link href="/blog" className="inline-flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors font-medium mb-8 group">
+                            <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
                             <span>Back to all posts</span>
                         </Link>
 
@@ -116,17 +157,20 @@ export default async function BlogPostPage({ params }: Props) {
 
                         <div className="flex flex-wrap items-center gap-6 text-slate-500 border-b border-slate-100 pb-8 mb-8">
                             <div className="flex items-center gap-2">
-                                <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-900 font-bold border border-slate-200">
-                                    {post.author[0]}
+                                <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-900 font-bold border border-slate-200">
+                                    <User size={20} className="text-slate-600" />
                                 </div>
-                                <span className="font-semibold text-slate-900">{post.author}</span>
+                                <div>
+                                    <span className="block font-semibold text-slate-900 text-sm leading-none">{post.author}</span>
+                                    <span className="text-xs text-slate-500">Travel Writer</span>
+                                </div>
                             </div>
-                            <div className="flex items-center gap-2">
-                                <Calendar size={18} />
+                            <div className="flex items-center gap-2 text-sm">
+                                <Calendar size={16} />
                                 <span>{new Date(post.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
                             </div>
-                            <div className="flex items-center gap-2">
-                                <Clock size={18} />
+                            <div className="flex items-center gap-2 text-sm">
+                                <Clock size={16} />
                                 <span>{post.readTime}</span>
                             </div>
                         </div>
@@ -151,7 +195,20 @@ export default async function BlogPostPage({ params }: Props) {
                         dangerouslySetInnerHTML={{ __html: post.content }}
                     />
 
-                    <div className="mt-16 pt-8 border-t border-slate-200">
+                    {/* Author Bio Box - E-E-A-T */}
+                    <div className="mt-16 bg-slate-50 rounded-2xl p-8 flex flex-col md:flex-row gap-6 items-center md:items-start text-center md:text-left">
+                        <div className="w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
+                            <User size={40} className="text-blue-600" />
+                        </div>
+                        <div>
+                            <h3 className="text-xl font-bold text-slate-900 mb-2">About {post.author}</h3>
+                            <p className="text-slate-600">
+                                {post.author} is a passionate traveler and content creator for Paymm. With a love for exploring hidden gems and sharing practical travel tips, they help you plan the perfect trip.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="mt-12 pt-8 border-t border-slate-200">
                         <h3 className="text-lg font-bold text-slate-900 mb-4">Share this article</h3>
                         <div className="flex gap-4">
                             <button className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-full text-slate-700 font-semibold transition-colors">
@@ -163,9 +220,42 @@ export default async function BlogPostPage({ params }: Props) {
                     </div>
 
                 </article>
+
+                {/* Related Posts Section */}
+                {relatedPosts.length > 0 && (
+                    <section className="max-w-7xl mx-auto px-4 md:px-8 mt-24">
+                        <h2 className="text-3xl font-bold text-slate-900 mb-10">Read Next</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            {relatedPosts.map((relatedPost) => (
+                                <Link key={relatedPost.slug} href={`/blog/${relatedPost.slug}`} className="group cursor-pointer">
+                                    <div className="relative aspect-[4/3] rounded-2xl overflow-hidden mb-4 shadow-md bg-gray-100">
+                                        <Image
+                                            src={relatedPost.imageUrl}
+                                            alt={relatedPost.title}
+                                            fill
+                                            className="object-cover transition-transform duration-500 group-hover:scale-110"
+                                        />
+                                    </div>
+                                    <div className="flex items-center gap-2 text-xs font-semibold text-blue-600 mb-2">
+                                        <span className="bg-blue-50 px-2 py-0.5 rounded-md">{relatedPost.category}</span>
+                                    </div>
+                                    <h3 className="text-xl font-bold text-slate-900 mb-2 leading-tight group-hover:text-blue-600 transition-colors">
+                                        {relatedPost.title}
+                                    </h3>
+                                    <p className="text-slate-500 text-sm line-clamp-2">
+                                        {relatedPost.excerpt}
+                                    </p>
+                                    <div className="flex items-center gap-1 text-blue-600 font-semibold text-sm mt-3 group-hover:gap-2 transition-all">
+                                        Read Article <ArrowRight size={16} />
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+                    </section>
+                )}
             </main>
 
-           
+            <Footer />
         </div>
     );
 }

@@ -1,9 +1,10 @@
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { BLOG_POSTS } from '@/app/lib/blog-data';
 import { Metadata } from 'next';
 import Navbar from '@/app/components/Navbar';
-
+import Footer from '@/app/components/Footer';
 
 export const metadata: Metadata = {
     title: 'Travel Blog | Paymm - Tips, Guides & Destinations',
@@ -13,13 +14,46 @@ export const metadata: Metadata = {
         description: 'Read our latest stories on travel destinations, flight hacks, and holiday planning.',
         url: 'https://paymm.in/blog',
         type: 'website',
+        images: [
+            {
+                url: '/og-image.jpg',
+                width: 1200,
+                height: 630,
+                alt: 'Paymm Travel Blog',
+            },
+        ],
     },
 };
 
 export default function BlogListingPage() {
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Home',
+                item: 'https://paymm.in'
+            },
+            {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Blog',
+                item: 'https://paymm.in/blog'
+            }
+        ]
+    };
+
     return (
         <div className="min-h-screen bg-slate-50 font-sans selection:bg-slate-900 selection:text-white">
             <Navbar />
+
+            {/* Structured Data for SEO */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
 
             <main className="pt-28 pb-20 px-4 md:px-8 max-w-7xl mx-auto">
                 <header className="mb-16 text-center">
@@ -38,9 +72,7 @@ export default function BlogListingPage() {
                     {BLOG_POSTS.map((post) => (
                         <article key={post.slug} className="group flex flex-col bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 transform hover:-translate-y-1">
                             <Link href={`/blog/${post.slug}`} className="relative h-64 overflow-hidden">
-                                {/* Placeholder for images if they don't exist yet, using a colored div or similar if Image fails, but here we assume Image component usage */}
                                 <div className="absolute inset-0 bg-slate-200 animate-pulse group-hover:animate-none transition-all" />
-                                {/* In a real app, ensure images exist. We will use a standard Next Image */}
                                 <Image
                                     src={post.imageUrl}
                                     alt={post.title}
@@ -80,7 +112,7 @@ export default function BlogListingPage() {
                 </div>
             </main>
 
-          
+            <Footer />
         </div>
     );
 }
