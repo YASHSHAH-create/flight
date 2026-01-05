@@ -41,20 +41,99 @@ export const SITE_KEYWORDS = [
 
     // Detailed Variations
     "flight ticket booking mobile app", "instant flight booking", "refundable flights", "free cancellation flights",
-    "modify flight booking", "web checkin", "flight baggage allowance", "extra baggage cost", "flight travel insurance"
+    "modify flight booking", "web checkin", "flight baggage allowance", "extra baggage cost", "flight travel insurance",
+
+    // Misspellings, Typos & Hinglish Variations
+    "Paym", "Pymm", "Payam", "Pay mm", "Paymm app", "Paymm web", "Paym flight",
+    "flite booking", "fligth booking", "filght booking", "flyt booking", "flt booking",
+    "cheep flights", "cheap flts", "sasti flight", "sasta ticket", "kam price flight",
+    "tikets", "tikits", "tickts", "tkt", "tkts", "air tikit", "air tkt",
+    "boking", "buking", "bukning", "bookin",
+    "airoplane ticket", "aroplane ticket", "plane ka ticket", "flight ka ticket",
+    "flight ki ticket", "hawai jahaz ki ticket", "ticket price kya hai",
+    "Delhi to Mumbai flt", "Mumbai to Delhi flt", "Goa flt",
+
+    // Festivals & Occasion (High Traffic)
+    "Diwali flight offers", "Holi flight booking", "Eid travel deals", "Christmas flight tickets",
+    "New Year flight offers", "Summer vacation flights", "Winter holiday flights", "Honeymoon flight packages",
+    "Durga Puja flights", "Chhath Puja flights",
+
+    // Urgency & 'Tatkal' Style Queries
+    "urgent flight booking", "tatkal flight ticket", "emergency air ticket", "same day flight booking",
+    "immediate flight booking", "next day flight ticket", "aaj ki flight", "kal ki flight"
 ];
 
 // Helper to generate even more if needed
-const cities = ["Delhi", "Mumbai", "Bangalore", "Hyderabad", "Chennai", "Kolkata", "Ahmedabad", "Pune", "Goa", "Jaipur"];
-cities.forEach(origin => {
-    cities.forEach(dest => {
+// Dynamic Generation with Variations
+const cityVariations: Record<string, string[]> = {
+    "Delhi": ["Dilli", "Dehli", "New Delhi", "Dlhi"],
+    "Mumbai": ["Bombay", "Mumbi", "Mumbahi"],
+    "Bangalore": ["Bengaluru", "Bangalor", "Banglore", "Blr"],
+    "Hyderabad": ["Hydrabad", "Hyderbad", "Hyd"],
+    "Chennai": ["Madras", "Chenai", "Chenn"],
+    "Kolkata": ["Calcutta", "Kolkatta", "Kolkta"],
+    "Ahmedabad": ["Ahemdabad", "Ahmdabad", "Amdavad"],
+    "Pune": ["Poona", "Puna"],
+    "Goa": ["Gowa"],
+    "Jaipur": ["Jaypur", "Japur"]
+};
+
+const baseCities = Object.keys(cityVariations);
+const connectorWords = ["to", "se"]; // English 'to', Hindi 'se'
+const ticketWords = ["flight", "flt", "ticket", "tkt", "ki ticket", "ka ticket"];
+
+baseCities.forEach(origin => {
+    baseCities.forEach(dest => {
         if (origin !== dest) {
+            // Standard correct spelling
             SITE_KEYWORDS.push(`${origin} to ${dest} flight booking`);
             SITE_KEYWORDS.push(`cheap flights from ${origin} to ${dest}`);
             SITE_KEYWORDS.push(`${origin} to ${dest} air ticket price`);
+
+            // Generate Misspelled/Hinglish Variations (Sampling to avoid array explosion, but here we can be generous)
+            const originReview = [origin, ...cityVariations[origin]];
+            const destReview = [dest, ...cityVariations[dest]];
+
+            originReview.forEach(o => {
+                destReview.forEach(d => {
+                    // Don't duplicate the main correct one immediately above
+                    if (o === origin && d === dest) return;
+
+                    // 1. Basic "City to City" with typos
+                    SITE_KEYWORDS.push(`${o} to ${d} flight`);
+
+                    // 2. Hinglish "City se City"
+                    SITE_KEYWORDS.push(`${o} se ${d} flight`);
+
+                    // 3. Short forms / Typos
+                    SITE_KEYWORDS.push(`${o} to ${d} flt`);
+                    SITE_KEYWORDS.push(`${o} to ${d} tkt`);
+
+                    // 4. Colloquial
+                    SITE_KEYWORDS.push(`${o} se ${d} ki ticket`);
+                    SITE_KEYWORDS.push(`${o} to ${d} cheap price`);
+                });
+            });
         }
     });
 });
+
+// International Routes (India Metros -> Major International Hubs)
+const indianMetros = ["Delhi", "Mumbai", "Bangalore", "Chennai", "Hyderabad", "Kolkata"];
+const internationalHubs = ["Dubai", "Bangkok", "Singapore", "London", "Toronto", "New York", "Bali", "Maldives"];
+
+indianMetros.forEach(origin => {
+    internationalHubs.forEach(dest => {
+        // Forward
+        SITE_KEYWORDS.push(`${origin} to ${dest} flight`);
+        SITE_KEYWORDS.push(`${origin} to ${dest} cheap tickets`);
+
+        // Reverse (NRIs coming back)
+        SITE_KEYWORDS.push(`${dest} to ${origin} flight`);
+        SITE_KEYWORDS.push(`flights from ${dest} to ${origin}`);
+    });
+});
+
 
 export const DEFAULT_SEO = {
     title: "Paymm - Book Cheap Flights & Air Tickets Online",
