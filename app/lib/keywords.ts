@@ -65,7 +65,7 @@ export const SITE_KEYWORDS = [
 
 // Helper to generate even more if needed
 // Dynamic Generation with Variations
-const cityVariations: Record<string, string[]> = {
+export const cityVariations: Record<string, string[]> = {
     "Delhi": ["Dilli", "Dehli", "New Delhi", "Dlhi"],
     "Mumbai": ["Bombay", "Mumbi", "Mumbahi"],
     "Bangalore": ["Bengaluru", "Bangalor", "Banglore", "Blr"],
@@ -78,7 +78,7 @@ const cityVariations: Record<string, string[]> = {
     "Jaipur": ["Jaypur", "Japur"]
 };
 
-const baseCities = Object.keys(cityVariations);
+export const baseCities = Object.keys(cityVariations);
 const connectorWords = ["to", "se"]; // English 'to', Hindi 'se'
 const ticketWords = ["flight", "flt", "ticket", "tkt", "ki ticket", "ka ticket"];
 

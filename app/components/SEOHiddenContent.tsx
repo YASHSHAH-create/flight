@@ -1,5 +1,6 @@
 import React from 'react';
 import { AIRPORT_MAP } from '../lib/airports';
+import { cityVariations, baseCities } from '../lib/keywords';
 
 export default function SEOHiddenContent() {
     // Use all airports from our map (Indian + International)
@@ -25,6 +26,30 @@ export default function SEOHiddenContent() {
                 const slug = `${fromCity.toLowerCase().replace(/\s+/g, '-')}-to-${toCity.toLowerCase().replace(/\s+/g, '-')}`;
                 // const price = Math.floor(Math.random() * (15000 - 3000) + 3000); // Removed fake price
                 routes.push({ from: fromCity, to: toCity, slug, price: 0 }); // price 0 as indicator for "Check Price"
+            }
+        });
+    });
+
+    // Generate Misspelling & Hinglish Variations for DOM Content
+    const searchVariations: string[] = [];
+    baseCities.forEach(origin => {
+        baseCities.forEach(dest => {
+            if (origin !== dest) {
+                const originReview = [origin, ...cityVariations[origin]];
+                const destReview = [dest, ...cityVariations[dest]];
+
+                // Limit to 1 variation per pair to avoid blowing up the DOM size too much
+                // e.g. "Dilli to Mumbi flight"
+                originReview.forEach((o, i) => {
+                    destReview.forEach((d, j) => {
+                        // Only pick a subset to keep DOM size reasonable (~1000 items is fine)
+                        if (i === 0 && j === 0) return; // Skip standard correct spelling (already covered)
+                        if (Math.random() > 0.3) return; // Randomly sample 30% of variations to save space
+
+                        searchVariations.push(`${o} to ${d} flight`);
+                        searchVariations.push(`${o} se ${d} ki ticket`);
+                    });
+                });
             }
         });
     });
@@ -82,6 +107,10 @@ export default function SEOHiddenContent() {
                 Paymm offers the best deals on domestic and international flights.
                 Search for flights from New Delhi, Mumbai, Bangalore, Hyderabad, Chennai, Kolkata, and more.
                 Get instant discounts, refundable fares, and 24/7 customer support.
+            </p>
+            <h3>Common User Searches (Variations)</h3>
+            <p style={{ fontSize: '10px', color: '#666' }}>
+                {searchVariations.join(", ")}
             </p>
         </div>
     );
