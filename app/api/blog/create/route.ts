@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
         postData.author = "Paymm Admin"; // simplified
         postData.imageUrl = "/blog/img1.png"; // Default image for now
 
-        const success = savePost(postData);
+        const success = await savePost(postData);
 
         if (success) {
             return NextResponse.json({ success: true, message: 'Post published successfully' });
