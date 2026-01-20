@@ -21,21 +21,27 @@ function mapDocToPost(doc: any): BlogPost {
 }
 
 export async function getAllPosts(): Promise<BlogPost[]> {
-    await dbConnect();
-    // Fetch from DB
-    const dbPosts = await Post.find({}).sort({ createdAt: -1 }).lean();
-    const mappedDbPosts = dbPosts.map(mapDocToPost);
-
-    // Combine with static posts (Static posts won't have views stored in DB unless we migrate them, 
-    // but for now we mix them. Static posts will have 0 or undefined views initially)
-    return [...mappedDbPosts, ...STATIC_POSTS.map(p => ({ ...p, views: 0 }))];
+    try {
+        await dbConnect();
+        // Fetch from DB
+        const dbPosts = await Post.find({}).sort({ createdAt: -1 }).lean();
+        const mappedDbPosts = dbPosts.map(mapDocToPost);
+        return [...mappedDbPosts, ...STATIC_POSTS.map(p => ({ ...p, views: 0 }))];
+    } catch (error) {
+        console.warn("Database fetch failed in getAllPosts, falling back to static content:", error);
+        return STATIC_POSTS.map(p => ({ ...p, views: 0 }));
+    }
 }
 
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
-    await dbConnect();
-    const dbPost = await Post.findOne({ slug }).lean();
-    if (dbPost) {
-        return mapDocToPost(dbPost);
+    try {
+        await dbConnect();
+        const dbPost = await Post.findOne({ slug }).lean();
+        if (dbPost) {
+            return mapDocToPost(dbPost);
+        }
+    } catch (error) {
+        console.warn(`Database fetch failed in getPostBySlug for ${slug}:`, error);
     }
 
     // Check static
