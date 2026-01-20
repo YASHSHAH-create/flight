@@ -10,7 +10,7 @@ export default function AnimatedSection({ children }: { children: React.ReactNod
             initial={{ opacity: 0, y: 100, scale: 0.95 }}
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            viewport={{ once: false, amount: 0.1 }}
+            viewport={{ once: true, amount: 0.1 }}
         >
             {children}
         </motion.div>

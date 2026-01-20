@@ -78,5 +78,27 @@
 
   .animate-subtle-pop {
     animation: subtle-pop 0.5s ease-out forwards;
+    will-change: transform;
+  }
+
+  @keyframes subtle-zoom {
+    from {
+      transform: scale(1);
+    }
+
+    to {
+      transform: scale(1.05);
+    }
+  }
+
+  .animate-subtle-zoom {
+    animation: subtle-zoom 20s ease-in-out infinite alternate;
+    will-change: transform;
+  }
+}
+
+@layer utilities {
+  .will-change-transform {
+    will-change: transform;
   }
 }

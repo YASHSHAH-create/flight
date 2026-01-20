@@ -1,11 +1,11 @@
-
 import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { BLOG_POSTS, BlogPost } from '@/app/lib/blog-data';
+import { getAllPosts, getPostBySlug } from '@/app/services/blogService';
+import { BlogPost } from '@/app/lib/blog-data';
 import { Metadata } from 'next';
 import Navbar from '@/app/components/Navbar';
-import Footer from '@/app/components/Footer';
+import ViewCounter from '@/app/components/ViewCounter';
 import { ArrowLeft, Calendar, Clock, Share2, ArrowRight, User } from 'lucide-react';
 
 interface Props {
@@ -14,7 +14,7 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const slug = (await params).slug;
-    const post = BLOG_POSTS.find((p) => p.slug === slug);
+    const post = await getPostBySlug(slug);
 
     if (!post) {
         return {
@@ -49,27 +49,30 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export async function generateStaticParams() {
-    return BLOG_POSTS.map((post) => ({
+    const posts = await getAllPosts();
+    return posts.map((post) => ({
         slug: post.slug,
     }));
 }
 
 export default async function BlogPostPage({ params }: Props) {
     const slug = (await params).slug;
-    const post = BLOG_POSTS.find((p) => p.slug === slug);
+    const post = await getPostBySlug(slug);
 
     if (!post) {
         notFound();
     }
 
+    const posts = await getAllPosts();
+
     // Find related posts (same category, excluding current)
-    const relatedPosts = BLOG_POSTS
+    const relatedPosts = posts
         .filter(p => p.category === post.category && p.slug !== post.slug)
         .slice(0, 3);
 
     // If not enough related posts, fill with others
     if (relatedPosts.length < 3) {
-        const others = BLOG_POSTS
+        const others = posts
             .filter(p => p.slug !== post.slug && !relatedPosts.includes(p))
             .slice(0, 3 - relatedPosts.length);
         relatedPosts.push(...others);
@@ -173,6 +176,7 @@ export default async function BlogPostPage({ params }: Props) {
                                 <Clock size={16} />
                                 <span>{post.readTime}</span>
                             </div>
+                            <ViewCounter slug={slug} initialViews={post.views} />
                         </div>
                     </div>
 
@@ -255,7 +259,7 @@ export default async function BlogPostPage({ params }: Props) {
                 )}
             </main>
 
-            <Footer />
+
         </div>
     );
 }

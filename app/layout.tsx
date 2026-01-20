@@ -100,6 +100,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5030260303252769" crossOrigin="anonymous"></script>
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
@@ -138,12 +141,7 @@ export default function RootLayout({
             gtag('config', 'G-33PDDT6135');
           `}
         </Script>
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5030260303252769"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
+
         <SmoothScrolling />
         <AuthProvider>
           {children}

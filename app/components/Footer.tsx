@@ -1,5 +1,6 @@
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaPaperPlane, FaCcVisa, FaCcMastercard, FaCcAmex, FaPaypal } from 'react-icons/fa';
 import { MdEmail, MdPhone, MdLocationOn, MdVerifiedUser } from 'react-icons/md';
 
@@ -17,10 +18,18 @@ const Footer = () => {
 
                     {/* Brand Section */}
                     <div className="space-y-6">
-                        <Link href="/" className="inline-block">
-                            <h2 className="text-3xl font-extrabold bg-gradient-to-r from-blue-400 via-indigo-400 to-violet-400 bg-clip-text text-transparent">
-                                PayMM
-                            </h2>
+                        <Link href="/" className="flex items-center gap-3 group select-none mb-6">
+                            <div className="relative w-10 h-10 md:w-11 md:h-11 rounded-xl overflow-hidden shadow-sm ring-1 ring-white/10 transition-all duration-300 group-hover:scale-105 group-hover:shadow-md bg-white">
+                                <Image
+                                    src="/paymm.png"
+                                    alt="Paymm Logo"
+                                    fill
+                                    className="object-cover"
+                                />
+                            </div>
+                            <span className="text-3xl font-black tracking-tighter text-white group-hover:text-blue-400 transition-colors leading-none pb-1">
+                                Paymm
+                            </span>
                         </Link>
                         <p className="text-slate-400 leading-relaxed text-sm">
                             Experience the future of travel booking. Seamless flights, secure payments, and 24/7 support for your journey.

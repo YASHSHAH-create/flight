@@ -1,10 +1,9 @@
-
 import Link from 'next/link';
 import Image from 'next/image';
-import { BLOG_POSTS } from '@/app/lib/blog-data';
+import { getAllPosts } from '@/app/services/blogService'; // Updated import
 import { Metadata } from 'next';
 import Navbar from '@/app/components/Navbar';
-import Footer from '@/app/components/Footer';
+
 
 export const metadata: Metadata = {
     title: 'Travel Blog | Paymm - Tips, Guides & Destinations',
@@ -25,7 +24,8 @@ export const metadata: Metadata = {
     },
 };
 
-export default function BlogListingPage() {
+export default async function BlogListingPage() {
+    const posts = await getAllPosts(); // Fetch combined posts
     const jsonLd = {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
@@ -69,7 +69,7 @@ export default function BlogListingPage() {
                 </header>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
-                    {BLOG_POSTS.map((post) => (
+                    {posts.map((post) => (
                         <article key={post.slug} className="group flex flex-col bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 transform hover:-translate-y-1">
                             <Link href={`/blog/${post.slug}`} className="relative h-64 overflow-hidden">
                                 <div className="absolute inset-0 bg-slate-200 animate-pulse group-hover:animate-none transition-all" />
@@ -112,7 +112,7 @@ export default function BlogListingPage() {
                 </div>
             </main>
 
-            <Footer />
+
         </div>
     );
 }

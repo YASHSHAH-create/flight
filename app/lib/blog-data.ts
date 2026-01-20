@@ -10,6 +10,7 @@ export interface BlogPost {
     readTime: string;
     imageUrl: string;
     keywords: string[];
+    views?: number;
 }
 
 export const BLOG_POSTS: BlogPost[] = [

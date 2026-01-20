@@ -17,6 +17,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
         '/search',
         '/terms',
         '/blog',
+        '/packages',
+        '/schedule',
+        '/profile',
     ];
 
     const staticEntries: MetadataRoute.Sitemap = routes.map((route) => ({

@@ -12,6 +12,9 @@ const SearchWidget = dynamic(() => import('./components/SearchWidget'), {
 });
 const FeaturedProducts = dynamic(() => import('./components/FeaturedProducts'));
 const Testimonials = dynamic(() => import('./components/Testimonials'));
+const PopularRoutes = dynamic(() => import('./components/PopularRoutes'));
+const LatestBlogPosts = dynamic(() => import('./components/LatestBlogPosts'));
+const FAQSection = dynamic(() => import('./components/FAQSection'));
 const BottomNav = dynamic(() => import('./components/ClientBottomNav'));
 
 
@@ -67,7 +70,10 @@ export default function Home() {
       <section className="relative w-full bg-white flex flex-col justify-center py-20 px-0 md:px-0">
         <AnimatedSection>
           <FeaturedProducts />
+          <PopularRoutes />
           <Testimonials />
+          <LatestBlogPosts />
+          <FAQSection />
 
           <div className="py-[3vh] px-[4vw] text-center bg-slate-900 text-white mx-[4vw] md:mx-16 rounded-[clamp(1.5rem,3vw,2rem)] shadow-2xl">
             <h2 className="text-[clamp(1.25rem,2.5vw,2rem)] font-bold mb-[1vh]">Ready to paymm?</h2>

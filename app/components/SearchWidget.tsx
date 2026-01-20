@@ -795,11 +795,7 @@ const SearchWidget = ({ initialState, className }: SearchWidgetProps) => {
                 </div>
             </div>
 
-            {/* Popular Destination */}
-            <div className="hidden md:flex justify-between items-end mt-20 px-4 animate-subtle-pop">
-                <h2 className="text-xl font-bold text-slate-800 tracking-tight">Popular Destination</h2>
-                <a href="#" className="text-sm font-bold text-slate-600 underline decoration-2 decoration-slate-300 hover:text-black hover:decoration-black transition-all">Explore All</a>
-            </div>
+         
 
             {/* Date Picker Slider/Modal */}
             {mounted && createPortal(

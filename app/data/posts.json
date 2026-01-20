@@ -1,0 +1,17 @@
+[
+    {
+        "title": "Start Your Blog Journey",
+        "slug": "start-your-blog-journey",
+        "excerpt": "This is a placeholder for your first dynamic post.",
+        "content": "<h1>Welcome</h1><p>This post is stored in the local JSON file. Create new posts from the dashboard!</p>",
+        "date": "2026-01-21",
+        "author": "System",
+        "category": "General",
+        "readTime": "1 min read",
+        "imageUrl": "/blog/img1.png",
+        "keywords": [
+            "welcome",
+            "first post"
+        ]
+    }
+]
