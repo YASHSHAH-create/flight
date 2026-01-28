@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import Footer from "@/app/components/Footer";
 import SEOContentBlock from "@/app/components/SEOContentBlock";
 
-const SearchWidget = dynamic(() => import('@/app/components/SearchWidget'), { ssr: true });
+const SearchWidget = dynamic(() => import('@/app/components/search-widget'), { ssr: true });
 
 type Props = {
     params: Promise<{ slug: string }>;

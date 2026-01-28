@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Card Design</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            width: 340px;
+            border-radius: 32px;
+            padding: 12px;
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .image-container {
+            position: relative;
+            width: 100%;
+            height: 340px;
+            border-radius: 24px;
+            overflow: hidden;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: rgba(40, 40, 40, 0.6);
+            backdrop-filter: blur(4px);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .brand-logo {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 36px;
+            height: 36px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .brand-logo svg {
+            width: 20px;
+            height: auto;
+        }
+
+        .pagination-dots {
+            position: absolute;
+            bottom: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+        }
+
+        .dot.active {
+            background: white;
+            width: 8px;
+            height: 8px;
+            transform: translateY(-1px);
+        }
+
+        .content {
+            padding: 4px 8px 8px 8px;
+        }
+
+        .title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #111;
+            margin-bottom: 4px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 15px;
+            color: #888;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            font-size: 14px;
+            color: #999;
+            line-height: 1.4;
+            margin-bottom: 24px;
+        }
+
+        .action-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price-tag {
+            background: #f0f0f0;
+            padding: 10px 20px;
+            border-radius: 100px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #111;
+        }
+
+        .buy-btn {
+            background: #111;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s;
+        }
+
+        .buy-btn:hover {
+            transform: scale(1.02);
+        }
+
+        .arrow-icon {
+            background: white;
+            color: black;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <div class="image-container">
+            <img src="images/nike-shoe.png" alt="Nike Court Vision">
+
+            <div class="badge">Best Seller</div>
+
+            <div class="brand-logo">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="black">
+                    <path
+                        d="M21.32,4.89c-4.99,2.83-9.5,4.73-13.88,5.19C5.39,10.3,3.87,8.96,2.2,7.3c-2.09-2.09-1.39-4.83,1.55-5.91 c1.66-0.61,3.2-0.08,4.55,1.27c1.47,1.47,2.8,3.25,3.95,5.19C15.34,6.72,18.5,5.7,21.32,4.89z" />
+                    <!-- Just a simple swoosh-like shape for demo -->
+                    <path d="M6.2 12.5C12.5 12.5 17.5 7.5 22.5 2.5C15 8.5 8 13.5 2 13.5C4.5 16 7.5 14 6.2 12.5Z" />
+                </svg>
+            </div>
+
+            <div class="pagination-dots">
+                <div class="dot active"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+
+        <div class="content">
+            <h1 class="title">Nike NK Court Vision</h1>
+            <div class="subtitle">Own the Court</div>
+            <p class="description">Step back into classic hoops style with a durable leather.</p>
+
+            <div class="action-row">
+                <div class="price-tag">$156</div>
+                <button class="buy-btn">
+                    Buy Now
+                    <div class="arrow-icon">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="7" y1="17" x2="17" y2="7"></line>
+                            <polyline points="7 7 17 7 17 17"></polyline>
+                        </svg>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

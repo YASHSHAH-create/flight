@@ -13,7 +13,7 @@ import { SearchResponse, FlightResult } from '../../types/api';
 import { useAuth } from '../../context/AuthContext';
 import Image from 'next/image';
 import Link from 'next/link';
-import SearchWidget from '../components/SearchWidget';
+import SearchWidget from '../components/search-widget';
 import BottomNav from '../components/BottomNav';
 
 // --- Helper Functions ---

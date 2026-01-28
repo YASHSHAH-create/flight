@@ -6,7 +6,7 @@ import JsonLd from "./components/JsonLd";
 import SEOHiddenContent from "./components/SEOHiddenContent";
 import dynamic from 'next/dynamic';
 
-const SearchWidget = dynamic(() => import('./components/SearchWidget'), {
+const SearchWidget = dynamic(() => import('./components/search-widget'), {
   ssr: true,
   loading: () => <div className="h-[400px] w-full bg-white/50 animate-pulse rounded-[24px]" />
 });

@@ -8,7 +8,7 @@ import { motion } from 'framer-motion';
 const routes = [
     {
         city: "Mumbai",
-        image: "https://images.unsplash.com/photo-1570168007204-dfb528c6958f?q=80&w=200&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1566552881560-0be862a7c445?q=80&w=200&auto=format&fit=crop",
         destinations: ["Goa", "Delhi", "Bangalore", "Ahmedabad"]
     },
     {
@@ -33,7 +33,7 @@ const routes = [
     },
     {
         city: "Ahmedabad",
-        image: "https://images.unsplash.com/photo-1585068227658-00516eb58e74?q=80&w=200&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1577085781358-1d740c83d652?q=80&w=200&auto=format&fit=crop",
         destinations: ["Mumbai", "Delhi", "Bangalore", "Goa"]
     },
     {
@@ -43,7 +43,7 @@ const routes = [
     },
     {
         city: "Pune",
-        image: "https://images.unsplash.com/photo-1582928509044-777e384c1ce7?q=80&w=200&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1588691884451-b84747372ba0?q=80&w=200&auto=format&fit=crop",
         destinations: ["Goa", "Delhi", "Bangalore", "Nagpur"]
     },
     {

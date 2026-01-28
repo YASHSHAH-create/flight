@@ -51,7 +51,7 @@ const LatestBlogPosts = () => {
                             <div className="flex items-center gap-4 text-slate-400 text-sm mb-4">
                                 <span className="flex items-center gap-1">
                                     <Calendar size={14} />
-                                    {new Date(post.date).toLocaleDateString()}
+                                    {new Date(post.date).toLocaleDateString('en-US', { day: 'numeric', month: 'numeric', year: 'numeric' })}
                                 </span>
                                 <span className="flex items-center gap-1">
                                     <Clock size={14} />

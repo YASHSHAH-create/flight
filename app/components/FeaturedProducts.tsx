@@ -8,7 +8,7 @@ const products = [
     {
         id: 1,
         title: "New York",
-        image: "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?q=80&w=2671&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?q=80&w=2671&auto=format&fit=crop",
         price: "Check Price",
         rating: "4.9",
         code: "JFK"
@@ -24,7 +24,7 @@ const products = [
     {
         id: 3,
         title: "Cape Town",
-        image: "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?q=80&w=2671&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1576485290814-1c72aa4bbb8e?q=80&w=2671&auto=format&fit=crop",
         price: "Check Price",
         rating: "4.8",
         code: "CPT"
@@ -32,7 +32,7 @@ const products = [
     {
         id: 4,
         title: "Tokyo",
-        image: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?q=80&w=2671&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=2671&auto=format&fit=crop",
         price: "Check Price",
         rating: "4.8",
         code: "HND"
