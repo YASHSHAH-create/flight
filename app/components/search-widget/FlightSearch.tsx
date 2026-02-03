@@ -250,62 +250,61 @@ const FlightSearch = ({ initialState }: FlightSearchProps) => {
 
             {/* Main Inputs */}
             {tripType !== 'Multi City' ? (
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 md:gap-6 items-center">
-                    {/* Origin & Dest */}
-                    <div className="lg:col-span-7 flex flex-col md:flex-row items-center gap-2 relative">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-2 md:gap-6 items-center">
+                    {/* Origin & Dest - Side by Side on Mobile now */}
+                    <div className="lg:col-span-7 grid grid-cols-2 md:flex md:flex-row items-center gap-2 relative">
                         {/* From */}
                         <div onClick={() => setActiveSearchField('from')}
-                            className="w-full bg-slate-50 border border-slate-200/80 rounded-2xl p-3 flex flex-col justify-center cursor-pointer hover:bg-white hover:shadow-md hover:border-slate-300 min-h-[70px]">
+                            className="w-full bg-slate-50 border border-slate-200/80 rounded-xl md:rounded-2xl p-2 md:p-3 flex flex-col justify-center cursor-pointer hover:bg-white hover:shadow-md hover:border-slate-300 min-h-[56px] md:min-h-[70px]">
                             <div className="flex items-center space-x-1 text-slate-400 mb-0.5">
-                                <MapPin size={12} />
-                                <span className="text-xs font-bold uppercase tracking-wider">From</span>
+                                <MapPin size={12} className="hidden md:block" />
+                                <span className="text-[10px] md:text-xs font-bold uppercase tracking-wider">From</span>
                             </div>
-                            <div className="text-xl md:text-2xl font-black text-slate-900 tracking-tight truncate">{flightData.from.city}</div>
-                            <div className="text-xs font-semibold text-slate-500 truncate">{flightData.from.code}, {flightData.from.country}</div>
+                            <div className="text-sm md:text-2xl font-black text-slate-900 tracking-tight truncate">{flightData.from.city}</div>
+                            <div className="text-[10px] md:text-xs font-semibold text-slate-500 truncate">{flightData.from.code}, {flightData.from.country}</div>
                         </div>
 
-                        {/* Swap */}
+                        {/* Swap - Desktop Only */}
                         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 hidden md:block">
                             <button onClick={(e) => { e.stopPropagation(); handleSwap(); }}
                                 className="bg-white border text-slate-400 hover:text-black hover:shadow-md p-2 rounded-full shadow-sm">
                                 <ArrowRightLeft size={16} />
                             </button>
                         </div>
-                        {/* Mobile Swap - Positioned differently or just allow re-selection */}
 
                         {/* To */}
                         <div onClick={() => setActiveSearchField('to')}
-                            className="w-full bg-slate-50 border border-slate-200/80 rounded-2xl p-3 flex flex-col justify-center cursor-pointer hover:bg-white hover:shadow-md hover:border-slate-300 min-h-[70px]">
+                            className="w-full bg-slate-50 border border-slate-200/80 rounded-xl md:rounded-2xl p-2 md:p-3 flex flex-col justify-center cursor-pointer hover:bg-white hover:shadow-md hover:border-slate-300 min-h-[56px] md:min-h-[70px]">
                             <div className="flex items-center space-x-1 text-slate-400 mb-0.5">
-                                <MapPin size={12} />
-                                <span className="text-xs font-bold uppercase tracking-wider">To</span>
+                                <MapPin size={12} className="hidden md:block" />
+                                <span className="text-[10px] md:text-xs font-bold uppercase tracking-wider">To</span>
                             </div>
-                            <div className="text-xl md:text-2xl font-black text-slate-900 tracking-tight truncate">{flightData.to.city}</div>
-                            <div className="text-xs font-semibold text-slate-500 truncate">{flightData.to.code}, {flightData.to.country}</div>
+                            <div className="text-sm md:text-2xl font-black text-slate-900 tracking-tight truncate">{flightData.to.city}</div>
+                            <div className="text-[10px] md:text-xs font-semibold text-slate-500 truncate">{flightData.to.code}, {flightData.to.country}</div>
                         </div>
                     </div>
 
                     {/* Dates */}
                     <div className="lg:col-span-5 flex flex-row items-center gap-2 md:gap-4 h-full">
                         <div onClick={() => setActiveDateField('departure')}
-                            className="flex-1 w-full bg-slate-50 border border-slate-200/80 rounded-2xl p-3 flex flex-col justify-center cursor-pointer hover:bg-white hover:shadow-md hover:border-slate-300 min-h-[70px]">
+                            className="flex-1 w-full bg-slate-50 border border-slate-200/80 rounded-xl md:rounded-2xl p-2 md:p-3 flex flex-col justify-center cursor-pointer hover:bg-white hover:shadow-md hover:border-slate-300 min-h-[56px] md:min-h-[70px]">
                             <div className="flex items-center space-x-1 text-slate-400 mb-0.5">
-                                <Calendar size={12} />
-                                <span className="text-xs font-bold uppercase tracking-wider">Departure</span>
+                                <Calendar size={12} className="hidden md:block" />
+                                <span className="text-[10px] md:text-xs font-bold uppercase tracking-wider">Departure</span>
                             </div>
-                            <div className={`text-xl md:text-2xl font-black ${dates.departure ? 'text-slate-900' : 'text-slate-300'}`}>
+                            <div className={`text-sm md:text-2xl font-black ${dates.departure ? 'text-slate-900' : 'text-slate-300'}`}>
                                 {formatDate(dates.departure)}
                             </div>
                         </div>
 
                         {tripType !== 'One Way' && (
                             <div onClick={() => setActiveDateField('return')}
-                                className="flex-1 w-full bg-slate-50 border border-slate-200/80 rounded-2xl p-3 flex flex-col justify-center cursor-pointer hover:bg-white hover:shadow-md hover:border-slate-300 min-h-[70px]">
+                                className="flex-1 w-full bg-slate-50 border border-slate-200/80 rounded-xl md:rounded-2xl p-2 md:p-3 flex flex-col justify-center cursor-pointer hover:bg-white hover:shadow-md hover:border-slate-300 min-h-[56px] md:min-h-[70px]">
                                 <div className="flex items-center space-x-1 text-slate-400 mb-0.5">
-                                    <Calendar size={12} />
-                                    <span className="text-xs font-bold uppercase tracking-wider">Return</span>
+                                    <Calendar size={12} className="hidden md:block" />
+                                    <span className="text-[10px] md:text-xs font-bold uppercase tracking-wider">Return</span>
                                 </div>
-                                <div className={`text-xl md:text-2xl font-black ${dates.return ? 'text-slate-900' : 'text-slate-300'}`}>
+                                <div className={`text-sm md:text-2xl font-black ${dates.return ? 'text-slate-900' : 'text-slate-300'}`}>
                                     {formatDate(dates.return)}
                                 </div>
                             </div>

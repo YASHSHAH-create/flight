@@ -41,7 +41,7 @@ export default function Home() {
           />
         </div>
 
-        <div className="relative z-10 flex-1 flex flex-col justify-start pt-24 pb-32 md:pb-0 md:justify-center items-center px-4 md:px-[6vw] max-w-7xl mx-auto w-full h-full gap-4 md:gap-12 pointer-events-none md:pointer-events-auto">
+        <div className="relative z-10 flex-1 flex flex-col justify-start pt-20 md:pt-24 pb-32 md:pb-0 md:justify-center items-center px-4 md:px-[6vw] max-w-7xl mx-auto w-full h-full gap-4 md:gap-12 pointer-events-none md:pointer-events-auto">
           <div className="max-w-[90vw] md:max-w-3xl animate-subtle-up pointer-events-auto flex flex-col items-center text-center">
 
             <div className="mb-4 block">
