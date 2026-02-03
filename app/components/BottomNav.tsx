@@ -17,8 +17,8 @@ const BottomNav = ({ onFilterClick, onMapClick }: BottomNavProps) => {
     useEffect(() => {
         if (pathname.includes('/search') || pathname.includes('/hotels')) {
             setActiveTab('search');
-        } else if (pathname.includes('/trips')) {
-            setActiveTab('trips');
+        } else if (pathname.includes('/bookings')) {
+            setActiveTab('bookings');
         } else if (pathname.includes('/profile')) {
             setActiveTab('profile');
         } else {
@@ -77,7 +77,7 @@ const BottomNav = ({ onFilterClick, onMapClick }: BottomNavProps) => {
                     </AnimatePresence>
                 </div>
 
-                {/* Map Toggle or Trips */}
+                {/* Map Toggle or Bookings */}
                 {onMapClick ? (
                     <button onClick={onMapClick}>
                         <div className="p-3 rounded-full transition-all duration-300 flex items-center justify-center relative hover:bg-slate-50">
@@ -85,10 +85,10 @@ const BottomNav = ({ onFilterClick, onMapClick }: BottomNavProps) => {
                         </div>
                     </button>
                 ) : (
-                    <Link href="/trips" onClick={() => setActiveTab('trips')}>
-                        <div className={`p-3 rounded-full transition-all duration-300 flex items-center justify-center relative ${activeTab === 'trips' ? 'bg-slate-100' : 'hover:bg-slate-50'}`}>
-                            <Calendar size={22} strokeWidth={activeTab === 'trips' ? 2.5 : 2} className={`transition-colors ${activeTab === 'trips' ? 'text-black' : 'text-slate-400'}`} />
-                            {activeTab === 'trips' && <motion.div layoutId="nav-dot" className="absolute -bottom-1 w-1 h-1 bg-black rounded-full" />}
+                    <Link href="/bookings" onClick={() => setActiveTab('bookings')}>
+                        <div className={`p-3 rounded-full transition-all duration-300 flex items-center justify-center relative ${activeTab === 'bookings' ? 'bg-slate-100' : 'hover:bg-slate-50'}`}>
+                            <Calendar size={22} strokeWidth={activeTab === 'bookings' ? 2.5 : 2} className={`transition-colors ${activeTab === 'bookings' ? 'text-black' : 'text-slate-400'}`} />
+                            {activeTab === 'bookings' && <motion.div layoutId="nav-dot" className="absolute -bottom-1 w-1 h-1 bg-black rounded-full" />}
                         </div>
                     </Link>
                 )}
