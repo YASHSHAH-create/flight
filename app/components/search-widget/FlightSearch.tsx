@@ -17,14 +17,23 @@ const FlightSearch = ({ initialState }: FlightSearchProps) => {
     const [travellers, setTravellers] = useState({ adults: 1, children: 0, infants: 0 });
     const [travelClass, setTravelClass] = useState('Economy');
 
+    // Helper to parse DDMMYYYY to YYYY-MM-DD
+    const parseInitialDate = (dStr?: string) => {
+        if (!dStr || dStr.length !== 8) return new Date().toISOString().split('T')[0];
+        const d = dStr.slice(0, 2);
+        const m = dStr.slice(2, 4);
+        const y = dStr.slice(4);
+        return `${y}-${m}-${d}`;
+    };
+
     // One Way / Round Trip Data
     const [flightData, setFlightData] = useState({
-        from: airports.find((a: any) => a.code === 'DEL') || airports[0],
-        to: airports.find((a: any) => a.code === 'DXB') || airports[1],
+        from: (initialState?.fromCode && airports.find((a: any) => a.code === initialState.fromCode)) || airports.find((a: any) => a.code === 'DEL') || airports[0],
+        to: (initialState?.toCode && airports.find((a: any) => a.code === initialState.toCode)) || airports.find((a: any) => a.code === 'DXB') || airports[1],
     });
 
     const [dates, setDates] = useState({
-        departure: new Date().toISOString().split('T')[0],
+        departure: (initialState?.date) ? parseInitialDate(initialState.date) : new Date().toISOString().split('T')[0],
         return: '',
     });
 

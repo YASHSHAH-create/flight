@@ -17,6 +17,9 @@ export const airports = [
     { code: 'SYD', city: 'Sydney', airport: 'Kingsford Smith Airport', country: 'Australia' },
     { code: 'BKK', city: 'Bangkok', airport: 'Suvarnabhumi Airport', country: 'Thailand' },
     { code: 'YYZ', city: 'Toronto', airport: 'Pearson International Airport', country: 'Canada' },
+    { code: 'HKT', city: 'Phuket', airport: 'Phuket International Airport', country: 'Thailand' },
+    { code: 'MLE', city: 'Male', airport: 'Velana International Airport', country: 'Maldives' },
+    { code: 'DPS', city: 'Bali', airport: 'Ngurah Rai International Airport', country: 'Indonesia' },
 
     // Other Major Indian Airports
     { code: 'AMD', city: 'Ahmedabad', airport: 'Sardar Vallabhbhai Patel International Airport', country: 'India' },
