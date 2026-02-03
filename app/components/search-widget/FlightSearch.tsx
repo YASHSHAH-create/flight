@@ -255,7 +255,7 @@ const FlightSearch = ({ initialState }: FlightSearchProps) => {
                     <div className="lg:col-span-7 grid grid-cols-2 md:flex md:flex-row items-center gap-2 relative">
                         {/* From */}
                         <div onClick={() => setActiveSearchField('from')}
-                            className="w-full bg-slate-50 border border-slate-200/80 rounded-xl md:rounded-2xl p-2 md:p-3 flex flex-col justify-center cursor-pointer hover:bg-white hover:shadow-md hover:border-slate-300 min-h-[56px] md:min-h-[70px]">
+                            className="w-full bg-slate-50 border border-slate-200/80 rounded-xl md:rounded-2xl p-2 pr-8 md:p-3 md:pr-3 flex flex-col justify-center cursor-pointer hover:bg-white hover:shadow-md hover:border-slate-300 min-h-[56px] md:min-h-[70px]">
                             <div className="flex items-center space-x-1 text-slate-400 mb-0.5">
                                 <MapPin size={12} className="hidden md:block" />
                                 <span className="text-[10px] md:text-xs font-bold uppercase tracking-wider">From</span>
@@ -267,14 +267,14 @@ const FlightSearch = ({ initialState }: FlightSearchProps) => {
                         {/* Swap */}
                         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
                             <button onClick={(e) => { e.stopPropagation(); handleSwap(); }}
-                                className="bg-white border text-slate-400 hover:text-black hover:shadow-md p-2 rounded-full shadow-sm transform active:rotate-180 transition-transform">
+                                className="bg-white border text-slate-400 hover:text-black hover:shadow-md p-1.5 md:p-2 rounded-full shadow-sm transform active:rotate-180 transition-transform">
                                 <ArrowRightLeft size={16} />
                             </button>
                         </div>
 
                         {/* To */}
                         <div onClick={() => setActiveSearchField('to')}
-                            className="w-full bg-slate-50 border border-slate-200/80 rounded-xl md:rounded-2xl p-2 md:p-3 flex flex-col justify-center cursor-pointer hover:bg-white hover:shadow-md hover:border-slate-300 min-h-[56px] md:min-h-[70px]">
+                            className="w-full bg-slate-50 border border-slate-200/80 rounded-xl md:rounded-2xl p-2 pl-8 md:p-3 md:pl-3 flex flex-col justify-center cursor-pointer hover:bg-white hover:shadow-md hover:border-slate-300 min-h-[56px] md:min-h-[70px]">
                             <div className="flex items-center space-x-1 text-slate-400 mb-0.5">
                                 <MapPin size={12} className="hidden md:block" />
                                 <span className="text-[10px] md:text-xs font-bold uppercase tracking-wider">To</span>
