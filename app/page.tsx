@@ -27,9 +27,9 @@ export default function Home() {
       <Navbar />
 
       {/* Frame 1: Hero Section */}
-      <section className="relative min-h-[100svh] w-full flex flex-col overflow-x-hidden md:overflow-visible">
-        {/* Background Image - Fixed & Stable */}
-        <div className="fixed inset-0 z-0 h-[120vh] w-full pointer-events-none">
+      <section className="relative min-h-[100svh] w-full flex flex-col overflow-x-hidden md:overflow-visible bg-gradient-to-b from-blue-50 via-slate-50 to-white">
+        {/* Background Image - Fixed & Stable (Desktop Only) */}
+        <div className="hidden md:block fixed inset-0 z-0 h-[120vh] w-full pointer-events-none">
           <Image
             src="/background.jpg"
             alt="Background"
