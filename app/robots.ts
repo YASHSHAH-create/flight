@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
         rules: {
             userAgent: '*',
             allow: '/',
-            disallow: ['/api/', '/bookings/'], // Disallow private paths
+            disallow: ['/admin/', '/api/', '/_next/'],
         },
         sitemap: 'https://paymm.in/sitemap.xml',
     };

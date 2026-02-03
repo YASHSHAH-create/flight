@@ -34,7 +34,7 @@ export default function Home() {
             src="/background.jpg"
             alt="Background"
             fill
-            className="object-cover object-center animate-subtle-zoom"
+            className="object-cover object-center"
             priority
             sizes="100vw"
           />

@@ -61,8 +61,8 @@ const MOCK_HOTELS: Hotel[] = [
         price: 32000,
         originalPrice: 45000,
         images: [
-            "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2070&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1582719508461-905c673771fd?q=80&w=2025&auto=format&fit=crop"
+            "https://picsum.photos/seed/oberoi1/800/600",
+            "https://picsum.photos/seed/oberoi2/800/600"
         ],
         amenities: ["wifi", "pool", "spa", "restaurant", "lake_view"],
         tags: ["Luxury", "Honeymoon Special"],
@@ -81,8 +81,8 @@ const MOCK_HOTELS: Hotel[] = [
         price: 48500,
         originalPrice: 60000,
         images: [
-            "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=2070&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?q=80&w=2070&auto=format&fit=crop"
+            "https://picsum.photos/seed/taj1/800/600",
+            "https://picsum.photos/seed/taj2/800/600"
         ],
         amenities: ["wifi", "pool", "boat", "dining"],
         tags: ["Heritage", "Iconic"]
@@ -100,7 +100,7 @@ const MOCK_HOTELS: Hotel[] = [
         price: 28000,
         originalPrice: 35000,
         images: [
-            "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=2070&auto=format&fit=crop"
+            "https://picsum.photos/seed/raffles1/800/600"
         ],
         amenities: ["wifi", "spa", "bar", "gym"],
         tags: ["Modern", "Island Oasis"]
@@ -118,7 +118,7 @@ const MOCK_HOTELS: Hotel[] = [
         price: 12500,
         originalPrice: 18000,
         images: [
-            "https://images.unsplash.com/photo-1571896349842-6e5c48dc52e3?q=80&w=2070&auto=format&fit=crop"
+            "https://picsum.photos/seed/trident1/800/600"
         ],
         amenities: ["wifi", "pool", "parking", "restaurant"],
         tags: ["Family Friendly", "Garden"]
@@ -136,7 +136,7 @@ const MOCK_HOTELS: Hotel[] = [
         price: 15000,
         originalPrice: 22000,
         images: [
-            "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?q=80&w=2070&auto=format&fit=crop"
+            "https://picsum.photos/seed/aurika1/800/600"
         ],
         amenities: ["wifi", "pool", "spa", "view"],
         tags: ["Hilltop", "Scenic Views"]
@@ -154,7 +154,7 @@ const MOCK_HOTELS: Hotel[] = [
         price: 52000,
         originalPrice: 65000,
         images: [
-            "https://images.unsplash.com/photo-1566665797739-1674de7a421a?q=80&w=1974&auto=format&fit=crop"
+            "https://picsum.photos/seed/leela1/800/600"
         ],
         amenities: ["wifi", "pool", "spa", "lake_view", "butler"],
         tags: ["Ultimate Luxury", "Palace"]
@@ -383,7 +383,7 @@ const MapView = ({ hotels, onClose }: { hotels: Hotel[], onClose: () => void }) 
             <div className="flex-1 w-full h-full relative overflow-auto touch-pan-x touch-pan-y scroll-smooth">
                 <div className="min-w-[150vw] min-h-[150vh] relative">
                     <img
-                        src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=2000&auto=format&fit=crop"
+                        src="https://picsum.photos/seed/map/2000/1000?grayscale"
                         alt="Map Background"
                         className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-multiply grayscale-[0.2]"
                     />
@@ -504,7 +504,7 @@ export default function HotelSearchPage() {
                                 className="bg-white rounded-2xl p-2 border border-slate-200 shadow-sm group cursor-pointer overflow-hidden relative h-32"
                             >
                                 <img
-                                    src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=600&auto=format&fit=crop"
+                                    src="https://picsum.photos/seed/map/600/400?grayscale"
                                     className="w-full h-full object-cover rounded-xl opacity-80 group-hover:opacity-100 transition-opacity"
                                     alt="Map view"
                                 />

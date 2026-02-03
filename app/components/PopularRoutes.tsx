@@ -8,47 +8,47 @@ import { motion } from 'framer-motion';
 const routes = [
     {
         city: "Mumbai",
-        image: "https://images.unsplash.com/photo-1566552881560-0be862a7c445?q=80&w=200&auto=format&fit=crop",
+        image: "https://picsum.photos/seed/mumbai/200/200",
         destinations: ["Goa", "Delhi", "Bangalore", "Ahmedabad"]
     },
     {
         city: "Delhi",
-        image: "https://images.unsplash.com/photo-1587474265402-9e2b285857b3?q=80&w=200&auto=format&fit=crop",
+        image: "https://picsum.photos/seed/delhi/200/200",
         destinations: ["Mumbai", "Goa", "Bangalore", "Pune"]
     },
     {
         city: "Kolkata",
-        image: "https://images.unsplash.com/photo-1536421469767-80559bb6f5e1?q=80&w=200&auto=format&fit=crop",
+        image: "https://picsum.photos/seed/kolkata/200/200",
         destinations: ["Mumbai", "Delhi", "Bangalore", "Bagdogra"]
     },
     {
         city: "Chennai",
-        image: "https://images.unsplash.com/photo-1582510003544-5294b321ded9?q=80&w=200&auto=format&fit=crop",
+        image: "https://picsum.photos/seed/chennai/200/200",
         destinations: ["Mumbai", "Delhi", "Madurai", "Coimbatore"]
     },
     {
         city: "Hyderabad",
-        image: "https://images.unsplash.com/photo-1605218427368-35b81a3dd6a6?q=80&w=200&auto=format&fit=crop",
+        image: "https://picsum.photos/seed/hyderabad/200/200",
         destinations: ["Mumbai", "Goa", "Bangalore", "Delhi"]
     },
     {
         city: "Ahmedabad",
-        image: "https://images.unsplash.com/photo-1577085781358-1d740c83d652?q=80&w=200&auto=format&fit=crop",
+        image: "https://picsum.photos/seed/ahmedabad/200/200",
         destinations: ["Mumbai", "Delhi", "Bangalore", "Goa"]
     },
     {
         city: "Bangalore",
-        image: "https://images.unsplash.com/photo-1596176530529-78163a4f7af2?q=80&w=200&auto=format&fit=crop",
+        image: "https://picsum.photos/seed/bangalore/200/200",
         destinations: ["Mumbai", "Delhi", "Goa", "Hyderabad"]
     },
     {
         city: "Pune",
-        image: "https://images.unsplash.com/photo-1588691884451-b84747372ba0?q=80&w=200&auto=format&fit=crop",
+        image: "https://picsum.photos/seed/pune/200/200",
         destinations: ["Goa", "Delhi", "Bangalore", "Nagpur"]
     },
     {
         city: "Goa",
-        image: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?q=80&w=200&auto=format&fit=crop",
+        image: "https://picsum.photos/seed/goa/200/200",
         destinations: ["Mumbai", "Delhi", "Bangalore", "Hyderabad"]
     },
 ];

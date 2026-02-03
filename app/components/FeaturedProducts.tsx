@@ -1,14 +1,14 @@
 "use client";
 
 import { Heart, Tag, Plane, Search } from 'lucide-react';
-import { motion } from 'framer-motion';
+
 import Image from 'next/image';
 
 const products = [
     {
         id: 1,
         title: "New York",
-        image: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?q=80&w=2671&auto=format&fit=crop",
+        image: "https://picsum.photos/seed/newyork/800/600",
         price: "Check Price",
         rating: "4.9",
         code: "JFK"
@@ -16,7 +16,7 @@ const products = [
     {
         id: 2,
         title: "Paris",
-        image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=2673&auto=format&fit=crop",
+        image: "https://picsum.photos/seed/paris/800/600",
         price: "Check Price",
         rating: "5.0",
         code: "CDG"
@@ -24,7 +24,7 @@ const products = [
     {
         id: 3,
         title: "Cape Town",
-        image: "https://images.unsplash.com/photo-1576485290814-1c72aa4bbb8e?q=80&w=2671&auto=format&fit=crop",
+        image: "https://picsum.photos/seed/capetown/800/600",
         price: "Check Price",
         rating: "4.8",
         code: "CPT"
@@ -32,7 +32,7 @@ const products = [
     {
         id: 4,
         title: "Tokyo",
-        image: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=2671&auto=format&fit=crop",
+        image: "https://picsum.photos/seed/tokyo/800/600",
         price: "Check Price",
         rating: "4.8",
         code: "HND"
@@ -41,22 +41,16 @@ const products = [
 
 const FeaturedProducts = () => {
     return (
-        <section className="py-8 px-4 md:px-8 lg:px-16 w-full max-w-[1920px] mx-auto">
-            <h2 className="text-2xl md:text-3xl font-bold mb-6 text-slate-900">Featured Destinations</h2>
+        <section className="py-8 px-0 md:px-8 lg:px-16 w-full max-w-[1920px] mx-auto">
+            <div className="px-4 md:px-0">
+                <h2 className="text-2xl md:text-3xl font-bold mb-6 text-slate-900">Featured Destinations</h2>
+            </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
-                {products.map((product, index) => (
-                    <motion.div
+            <div className="flex overflow-x-auto gap-4 px-4 pb-4 w-full snap-x snap-mandatory no-scrollbar md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-6 md:px-0 md:pb-0">
+                {products.map((product) => (
+                    <div
                         key={product.id}
-                        className="group relative flex flex-col w-full rounded-2xl md:rounded-3xl bg-white p-3 md:p-3 shadow-sm md:shadow-xl hover:shadow-md md:hover:shadow-2xl transition-all duration-300 overflow-hidden md:aspect-[3/4]"
-                        initial={{ opacity: 0, y: 50 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, margin: "-50px" }}
-                        transition={{
-                            duration: 0.5,
-                            delay: index * 0.1,
-                            ease: "easeOut"
-                        }}
+                        className="group relative flex flex-col shrink-0 w-[85vw] sm:w-[45vw] md:w-auto rounded-2xl md:rounded-3xl bg-white p-3 md:p-3 shadow-sm md:shadow-xl hover:shadow-md md:hover:shadow-2xl transition-all duration-300 overflow-hidden md:aspect-[3/4] snap-center"
                     >
                         {/* Image Container */}
                         <div className="relative w-full h-64 md:h-full rounded-xl md:rounded-2xl overflow-hidden transition-all duration-500 ease-in-out md:group-hover:h-[65%] shrink-0">
@@ -66,7 +60,7 @@ const FeaturedProducts = () => {
                                 alt={product.title}
                                 fill
                                 className="object-cover transition-transform duration-700 group-hover:scale-110"
-                                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                                sizes="(max-width: 640px) 85vw, (max-width: 1024px) 50vw, 25vw"
                             />
 
                             {/* Gradient Overlay - Desktop Only for readability of overlay text */}
@@ -127,7 +121,7 @@ const FeaturedProducts = () => {
                             </div>
                         </div>
 
-                    </motion.div>
+                    </div>
                 ))}
             </div>
         </section>
