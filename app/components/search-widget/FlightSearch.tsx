@@ -264,10 +264,10 @@ const FlightSearch = ({ initialState }: FlightSearchProps) => {
                             <div className="text-[10px] md:text-xs font-semibold text-slate-500 truncate">{flightData.from.code}, {flightData.from.country}</div>
                         </div>
 
-                        {/* Swap - Desktop Only */}
-                        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 hidden md:block">
+                        {/* Swap */}
+                        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
                             <button onClick={(e) => { e.stopPropagation(); handleSwap(); }}
-                                className="bg-white border text-slate-400 hover:text-black hover:shadow-md p-2 rounded-full shadow-sm">
+                                className="bg-white border text-slate-400 hover:text-black hover:shadow-md p-2 rounded-full shadow-sm transform active:rotate-180 transition-transform">
                                 <ArrowRightLeft size={16} />
                             </button>
                         </div>
