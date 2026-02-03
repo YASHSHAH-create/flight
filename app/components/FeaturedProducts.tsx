@@ -9,7 +9,7 @@ const products = [
         id: 1,
         title: "New York",
         image: "https://picsum.photos/seed/newyork/800/600",
-        price: "$1,299",
+        price: "₹85,500",
         rating: "4.9",
         code: "JFK"
     },
@@ -17,7 +17,7 @@ const products = [
         id: 2,
         title: "Paris",
         image: "https://picsum.photos/seed/paris/800/600",
-        price: "$899",
+        price: "₹55,900",
         rating: "5.0",
         code: "CDG"
     },
@@ -25,7 +25,7 @@ const products = [
         id: 3,
         title: "Cape Town",
         image: "https://picsum.photos/seed/capetown/800/600",
-        price: "$1,150",
+        price: "₹65,200",
         rating: "4.8",
         code: "CPT"
     },
@@ -33,7 +33,7 @@ const products = [
         id: 4,
         title: "Tokyo",
         image: "https://picsum.photos/seed/tokyo/800/600",
-        price: "$1,450",
+        price: "₹48,000",
         rating: "4.8",
         code: "HND"
     }
