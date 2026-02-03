@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import Navbar from "./components/Navbar";
 import { MoveRight } from 'lucide-react';
 import AnimatedSection from "./components/AnimatedSection";
@@ -45,12 +46,14 @@ export default function Home() {
           <div className="max-w-[90vw] md:max-w-3xl animate-subtle-up pointer-events-auto flex flex-col items-center text-center">
 
             <div className="mb-4 block">
-              <button className="group flex items-center gap-2 px-6 py-2 bg-white/70 backdrop-blur-md hover:bg-white text-slate-900 rounded-full font-semibold shadow-sm transition-all border border-white/40 hover:-translate-y-0.5 active:translate-y-0">
-                <span>Explore Now</span>
-                <span className="bg-black text-white rounded-full p-1 transition-transform group-hover:translate-x-1">
-                  <MoveRight size={14} strokeWidth={3} />
-                </span>
-              </button>
+              <Link href="/packages">
+                <button className="group flex items-center gap-2 px-6 py-2 bg-white/70 backdrop-blur-md hover:bg-white text-slate-900 rounded-full font-semibold shadow-sm transition-all border border-white/40 hover:-translate-y-0.5 active:translate-y-0">
+                  <span>Explore Now</span>
+                  <span className="bg-black text-white rounded-full p-1 transition-transform group-hover:translate-x-1">
+                    <MoveRight size={14} strokeWidth={3} />
+                  </span>
+                </button>
+              </Link>
             </div>
 
             <h1 className="text-[clamp(1.75rem,8vw,3.5rem)] leading-[1.1] tracking-tight drop-shadow-sm font-bold text-slate-900">
@@ -79,7 +82,9 @@ export default function Home() {
           <div className="py-[3vh] px-[4vw] text-center bg-slate-900 text-white mx-[4vw] md:mx-16 rounded-[clamp(1.5rem,3vw,2rem)] shadow-2xl">
             <h2 className="text-[clamp(1.25rem,2.5vw,2rem)] font-bold mb-[1vh]">Ready to paymm?</h2>
             <p className="mb-[2vh] text-slate-400 text-[clamp(0.875rem,1.2vw,1rem)]">Join millions of travelers today.</p>
-            <button className="bg-white text-black px-[6vw] md:px-8 py-[1.5vh] md:py-3 rounded-full font-bold text-[clamp(0.875rem,1.2vw,1rem)] hover:bg-slate-200 transition-colors transform hover:scale-105 active:scale-95">Get Started</button>
+            <Link href="/search">
+              <button className="bg-white text-black px-[6vw] md:px-8 py-[1.5vh] md:py-3 rounded-full font-bold text-[clamp(0.875rem,1.2vw,1rem)] hover:bg-slate-200 transition-colors transform hover:scale-105 active:scale-95">Get Started</button>
+            </Link>
           </div>
         </AnimatedSection>
       </section>

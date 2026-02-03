@@ -178,8 +178,8 @@ const Navbar = () => {
 
                             <div className="flex flex-col space-y-2">
                                 {[
-                                    { name: 'Holiday Packages', href: '#', icon: Package },
-                                    { name: 'Flight Schedule', href: '#', icon: CalendarDays },
+                                    { name: 'Holiday Packages', href: '/packages', icon: Package },
+                                    { name: 'Flight Schedule', href: '/schedule', icon: CalendarDays },
                                     { name: 'Travel Blog', href: '/blog', icon: BookOpen },
                                     { name: 'Account Settings', href: '#', icon: Settings },
                                     { name: 'My Bookings', href: '/bookings', icon: Briefcase },
