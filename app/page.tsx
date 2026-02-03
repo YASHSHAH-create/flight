@@ -27,7 +27,7 @@ export default function Home() {
       <Navbar />
 
       {/* Frame 1: Hero Section */}
-      <section className="relative min-h-screen w-full flex flex-col overflow-x-hidden md:overflow-hidden">
+      <section className="relative min-h-[100svh] w-full flex flex-col overflow-x-hidden md:overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <Image
@@ -60,7 +60,7 @@ export default function Home() {
 
           </div>
 
-          <div className="w-full pointer-events-auto transform transition-transform origin-top [@media(max-height:800px)]:scale-90 [@media(max-height:800px)]:-mt-2">
+          <div className="w-full pointer-events-auto transform transition-transform origin-top md:[@media(max-height:800px)]:scale-90 md:[@media(max-height:800px)]:-mt-2">
             <SearchWidget />
           </div>
         </div>
