@@ -27,9 +27,9 @@ export default function Home() {
       <Navbar />
 
       {/* Frame 1: Hero Section */}
-      <section className="relative min-h-[100svh] w-full flex flex-col overflow-x-hidden md:overflow-hidden">
-        {/* Background Image */}
-        <div className="absolute inset-0 z-0">
+      <section className="relative min-h-[100svh] w-full flex flex-col overflow-x-hidden md:overflow-visible">
+        {/* Background Image - Fixed & Stable */}
+        <div className="fixed inset-0 z-0 h-[120vh] w-full pointer-events-none">
           <Image
             src="/background.jpg"
             alt="Background"
@@ -37,13 +37,14 @@ export default function Home() {
             className="object-cover object-center"
             priority
             sizes="100vw"
+            quality={90}
           />
         </div>
 
         <div className="relative z-10 flex-1 flex flex-col justify-start pt-24 pb-32 md:pb-0 md:justify-center items-center px-4 md:px-[6vw] max-w-7xl mx-auto w-full h-full gap-4 md:gap-12 pointer-events-none md:pointer-events-auto">
           <div className="max-w-[90vw] md:max-w-3xl animate-subtle-up pointer-events-auto flex flex-col items-center text-center">
 
-            <div className="mb-4 block [@media(max-height:800px)]:mb-2">
+            <div className="mb-4 block">
               <button className="group flex items-center gap-2 px-6 py-2 bg-white/70 backdrop-blur-md hover:bg-white text-slate-900 rounded-full font-semibold shadow-sm transition-all border border-white/40 hover:-translate-y-0.5 active:translate-y-0">
                 <span>Explore Now</span>
                 <span className="bg-black text-white rounded-full p-1 transition-transform group-hover:translate-x-1">
@@ -60,14 +61,14 @@ export default function Home() {
 
           </div>
 
-          <div className="w-full pointer-events-auto transform transition-transform origin-top md:[@media(max-height:800px)]:scale-90 md:[@media(max-height:800px)]:-mt-2">
+          <div className="w-full pointer-events-auto">
             <SearchWidget />
           </div>
         </div>
       </section>
 
       {/* Frame 2: Content Section */}
-      <section className="relative w-full bg-white flex flex-col justify-center py-20 px-0 md:px-0">
+      <section className="relative z-10 w-full bg-white flex flex-col justify-center py-20 px-0 md:px-0">
         <AnimatedSection>
           <FeaturedProducts />
           <PopularRoutes />
