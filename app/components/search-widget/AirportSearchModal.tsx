@@ -86,7 +86,6 @@ const AirportSearchModal = ({ isOpen, onClose, onSelect, activeField, airports }
                                     className="bg-transparent border-none outline-none w-full text-slate-800 font-medium placeholder:text-slate-400"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    autoFocus
                                 />
                             </div>
                         </div>
