@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { ChevronDown, Menu, LogOut, User, Globe, Package, CalendarDays, Settings, Briefcase, X, BookOpen } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
+import AppBanner from './AppBanner';
 
 const Navbar = () => {
     const { user, login, logout } = useAuth();
@@ -24,14 +25,17 @@ const Navbar = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+
+
     return (
         <header
-            className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 border-b ${scrolled
-                ? 'bg-white/80 backdrop-blur-xl border-slate-200/60 py-3 shadow-lg shadow-slate-900/5'
-                : 'bg-transparent border-transparent py-5'
+            className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 border-b flex flex-col ${scrolled
+                ? 'bg-white/80 backdrop-blur-xl border-slate-200/60 shadow-lg shadow-slate-900/5'
+                : 'bg-transparent border-transparent'
                 }`}
         >
-            <nav className="max-w-[1440px] mx-auto px-4 md:px-8 flex items-center justify-between">
+            <AppBanner />
+            <nav className={`w-full max-w-[1440px] mx-auto px-4 md:px-8 flex items-center justify-between transition-all duration-300 ${scrolled ? 'py-3' : 'py-5'}`}>
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-3 group select-none">
                     <div className="relative w-10 h-10 md:w-11 md:h-11 rounded-xl overflow-hidden shadow-sm ring-1 ring-slate-900/5 transition-all duration-300 group-hover:scale-105 group-hover:shadow-md bg-white">
