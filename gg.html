@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jolii - Language Learning</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f5f5f5;
+            --primary-black: #000000;
+            --accent-orange: #ff4d00;
+            --card-bg: #ffffff;
+            --text-gray: #666666;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-black);
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: #fff;
+            border-radius: 50px;
+            border: 1px solid #eee;
+            margin-bottom: 60px;
+        }
+
+        .logo { font-weight: 800; font-size: 1.5rem; color: var(--accent-orange); }
+        .nav-links a { text-decoration: none; color: #333; margin: 0 15px; font-size: 14px; }
+        .btn-black { 
+            background: black; color: white; border: none; 
+            padding: 10px 20px; border-radius: 50px; cursor: pointer; 
+        }
+
+        /* Hero Section */
+        .badge {
+            background: #fff8f0;
+            color: #d4a017;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        h1 { font-size: 3.5rem; letter-spacing: -2px; margin: 0 auto 20px; max-width: 800px; }
+        .subtitle { color: var(--text-gray); max-width: 600px; margin: 0 auto 30px; line-height: 1.5; }
+
+        .btn-trial {
+            background: var(--primary-black);
+            color: white;
+            padding: 15px 35px;
+            border-radius: 12px;
+            border: 2px solid #333;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        /* Dashboard Mockup */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 20px;
+            background: #fcfcfc;
+            padding: 30px;
+            border-radius: 30px;
+            margin-top: 50px;
+            border: 1px solid #eee;
+        }
+
+        .video-card {
+            background: url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=1000') center/cover;
+            border-radius: 20px;
+            height: 400px;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+            color: white;
+            text-align: left;
+        }
+
+        .video-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+            border-radius: 20px;
+        }
+
+        .video-info { z-index: 1; }
+
+        .app-ui {
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .ui-card {
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            border: 1px solid #f0f0f0;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #eee;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            width: 50%;
+            height: 100%;
+            background: var(--accent-orange);
+            border-radius: 10px;
+        }
+
+        /* Footer / Trusted By */
+        .trusted {
+            margin-top: 40px;
+            color: #999;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .logos {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            opacity: 0.5;
+            filter: grayscale(1);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <nav>
+        <div class="logo">jolii</div>
+        <div class="nav-links">
+            <a href="#">Pricing</a>
+            <a href="#">Blog</a>
+            <a href="#">About Us</a>
+            <a href="#">Contact</a>
+        </div>
+        <button class="btn-black">Free Trial</button>
+    </nav>
+
+    <span class="badge">✨ User-friendly AI platform</span>
+    <h1>New Era of Language Learning with AI ChatBot</h1>
+    <p class="subtitle">AI-powered language learning app that leverages your existing entertainment to create personalized and engaging learning experiences.</p>
+    
+    <button class="btn-trial">7 Days FREE Trial</button>
+    <p style="font-size: 12px; color: #666; margin-top: 10px;">👥 500+ Active Users</p>
+
+    <div class="dashboard-container">
+        <div class="video-card">
+            <div class="video-info">
+                <p style="font-size: 12px; margin: 0;">Squid Game 2: Let the News Era Begin</p>
+                <small>✨ AI Personalized</small>
+            </div>
+        </div>
+
+        <div class="app-ui">
+            <div class="ui-card">
+                <strong style="font-size: 14px;">AI chatbot</strong>
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+                <p style="font-size: 12px; color: #666;">50% of magic completed</p>
+            </div>
+            
+            <div class="ui-card" style="background: #fdf4ff;">
+                <p style="font-size: 13px; margin: 0;"><strong>"each word you memorize"</strong></p>
+                <p style="font-size: 11px; color: #666;">The phrase emphasizing the process of learning and retaining words.</p>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <div class="ui-card" style="flex: 1;">
+                    <small>Grammar</small>
+                    <p style="font-size: 12px; font-weight: bold; margin: 5px 0;">Your daily verb selection is ready!</p>
+                </div>
+                <div class="ui-card" style="flex: 1;">
+                    <small>Adjectives</small>
+                    <p style="font-size: 12px; font-weight: bold; margin: 5px 0;">Guten Tag! Daily adjective pick!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="trusted">Trusted by big companies</div>
+    <div class="logos">
+        <span>Shopify</span>
+        <span>Webflow</span>
+        <span>BigCartel</span>
+        <span>Jamstack</span>
+    </div>
+</div>
+
+</body>
+</html>

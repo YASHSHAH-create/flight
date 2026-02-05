@@ -17,6 +17,7 @@ const PopularRoutes = dynamic(() => import('./components/PopularRoutes'));
 const LatestBlogPosts = dynamic(() => import('./components/LatestBlogPosts'));
 const FAQSection = dynamic(() => import('./components/FAQSection'));
 const BottomNav = dynamic(() => import('./components/ClientBottomNav'));
+const LottieAnimation = dynamic(() => import('./components/LottieAnimation'));
 
 
 export default function Home() {
@@ -42,7 +43,7 @@ export default function Home() {
           />
         </div>
 
-        <div className="relative z-10 flex-1 flex flex-col justify-start pt-20 md:pt-24 pb-32 md:pb-0 md:justify-center items-center px-4 md:px-[6vw] max-w-7xl mx-auto w-full h-full gap-4 md:gap-12 pointer-events-none md:pointer-events-auto">
+        <div className="relative z-10 flex-1 flex flex-col justify-start pt-32 md:justify-start md:pt-44 pb-32 items-center px-4 md:px-[6vw] max-w-7xl mx-auto w-full h-full gap-4 md:gap-8 pointer-events-none md:pointer-events-auto">
           <div className="max-w-[90vw] md:max-w-3xl animate-subtle-up pointer-events-auto flex flex-col items-center text-center">
 
             <div className="mb-4 block">
@@ -79,12 +80,27 @@ export default function Home() {
           <LatestBlogPosts />
           <FAQSection />
 
-          <div className="py-[3vh] px-[4vw] text-center bg-slate-900 text-white mx-[4vw] md:mx-16 rounded-[clamp(1.5rem,3vw,2rem)] shadow-2xl">
-            <h2 className="text-[clamp(1.25rem,2.5vw,2rem)] font-bold mb-[1vh]">Ready to paymm?</h2>
-            <p className="mb-[2vh] text-slate-400 text-[clamp(0.875rem,1.2vw,1rem)]">Join millions of travelers today.</p>
-            <Link href="/search">
-              <button className="bg-white text-black px-[6vw] md:px-8 py-[1.5vh] md:py-3 rounded-full font-bold text-[clamp(0.875rem,1.2vw,1rem)] hover:bg-slate-200 transition-colors transform hover:scale-105 active:scale-95">Get Started</button>
-            </Link>
+          <div className="relative overflow-hidden py-[5vh] px-[6vw] bg-slate-900 text-white mx-[4vw] md:mx-16 rounded-[clamp(1.5rem,3vw,2rem)] shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8 md:gap-16">
+            <div className="relative z-10 flex-1 flex flex-col items-center md:items-start text-center md:text-left">
+              <h2 className="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-[1.5vh] leading-tight">Ready to start your journey?</h2>
+              <p className="mb-[3vh] text-slate-400 text-[clamp(0.875rem,1.2vw,1.1rem)] max-w-md">Join millions of travelers booking cheap flights with Paymm.</p>
+              <Link href="/search">
+                <button className="bg-white text-black px-[8vw] md:px-10 py-[1.5vh] md:py-4 rounded-full font-bold text-[clamp(0.875rem,1.2vw,1rem)] hover:bg-slate-200 transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-white/10">
+                  Get Started
+                </button>
+              </Link>
+            </div>
+
+            <div className="relative z-10 w-full max-w-[250px] md:max-w-[350px]">
+              <LottieAnimation
+                url="https://lottie.host/5a07284b-0402-4545-9118-d67280780287/1B0q8X7J5j.json"
+                className="w-full h-auto drop-shadow-2xl"
+              />
+            </div>
+
+            {/* Decorative Background Elements */}
+            <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-blue-500/20 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
+            <div className="absolute bottom-0 left-0 w-[200px] h-[200px] bg-purple-500/20 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/2" />
           </div>
         </AnimatedSection>
       </section>

@@ -169,7 +169,7 @@ const FlightSearch = ({ initialState }: FlightSearchProps) => {
     return (
         <div className="relative" onClick={() => setOpenDropdown(null)}>
             {/* Top Row: Trip Type, Travellers, Class */}
-            <div className="flex flex-wrap justify-center md:justify-start items-center gap-2 md:gap-8 mb-4 md:mb-8 text-xs md:text-sm font-bold text-slate-600 relative z-20">
+            <div className="flex flex-wrap justify-center md:justify-start items-center gap-2 md:gap-8 mb-4 md:mb-8 text-xs md:text-sm font-bold text-slate-600 relative z-50">
                 {/* Trip Type */}
                 <div className="relative">
                     <div onClick={(e) => { e.stopPropagation(); toggleDropdown('tripType'); }}
