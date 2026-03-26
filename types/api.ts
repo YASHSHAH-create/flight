@@ -67,6 +67,14 @@ export interface FareQuoteResponse {
             ResultIndex: string;
             IsLCC: boolean;
             IsRefundable: boolean;
+            IsPanRequiredAtBook?: boolean;
+            IsPanRequiredAtTicket?: boolean;
+            IsPassportRequiredAtBook?: boolean;
+            IsPassportRequiredAtTicket?: boolean;
+            IsGSTMandatory?: boolean;
+            isseatmandatory?: boolean;
+            ismealmandatory?: boolean;
+            IsPassportFullDetailRequiredAtBook?: boolean;
             Fare: Fare;
             FareBreakdown: FareBreakdown[];
             Segments: Segment[][];
@@ -186,8 +194,18 @@ export interface Passenger {
     PaxType: number; // 1: Adult, 2: Child, 3: Infant
     DateOfBirth: string; // YYYY-MM-DDTHH:mm:ss
     Gender: number; // 1: Male, 2: Female
+    PAN?: string;
     PassportNo?: string;
     PassportExpiry?: string;
+    PassportIssueDate?: string;
+    PassportIssueCountryCode?: string;
+    GuardianDetails?: {
+        Title: string;
+        FirstName: string;
+        LastName: string;
+        PAN?: string;
+        PassportNo?: string;
+    };
     AddressLine1: string;
     AddressLine2?: string;
     Fare?: any; // From Quote

@@ -320,21 +320,23 @@ function BookPageContent() {
             initialPax.push({
                 Title: 'Mr', FirstName: '', LastName: '', PaxType: 1, DateOfBirth: '', Gender: 1,
                 AddressLine1: '123, Test Address', City: 'New Delhi', CountryCode: 'IN', CountryName: 'India',
-                ContactNo: '', Email: '', IsLeadPax: i === 0
+                ContactNo: '', Email: '', IsLeadPax: i === 0, PAN: '', PassportNo: '', PassportExpiry: '', PassportIssueDate: '', PassportIssueCountryCode: ''
             });
         }
         for (let i = 0; i < children; i++) {
             initialPax.push({
                 Title: 'Master', FirstName: '', LastName: '', PaxType: 2, DateOfBirth: '', Gender: 1,
                 AddressLine1: '123, Test Address', City: 'New Delhi', CountryCode: 'IN',
-                IsLeadPax: false
+                IsLeadPax: false,
+                GuardianDetails: { Title: 'Mr', FirstName: '', LastName: '', PAN: '', PassportNo: '' }
             });
         }
         for (let i = 0; i < infants; i++) {
             initialPax.push({
                 Title: 'Master', FirstName: '', LastName: '', PaxType: 3, DateOfBirth: '', Gender: 1,
                 AddressLine1: '123, Test Address', City: 'New Delhi', CountryCode: 'IN',
-                IsLeadPax: false
+                IsLeadPax: false,
+                GuardianDetails: { Title: 'Mr', FirstName: '', LastName: '', PAN: '', PassportNo: '' }
             });
         }
         setPassengers(initialPax);
@@ -398,7 +400,52 @@ function BookPageContent() {
         try {
             // Validation (Basic)
             if (passengers.some(p => !p.FirstName || !p.LastName || !p.DateOfBirth)) {
-                throw new Error("Please fill in all passenger details.");
+                throw new Error("Please fill in all basic passenger details (First Name, Last Name, Date of Birth).");
+            }
+            if (fareQuote.IsGSTMandatory && (!gstDetails.GSTCompanyName || !gstDetails.GSTNumber || !gstDetails.GSTCompanyEmail || !gstDetails.GSTCompanyContactNumber || !gstDetails.GSTCompanyAddress)) {
+                throw new Error("GST Details are mandatory for this booking.");
+            }
+
+            const panRequired = fareQuote.IsPanRequiredAtBook || fareQuote.IsPanRequiredAtTicket;
+            const passportRequired = fareQuote.IsPassportRequiredAtBook || fareQuote.IsPassportRequiredAtTicket;
+            
+            for (const p of passengers) {
+                if (p.DateOfBirth) {
+                    const age = new Date().getFullYear() - new Date(p.DateOfBirth).getFullYear();
+                    if (p.PaxType === 1 && age < 12) {
+                        throw new Error(`Adult passenger ${p.FirstName} must be at least 12 years old.`);
+                    }
+                }
+                
+                // PAN / Passport checks
+                if (panRequired) {
+                    if (p.PaxType === 1) {
+                         if (!p.PAN && !p.PassportNo) throw new Error(`PAN or Passport is required for Adult ${p.FirstName}`);
+                    } else {
+                         if (!p.GuardianDetails?.PAN && !p.GuardianDetails?.PassportNo) {
+                             throw new Error(`Guardian PAN or Passport is required for Child/Infant ${p.FirstName}`);
+                         }
+                    }
+                }
+                if (passportRequired || fareQuote.IsPassportFullDetailRequiredAtBook) {
+                    if (p.PaxType === 1) {
+                        if (!p.PassportNo) throw new Error(`Passport is required for Adult ${p.FirstName}`);
+                    } else {
+                        if (!p.GuardianDetails?.PassportNo) throw new Error(`Guardian Passport is required for Child/Infant ${p.FirstName}`);
+                    }
+                }
+                if (fareQuote.IsPassportFullDetailRequiredAtBook && p.PaxType === 1 && (!p.PassportNo || !p.PassportExpiry || !p.PassportIssueDate || !p.PassportIssueCountryCode)) {
+                    throw new Error(`Full Passport Details are required for Adult ${p.FirstName}`);
+                }
+                // Title Mapping Validation
+                if (p.PaxType === 1) { // Adult
+                    if (p.Gender === 1 && p.Title !== 'Mr') throw new Error(`Adult Male passenger ${p.FirstName} must have title 'Mr'`);
+                    if (p.Gender === 2 && !['Ms', 'Mrs'].includes(p.Title)) throw new Error(`Adult Female passenger ${p.FirstName} must have title 'Ms' or 'Mrs'`);
+                }
+
+                if (fareQuote.IsLCC && p.IsLeadPax && (!p.ContactNo || !p.Email)) {
+                     throw new Error(`Lead Passenger must provide Contact Number and Email for LCC flights.`);
+                }
             }
 
             // Prepare Payload Passengers
@@ -425,6 +472,14 @@ function BookPageContent() {
             const passengerDetails = passengers.map((p, index) => {
                 const paxSSR: any = { ...p, Fare: genericFare };
 
+                if (fareQuote.IsGSTMandatory) {
+                     paxSSR.GSTCompanyName = gstDetails.GSTCompanyName;
+                     paxSSR.GSTNumber = gstDetails.GSTNumber;
+                     paxSSR.GSTCompanyEmail = gstDetails.GSTCompanyEmail;
+                     paxSSR.GSTCompanyContactNumber = gstDetails.GSTCompanyContactNumber;
+                     paxSSR.GSTCompanyAddress = gstDetails.GSTCompanyAddress;
+                }
+
                 // Ensure SSRs for ALL segments.
                 // ssrData.MealDynamic and Baggage are arrays of arrays (Segments -> Options)
                 const paxMeals: any[] = [];
@@ -432,10 +487,16 @@ function BookPageContent() {
 
                 if (ssrData?.MealDynamic) {
                     ssrData.MealDynamic.forEach((segmentOptions: any[], segIndex: number) => {
-                        // Default fallback logic: Prefer "NoMeal", then "Free Meal", then just the first option.
+                        // Default fallback logic
                         let mealToUse = segmentOptions?.find((m: any) => m.Code === 'NoMeal') ||
                             segmentOptions?.find((m: any) => m.Price === 0) ||
                             segmentOptions?.[0] || null;
+
+                        // Force free meal for special fares
+                        if (fareQuote.ismealmandatory) {
+                            const freeMeal = segmentOptions?.find((m: any) => m.Price === 0);
+                            if (freeMeal) mealToUse = freeMeal;
+                        }
 
                         // Override with user selection if applicable
                         if (index === 0 && selectedMeal &&
@@ -458,6 +519,17 @@ function BookPageContent() {
                         let baggageToUse = segmentOptions?.find((b: any) => b.Code === 'NoBaggage') ||
                             segmentOptions?.find((b: any) => b.Price === 0) ||
                             segmentOptions?.[0] || null;
+
+                        // International LCC or I5 domestic free baggage
+                        const segments = fareQuote.Segments[0];
+                        const isInternational = segments.some((leg: any) => (leg.Origin?.Airport?.CountryCode && leg.Origin.Airport.CountryCode !== 'IN') || (leg.Destination?.Airport?.CountryCode && leg.Destination.Airport.CountryCode !== 'IN'));
+                        const isIntlLCC = isInternational && fareQuote.IsLCC;
+                        const isI5Domestic = !isInternational && segments[0].Airline.AirlineCode === 'I5';
+
+                        if (isIntlLCC || isI5Domestic) {
+                            const freeBaggage = segmentOptions?.find((b: any) => b.Price === 0);
+                            if (freeBaggage) baggageToUse = freeBaggage;
+                        }
 
                         if (index === 0 && selectedBaggage &&
                             selectedBaggage.Origin === segmentOptions?.[0]?.Origin &&
@@ -721,6 +793,9 @@ function BookPageContent() {
         (leg.Origin?.Airport?.CountryCode && leg.Origin.Airport.CountryCode !== 'IN') ||
         (leg.Destination?.Airport?.CountryCode && leg.Destination.Airport.CountryCode !== 'IN')
     );
+    const panRequired = fareQuote.IsPanRequiredAtBook || fareQuote.IsPanRequiredAtTicket;
+    const passportRequired = fareQuote.IsPassportRequiredAtBook || fareQuote.IsPassportRequiredAtTicket;
+    const fullPassportRequired = fareQuote.IsPassportFullDetailRequiredAtBook;
 
     return (
         <div className="min-h-screen bg-slate-50 pb-32 lg:pb-10 font-sans">
@@ -987,37 +1062,132 @@ function BookPageContent() {
                                             </div>
                                         </div>
 
-                                        {/* Passport Info - Conditional for International */}
-                                        {isInternational && (
-                                            <div className="pt-4 border-t border-slate-200/60">
-                                                <div className="flex items-center mb-4 space-x-2 text-slate-800 font-bold text-sm">
-                                                    <ShieldCheck size={18} className="text-blue-600" />
-                                                    <span>Passport Details</span>
-                                                </div>
-                                                <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
-                                                    <div className="md:col-span-6">
-                                                        <label className="text-xs font-bold text-slate-500 mb-1.5 block">Passport Number</label>
-                                                        <input
-                                                            type="text"
-                                                            value={pax.PassportNo || ''}
-                                                            onChange={(e) => handlePaxChange(i, 'PassportNo', e.target.value)}
-                                                            placeholder="Enter Passport Number"
-                                                            className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 outline-none focus:border-black focus:ring-1 focus:ring-black placeholder:font-normal placeholder:text-slate-300 transition-all"
-                                                        />
-                                                    </div>
-                                                    <div className="md:col-span-6">
-                                                        <label className="text-xs font-bold text-slate-500 mb-1.5 block">Passport Expiry</label>
-                                                        <input
-                                                            type="date"
-                                                            value={pax.PassportExpiry ? pax.PassportExpiry.split('T')[0] : ''}
-                                                            onChange={(e) => handlePaxChange(i, 'PassportExpiry', e.target.value)}
-                                                            min={new Date().toISOString().split("T")[0]}
-                                                            className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 outline-none focus:border-black focus:ring-1 focus:ring-black transition-all"
-                                                        />
-                                                    </div>
-                                                </div>
+                                        {/* Travel Document Details: PAN & Passport & Guardian */}
+                                        <div className="pt-4 border-t border-slate-200/60">
+                                            <div className="flex items-center mb-4 space-x-2 text-slate-800 font-bold text-sm">
+                                                <ShieldCheck size={18} className="text-blue-600" />
+                                                <span>Travel Document Details</span>
+                                                {(panRequired || passportRequired || fullPassportRequired) && (
+                                                    <span className="text-[10px] bg-red-100 text-red-600 px-2 py-0.5 rounded uppercase tracking-wide">Mandatory</span>
+                                                )}
                                             </div>
-                                        )}
+                                            
+                                            {/* Guardian Details for Child/Infant */}
+                                            {pax.PaxType !== 1 && (panRequired || passportRequired) && (
+                                                <div className="mb-4 bg-slate-100 p-4 rounded-xl border border-slate-200">
+                                                    <label className="text-xs font-bold text-slate-700 mb-3 block">Guardian Details Required</label>
+                                                    <div className="grid grid-cols-1 md:grid-cols-12 gap-5 mb-4">
+                                                        <div className="md:col-span-4">
+                                                            <label className="text-[10px] font-bold text-slate-500 mb-1.5 block">Guardian First Name</label>
+                                                            <input
+                                                                type="text"
+                                                                value={pax.GuardianDetails?.FirstName || ''}
+                                                                onChange={(e) => handlePaxChange(i, 'GuardianDetails', { ...(pax.GuardianDetails || {Title: 'Mr', LastName: '', PAN: '', PassportNo: ''}), FirstName: e.target.value })}
+                                                                className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm font-bold text-slate-900 outline-none"
+                                                            />
+                                                        </div>
+                                                        <div className="md:col-span-4">
+                                                            <label className="text-[10px] font-bold text-slate-500 mb-1.5 block">Guardian Last Name</label>
+                                                            <input
+                                                                type="text"
+                                                                value={pax.GuardianDetails?.LastName || ''}
+                                                                onChange={(e) => handlePaxChange(i, 'GuardianDetails', { ...(pax.GuardianDetails || {Title: 'Mr', FirstName: '', PAN: '', PassportNo: ''}), LastName: e.target.value })}
+                                                                className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm font-bold text-slate-900 outline-none"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    {panRequired && (
+                                                        <div className="mb-4">
+                                                            <label className="text-[10px] font-bold text-slate-500 mb-1.5 block">Guardian PAN</label>
+                                                            <input
+                                                                type="text"
+                                                                value={pax.GuardianDetails?.PAN || ''}
+                                                                onChange={(e) => handlePaxChange(i, 'GuardianDetails', { ...(pax.GuardianDetails || {Title: 'Mr', FirstName: '', LastName: '', PassportNo: ''}), PAN: e.target.value })}
+                                                                className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm font-bold text-slate-900 outline-none max-w-sm"
+                                                            />
+                                                        </div>
+                                                    )}
+                                                    {(passportRequired || fullPassportRequired) && (
+                                                        <div>
+                                                            <label className="text-[10px] font-bold text-slate-500 mb-1.5 block">Guardian Passport Number</label>
+                                                            <input
+                                                                type="text"
+                                                                value={pax.GuardianDetails?.PassportNo || ''}
+                                                                onChange={(e) => handlePaxChange(i, 'GuardianDetails', { ...(pax.GuardianDetails || {Title: 'Mr', FirstName: '', LastName: '', PAN: ''}), PassportNo: e.target.value })}
+                                                                className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm font-bold text-slate-900 outline-none max-w-sm"
+                                                            />
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            )}
+
+                                            {/* Adult Details */}
+                                            {pax.PaxType === 1 && (
+                                                <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
+                                                    {(panRequired || !isInternational) && (
+                                                        <div className="md:col-span-6">
+                                                            <label className="text-xs font-bold text-slate-500 mb-1.5 block">PAN Number</label>
+                                                            <input
+                                                                type="text"
+                                                                value={pax.PAN || ''}
+                                                                onChange={(e) => handlePaxChange(i, 'PAN', e.target.value)}
+                                                                placeholder="e.g. ABCDE1234F"
+                                                                className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 outline-none focus:border-black transition-all"
+                                                            />
+                                                        </div>
+                                                    )}
+                                                    
+                                                    {(passportRequired || isInternational) && (
+                                                        <div className="md:col-span-12 grid grid-cols-1 md:grid-cols-12 gap-5">
+                                                            <div className="md:col-span-6">
+                                                                <label className="text-xs font-bold text-slate-500 mb-1.5 block">Passport Number</label>
+                                                                <input
+                                                                    type="text"
+                                                                    value={pax.PassportNo || ''}
+                                                                    onChange={(e) => handlePaxChange(i, 'PassportNo', e.target.value)}
+                                                                    className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 outline-none"
+                                                                />
+                                                            </div>
+                                                            <div className="md:col-span-6">
+                                                                <label className="text-xs font-bold text-slate-500 mb-1.5 block">Passport Expiry</label>
+                                                                <input
+                                                                    type="date"
+                                                                    value={pax.PassportExpiry ? pax.PassportExpiry.split('T')[0] : ''}
+                                                                    onChange={(e) => handlePaxChange(i, 'PassportExpiry', e.target.value)}
+                                                                    min={new Date().toISOString().split("T")[0]}
+                                                                    className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 outline-none"
+                                                                />
+                                                            </div>
+                                                            {fullPassportRequired && (
+                                                                <>
+                                                                    <div className="md:col-span-6">
+                                                                        <label className="text-xs font-bold text-slate-500 mb-1.5 block">Passport Issue Date</label>
+                                                                        <input
+                                                                            type="date"
+                                                                            value={pax.PassportIssueDate ? pax.PassportIssueDate.split('T')[0] : ''}
+                                                                            onChange={(e) => handlePaxChange(i, 'PassportIssueDate', e.target.value)}
+                                                                            max={new Date().toISOString().split("T")[0]}
+                                                                            className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 outline-none"
+                                                                        />
+                                                                    </div>
+                                                                    <div className="md:col-span-6">
+                                                                        <label className="text-xs font-bold text-slate-500 mb-1.5 block">Issue Country Code</label>
+                                                                        <input
+                                                                            type="text"
+                                                                            value={pax.PassportIssueCountryCode || ''}
+                                                                            onChange={(e) => handlePaxChange(i, 'PassportIssueCountryCode', e.target.value)}
+                                                                            placeholder="e.g. IN"
+                                                                            className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 outline-none"
+                                                                        />
+                                                                    </div>
+                                                                </>
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            )}
+                                        </div>
 
                                         {/* Contact Info for Lead Pax */}
                                         {pax.IsLeadPax && (
@@ -1059,7 +1229,63 @@ function BookPageContent() {
                             ))}
                         </div>
                     </div>
-
+                    
+                    {/* GST Details Form */}
+                    {fareQuote.IsGSTMandatory && (
+                        <div className="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 overflow-hidden">
+                            <h3 className="text-lg font-bold text-slate-900 mb-6 flex items-center">
+                                <Info size={18} className="mr-2 text-slate-400" />
+                                GST Details (Mandatory)
+                            </h3>
+                            <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
+                                <div className="md:col-span-6">
+                                    <label className="text-xs font-bold text-slate-500 mb-1.5 block">Company Name</label>
+                                    <input
+                                        type="text"
+                                        value={gstDetails.GSTCompanyName}
+                                        onChange={(e) => setGstDetails({...gstDetails, GSTCompanyName: e.target.value})}
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 outline-none focus:border-black transition-all"
+                                    />
+                                </div>
+                                <div className="md:col-span-6">
+                                    <label className="text-xs font-bold text-slate-500 mb-1.5 block">GST Number</label>
+                                    <input
+                                        type="text"
+                                        value={gstDetails.GSTNumber}
+                                        onChange={(e) => setGstDetails({...gstDetails, GSTNumber: e.target.value})}
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 outline-none focus:border-black transition-all"
+                                    />
+                                </div>
+                                <div className="md:col-span-6">
+                                    <label className="text-xs font-bold text-slate-500 mb-1.5 block">Company Email</label>
+                                    <input
+                                        type="email"
+                                        value={gstDetails.GSTCompanyEmail}
+                                        onChange={(e) => setGstDetails({...gstDetails, GSTCompanyEmail: e.target.value})}
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 outline-none focus:border-black transition-all"
+                                    />
+                                </div>
+                                <div className="md:col-span-6">
+                                    <label className="text-xs font-bold text-slate-500 mb-1.5 block">Company Contact</label>
+                                    <input
+                                        type="tel"
+                                        value={gstDetails.GSTCompanyContactNumber}
+                                        onChange={(e) => setGstDetails({...gstDetails, GSTCompanyContactNumber: e.target.value})}
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 outline-none focus:border-black transition-all"
+                                    />
+                                </div>
+                                <div className="md:col-span-12">
+                                    <label className="text-xs font-bold text-slate-500 mb-1.5 block">Company Address</label>
+                                    <input
+                                        type="text"
+                                        value={gstDetails.GSTCompanyAddress}
+                                        onChange={(e) => setGstDetails({...gstDetails, GSTCompanyAddress: e.target.value})}
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 outline-none focus:border-black transition-all"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    )}
 
                     {/* Add-ons Grid */}
                     <div className="space-y-4">
