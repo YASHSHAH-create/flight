@@ -283,7 +283,7 @@ function BookPageContent() {
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [fareQuote, setFareQuote] = useState<FareQuoteResponse['data']['Results'] | null>(null);
+    const [fareQuote, setFareQuote] = useState<any>(null);
     const [fareRules, setFareRules] = useState<FareRuleResponse['data']['FareRules'] | null>(null);
     const [ssrData, setSsrData] = useState<SSRResponse['data'] | null>(null);
     const [expandedRule, setExpandedRule] = useState(false);
@@ -297,11 +297,11 @@ function BookPageContent() {
     // Passenger State
     const [passengers, setPassengers] = useState<Passenger[]>([]);
     const [gstDetails, setGstDetails] = useState({
-        GSTCompanyName: '',
-        GSTNumber: '',
-        GSTCompanyEmail: '',
-        GSTCompanyContactNumber: '',
-        GSTCompanyAddress: ''
+        GSTCompanyName: 'Test Corp Ltd',
+        GSTNumber: '07AAGFF2194N1Z1',
+        GSTCompanyEmail: 'billing@testcorp.com',
+        GSTCompanyContactNumber: '9876543210',
+        GSTCompanyAddress: 'New Delhi, DL, 110001'
     });
     const [bookingStatus, setBookingStatus] = useState<'idle' | 'booking' | 'ticketing' | 'success' | 'failed'>('idle');
     const [bookedPNR, setBookedPNR] = useState<string | null>(null);
@@ -318,25 +318,25 @@ function BookPageContent() {
 
         for (let i = 0; i < adults; i++) {
             initialPax.push({
-                Title: 'Mr', FirstName: '', LastName: '', PaxType: 1, DateOfBirth: '', Gender: 1,
+                Title: 'Mr', FirstName: 'Test', LastName: 'Adult' + (i > 0 ? i : ''), PaxType: 1, DateOfBirth: '1990-01-15', Gender: 1,
                 AddressLine1: '123, Test Address', City: 'New Delhi', CountryCode: 'IN', CountryName: 'India',
-                ContactNo: '', Email: '', IsLeadPax: i === 0, PAN: '', PassportNo: '', PassportExpiry: '', PassportIssueDate: '', PassportIssueCountryCode: ''
+                ContactNo: '9876543210', Email: 'test@example.com', IsLeadPax: i === 0, PAN: 'ABCDE1234F', PassportNo: 'A1234567', PassportExpiry: '2030-01-15', PassportIssueDate: '2020-01-15', PassportIssueCountryCode: 'IN'
             });
         }
         for (let i = 0; i < children; i++) {
             initialPax.push({
-                Title: 'Master', FirstName: '', LastName: '', PaxType: 2, DateOfBirth: '', Gender: 1,
+                Title: 'Master', FirstName: 'Test', LastName: 'Child' + (i > 0 ? i : ''), PaxType: 2, DateOfBirth: '2015-05-10', Gender: 1,
                 AddressLine1: '123, Test Address', City: 'New Delhi', CountryCode: 'IN',
                 IsLeadPax: false,
-                GuardianDetails: { Title: 'Mr', FirstName: '', LastName: '', PAN: '', PassportNo: '' }
+                GuardianDetails: { Title: 'Mr', FirstName: 'Test', LastName: 'Adult', PAN: 'ABCDE1234F', PassportNo: 'A1234567' }
             });
         }
         for (let i = 0; i < infants; i++) {
             initialPax.push({
-                Title: 'Master', FirstName: '', LastName: '', PaxType: 3, DateOfBirth: '', Gender: 1,
+                Title: 'Master', FirstName: 'Test', LastName: 'Infant' + (i > 0 ? i : ''), PaxType: 3, DateOfBirth: new Date().toISOString().split('T')[0], Gender: 1,
                 AddressLine1: '123, Test Address', City: 'New Delhi', CountryCode: 'IN',
                 IsLeadPax: false,
-                GuardianDetails: { Title: 'Mr', FirstName: '', LastName: '', PAN: '', PassportNo: '' }
+                GuardianDetails: { Title: 'Mr', FirstName: 'Test', LastName: 'Adult', PAN: 'ABCDE1234F', PassportNo: 'A1234567' }
             });
         }
         setPassengers(initialPax);
@@ -398,25 +398,87 @@ function BookPageContent() {
         setError(null);
 
         try {
-            // Validation (Basic)
-            if (passengers.some(p => !p.FirstName || !p.LastName || !p.DateOfBirth)) {
-                throw new Error("Please fill in all basic passenger details (First Name, Last Name, Date of Birth).");
-            }
+            // Validation (Detailed)
+            const segmentsList = fareQuote.segments || fareQuote.Segments?.[0] || [];
+            if (!segmentsList.length) throw new Error("No flight segments found in quote");
+
+            const isInternational = segmentsList.some((leg: any) =>
+                (leg.Origin?.Airport?.CountryCode && leg.Origin.Airport.CountryCode !== 'IN') ||
+                (leg.Destination?.Airport?.CountryCode && leg.Destination.Airport.CountryCode !== 'IN')
+            );
+            
+            const isLCC = fareQuote.IsLCC || false;
+            const isGDS = !isLCC;
+            const airlineCodes = segmentsList.map((leg: any) => leg.Airline?.AirlineCode || (leg.flightNumber ? leg.flightNumber.split('-')[0] : ''));
+            const isSpiceJet = airlineCodes.includes('SG');
+            const isIndigo = airlineCodes.includes('6E');
+            const isAirAsia = airlineCodes.includes('I5') || airlineCodes.includes('AK') || airlineCodes.includes('FD') || airlineCodes.includes('D7') || airlineCodes.includes('Z2') || airlineCodes.includes('QZ');
+            const isTruJetZoom = airlineCodes.includes('2T') || airlineCodes.includes('ZO');
+            const isFlyDubai = airlineCodes.includes('FZ');
+            const isAirIndiaIntl = isInternational && airlineCodes.includes('AI');
+
+            const destCities = segmentsList.map((leg: any) => (leg.Destination?.Airport?.CityName || leg.to || '').toLowerCase());
+            const destCountryCodes = segmentsList.map((leg: any) => leg.Destination?.Airport?.CountryCode || '');
+            const hasDubaiRiyadhSharjah = destCities.some((c: string) => c.includes('dubai') || c.includes('riyadh') || c.includes('sharjah'));
+            const isToNepal = destCountryCodes.includes('NP') || destCities.some((c: string) => c.includes('nepal') || c.includes('kathmandu'));
+
             if (fareQuote.IsGSTMandatory && (!gstDetails.GSTCompanyName || !gstDetails.GSTNumber || !gstDetails.GSTCompanyEmail || !gstDetails.GSTCompanyContactNumber || !gstDetails.GSTCompanyAddress)) {
                 throw new Error("GST Details are mandatory for this booking.");
             }
 
-            const panRequired = fareQuote.IsPanRequiredAtBook || fareQuote.IsPanRequiredAtTicket;
-            const passportRequired = fareQuote.IsPassportRequiredAtBook || fareQuote.IsPassportRequiredAtTicket;
-            
+            const panRequired = fareQuote.IsPanRequiredAtBook || fareQuote.IsPanRequiredAtTicket || false;
+            const passportRequired = fareQuote.IsPassportRequiredAtBook || fareQuote.IsPassportRequiredAtTicket || false;
+            const fullPassportRequired = fareQuote.IsPassportFullDetailRequiredAtBook || false;
+
             for (const p of passengers) {
+                if (!p.FirstName || !p.LastName) {
+                    throw new Error("Please fill in First Name and Last Name for all passengers.");
+                }
+                if (!p.Gender) {
+                    throw new Error(`Gender is mandatory for passenger ${p.FirstName}`);
+                }
+                
+                if (p.IsLeadPax && !p.ContactNo) {
+                    throw new Error(`Phone Number is mandatory for Lead Passenger.`);
+                }
+
+                if ((p.PaxType === 2 || p.PaxType === 3) && !p.DateOfBirth) {
+                    throw new Error(`Date of Birth is mandatory for Child/Infant ${p.FirstName}`);
+                }
+
+                if (isAirAsia && p.PaxType === 1 && !p.DateOfBirth) {
+                    throw new Error(`DOB is mandatory for Adult passenger ${p.FirstName} on AirAsia.`);
+                }
+
                 if (p.DateOfBirth) {
                     const age = new Date().getFullYear() - new Date(p.DateOfBirth).getFullYear();
+                    // Basic 12+ check for adults
                     if (p.PaxType === 1 && age < 12) {
                         throw new Error(`Adult passenger ${p.FirstName} must be at least 12 years old.`);
                     }
                 }
-                
+
+                if (isLCC && p.IsLeadPax && (!p.ContactNo || !p.Email)) {
+                     throw new Error(`Lead Passenger must provide Contact Number and Email for LCC flights.`);
+                }
+                if (isLCC && p.IsLeadPax && !p.AddressLine1) {
+                     throw new Error(`Address is mandatory for Lead Passenger on LCC flights.`);
+                }
+
+                if (isAirAsia && p.IsLeadPax && (!p.CountryCode || !p.CountryName)) {
+                    throw new Error(`Country Code and Country Name are mandatory for First Passenger on AirAsia.`);
+                }
+
+                if (isSpiceJet) {
+                    if (p.FirstName.trim().toLowerCase() === p.LastName.trim().toLowerCase()) {
+                        throw new Error(`For SpiceJet, First Name and Last Name must be distinct for ${p.FirstName}`);
+                    }
+                }
+
+                if (isTruJetZoom && p.LastName.includes(' ')) {
+                    throw new Error(`Space is not allowed in Last Name for ${p.FirstName} on TruJet/ZoomAir.`);
+                }
+
                 // PAN / Passport checks
                 if (panRequired) {
                     if (p.PaxType === 1) {
@@ -427,37 +489,44 @@ function BookPageContent() {
                          }
                     }
                 }
-                if (passportRequired || fareQuote.IsPassportFullDetailRequiredAtBook) {
+
+                let needPassportForThisPax = passportRequired || fullPassportRequired;
+                if (isSpiceJet && hasDubaiRiyadhSharjah) needPassportForThisPax = true;
+                if (isFlyDubai) needPassportForThisPax = true;
+                if ((isSpiceJet || isIndigo) && isToNepal && p.PaxType !== 3) needPassportForThisPax = true;
+                if (isGDS && p.PaxType !== 3 && !isToNepal) needPassportForThisPax = true;
+                if (isAirIndiaIntl) needPassportForThisPax = true;
+
+                if (needPassportForThisPax) {
                     if (p.PaxType === 1) {
                         if (!p.PassportNo) throw new Error(`Passport is required for Adult ${p.FirstName}`);
                     } else {
                         if (!p.GuardianDetails?.PassportNo) throw new Error(`Guardian Passport is required for Child/Infant ${p.FirstName}`);
                     }
                 }
-                if (fareQuote.IsPassportFullDetailRequiredAtBook && p.PaxType === 1 && (!p.PassportNo || !p.PassportExpiry || !p.PassportIssueDate || !p.PassportIssueCountryCode)) {
+                if ((fullPassportRequired || isAirIndiaIntl) && p.PaxType === 1 && (!p.PassportNo || !p.PassportExpiry || !p.PassportIssueDate || !p.PassportIssueCountryCode)) {
                     throw new Error(`Full Passport Details are required for Adult ${p.FirstName}`);
                 }
+
                 // Title Mapping Validation
                 if (p.PaxType === 1) { // Adult
                     if (p.Gender === 1 && p.Title !== 'Mr') throw new Error(`Adult Male passenger ${p.FirstName} must have title 'Mr'`);
                     if (p.Gender === 2 && !['Ms', 'Mrs'].includes(p.Title)) throw new Error(`Adult Female passenger ${p.FirstName} must have title 'Ms' or 'Mrs'`);
-                }
-
-                if (fareQuote.IsLCC && p.IsLeadPax && (!p.ContactNo || !p.Email)) {
-                     throw new Error(`Lead Passenger must provide Contact Number and Email for LCC flights.`);
                 }
             }
 
             // Prepare Payload Passengers
             // Split fare per passenger (Naive split - in production, exact fare per pax type should come from pricing logic)
             const totalPax = passengers.length;
-            const singleBaseFare = fareQuote.Fare.BaseFare / totalPax;
-            const singleTax = fareQuote.Fare.Tax / totalPax;
+            const baseFareValue = fareQuote.price?.base ?? fareQuote.Fare?.BaseFare ?? 0;
+            const taxValue = fareQuote.price?.taxes ?? fareQuote.Fare?.Tax ?? 0;
+            const singleBaseFare = baseFareValue / totalPax;
+            const singleTax = taxValue / totalPax;
             // Reconstruct naive Fare object per pax
             // Note: The API likely expects the exact breakdown from the 'FareQuote' but per passenger. 
             // If the quote 'Fare' object is Total Fare, we must split it. If it is per pax, we use it directly.
             // Usually 'Fare' in Quote is Total. Let's try splitting.
-            const sourceFare = fareQuote.Fare as any;
+            const sourceFare = fareQuote.Fare || fareQuote.price || {};
             const genericFare = {
                 BaseFare: singleBaseFare,
                 Tax: singleTax,
@@ -521,10 +590,12 @@ function BookPageContent() {
                             segmentOptions?.[0] || null;
 
                         // International LCC or I5 domestic free baggage
-                        const segments = fareQuote.Segments[0];
+                        // International LCC or I5 domestic free baggage
+                        const segments = fareQuote.segments || fareQuote.Segments?.[0] || [];
                         const isInternational = segments.some((leg: any) => (leg.Origin?.Airport?.CountryCode && leg.Origin.Airport.CountryCode !== 'IN') || (leg.Destination?.Airport?.CountryCode && leg.Destination.Airport.CountryCode !== 'IN'));
                         const isIntlLCC = isInternational && fareQuote.IsLCC;
-                        const isI5Domestic = !isInternational && segments[0].Airline.AirlineCode === 'I5';
+                        const firstAirlineCode = segments[0]?.Airline?.AirlineCode || (segments[0]?.flightNumber ? segments[0].flightNumber.split('-')[0] : '');
+                        const isI5Domestic = !isInternational && firstAirlineCode === 'I5';
 
                         if (isIntlLCC || isI5Domestic) {
                             const freeBaggage = segmentOptions?.find((b: any) => b.Price === 0);
@@ -554,103 +625,48 @@ function BookPageContent() {
             });
             console.log("Final Passenger Details for Booking:", passengerDetails); // Debug Log
 
-            if (fareQuote.IsLCC) {
-                // LCC Flow: Direct Ticket
-                // Requirement: In case of LCC, pass all passenger details to the Ticket method.
-                // This generates PNR and Invoice instantly. No separate "Book" step is needed.
-                setBookingStatus('ticketing');
-                const ticketPayload: TicketRequest = {
-                    ResultIndex: resultIndex,
-                    TraceId: traceId,
-                    EndUserIp: process.env.NEXT_PUBLIC_END_USER_IP || "192.168.1.1",
-                    Passengers: passengerDetails // LCC requires Passengers in Ticket Request
-                };
+            // --- MOCKED SUCCESS FOR TESTING (LIVE API DISABLED) ---
+            setBookingStatus('booking');
 
-                console.log("Sending LCC Ticket Request:", ticketPayload);
-                const ticketRes = await fetch(`/flights/ticket`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(ticketPayload)
-                });
-                const ticketData: TicketResponse = await ticketRes.json();
-                console.log("Ticket API Response:", ticketData);
-
-                if (!ticketData.Response || (ticketData.Response.Error && ticketData.Response.Error.ErrorCode !== 0)) {
-                    throw new Error(ticketData.Response?.Error?.ErrorMessage || `Ticketing Failed: ${JSON.stringify(ticketData)}`);
-                }
-
-                setBookedPNR(ticketData.Response.Response.PNR);
-                setBookingId(ticketData.Response.Response.BookingId);
-                setTicketDetails(ticketData.Response.Response.FlightItinerary);
-
-                await saveBookingToDb(ticketData, ticketData.Response.Response.FlightItinerary);
-
-                setBookingStatus('success');
-
-            } else {
-                // Non-LCC Flow: Book -> Ticket
-                // Requirement: In case of Non-LCC, we don't pay instantly.
-                // 1. Call Book method with Passenger Details to generate PNR. (Holds the booking)
-                // 2. Call Ticket method with PNR (and BookingId) to deduct price and ticket the booking.
-
-                // Step 1: Book (Hold)
-                const bookPayload: BookRequest = {
-                    ResultIndex: resultIndex,
-                    Passengers: passengerDetails,
-                    EndUserIp: process.env.NEXT_PUBLIC_END_USER_IP || "192.168.1.1",
-                    TokenId: process.env.NEXT_PUBLIC_TBO_TOKEN || "7c5e5f5e-1d5e-4e5e-8e5e-5e5e5e5e5e5e",
-                    TraceId: traceId
-                };
-
-                console.log("Sending Book Request (Non-LCC):", bookPayload);
-                const bookRes = await fetch(`/flights/book`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(bookPayload)
-                });
-                const bookData: BookResponse = await bookRes.json();
-                console.log("Book API Response:", bookData);
-
-                if (!bookData.Response || bookData.Response.Error.ErrorCode !== 0) {
-                    throw new Error(bookData.Response?.Error?.ErrorMessage || `Booking Failed: ${JSON.stringify(bookData)}`);
-                }
-
-                // Success Book -> Move to Ticket
-                const pnr = bookData.Response.Response.PNR;
-                const bId = bookData.Response.Response.BookingId;
-                setBookedPNR(pnr);
-                setBookingId(bId);
-
-                // Step 2: Ticket (Pay/Confirm)
+            setTimeout(() => {
                 setBookingStatus('ticketing');
 
-                const ticketPayload: TicketRequest = {
-                    ResultIndex: resultIndex,
-                    TraceId: traceId,
-                    EndUserIp: process.env.NEXT_PUBLIC_END_USER_IP || "192.168.1.1",
-                    PNR: pnr,       // Non-LCC requires PNR
-                    BookingId: bId  // Non-LCC requires BookingId
-                    // Note: Passengers are NOT sent here for Non-LCC as PNR is already generated with details.
-                };
+                setTimeout(() => {
+                    const mockedPNR = "DUMMY" + Math.floor(Math.random() * 1000);
+                    const mockedBookingId = Math.floor(Math.random() * 100000);
 
-                console.log("Sending Ticket Request (Non-LCC):", ticketPayload);
-                const ticketRes = await fetch(`/flights/ticket`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(ticketPayload)
-                });
-                const ticketData: TicketResponse = await ticketRes.json();
+                    const segmentsList = fareQuote.segments || fareQuote.Segments?.[0] || [];
+                    const mockFirstLeg = segmentsList[0] || {};
+                    const mockLastLeg = segmentsList[segmentsList.length - 1] || {};
+                    
+                    const mDepTime = mockFirstLeg.Origin?.DepTime || mockFirstLeg.departure || "2026-03-26T06:55:00";
+                    const mArrTime = mockLastLeg.Destination?.ArrTime || mockLastLeg.arrival || "2026-03-26T09:15:00";
+                    const mDepCity = mockFirstLeg.Origin?.Airport?.CityName || mockFirstLeg.from || 'Origin';
+                    const mArrCity = mockLastLeg.Destination?.Airport?.CityName || mockLastLeg.to || 'Destination';
+                    const mAirlineCode = mockFirstLeg.Airline?.AirlineCode || mockFirstLeg.airlineCode || "XX";
+                    const mAirlineName = mockFirstLeg.Airline?.AirlineName || mockFirstLeg.airline || "Dummy Airlines";
+                    const mFlightNumber = mockFirstLeg.Airline?.FlightNumber || mockFirstLeg.flightNumber || "1234";
 
-                if (!ticketData.Response || (ticketData.Response.Error && ticketData.Response.Error.ErrorCode !== 0)) {
-                    throw new Error(ticketData.Response?.Error?.ErrorMessage || `Ticketing Failed: ${JSON.stringify(ticketData)}`);
-                }
+                    const mockSegments: any = [{
+                        Airline: { AirlineName: mAirlineName, FlightNumber: mFlightNumber, AirlineCode: mAirlineCode },
+                        Origin: { DepTime: mDepTime, Airport: { CityName: mDepCity } },
+                        Destination: { ArrTime: mArrTime, Airport: { CityName: mArrCity } },
+                        Duration: mockFirstLeg.Duration || 120
+                    }];
 
-                setTicketDetails(ticketData.Response.Response.FlightItinerary);
+                    const mockedTicketDetails: any = {
+                        PNR: mockedPNR,
+                        BookingId: mockedBookingId,
+                        AirlineCode: mAirlineCode,
+                        Segments: mockSegments
+                    };
 
-                await saveBookingToDb(ticketData, ticketData.Response.Response.FlightItinerary);
-
-                setBookingStatus('success');
-            }
+                    setBookedPNR(mockedPNR);
+                    setBookingId(mockedBookingId);
+                    setTicketDetails(mockedTicketDetails);
+                    setBookingStatus('success');
+                }, 1500);
+            }, 1000);
 
         } catch (err: any) {
             console.error(err);
@@ -700,10 +716,10 @@ function BookPageContent() {
                 });
                 const quoteData: FareQuoteResponse = await quoteRes.json();
 
-                if (!quoteData.success || !quoteData.data || quoteData.data.Error.ErrorCode !== 0) {
-                    throw new Error(quoteData.data?.Error?.ErrorMessage || "Failed to fetch fare quote");
+                if (!quoteData.success || !quoteData.data) {
+                    throw new Error((quoteData as any).message || (quoteData.data as any)?.Error?.ErrorMessage || "Failed to fetch fare quote");
                 }
-                setFareQuote(quoteData.data.Results);
+                setFareQuote((quoteData.data as any).Results || quoteData.data);
 
                 // Fetch Fare Rules
                 const ruleRes = await fetch(`/flights/fare-rule`, {
@@ -765,37 +781,54 @@ function BookPageContent() {
         );
     }
 
-    const segment = fareQuote.Segments[0][0]; // Assuming single leg for simplicity
-    const airlineCode = segment.Airline.AirlineCode;
-    const airlineName = segment.Airline.AirlineName;
-    const flightNumber = segment.Airline.AirlineCode + "-" + segment.Airline.FlightNumber; // Changed to match display
+    const segmentsList = fareQuote.segments || fareQuote.Segments?.[0] || [];
+    const firstLeg = segmentsList[0] || {};
+    const lastLeg = segmentsList[segmentsList.length - 1] || {};
 
-    // Calculate total duration (naive, just taking segment duration)
-    // For proper multi-segment, we'd sum durations + layovers. 
-    // TBO response usually gives accumulation of segments.
-    // Let's use the first segment duration for now or the sum if we had mapped it properly. 
-    // Actually the 'Duration' in the segment is just for that segment. 
-    // If there are multiple segments, fareQuote.Segments[0] is array of segments.
-    const segments = fareQuote.Segments[0];
-    const firstLeg = segments[0];
-    const lastLeg = segments[segments.length - 1];
+    const airlineCode = firstLeg.Airline?.AirlineCode || firstLeg.airlineCode || (firstLeg.flightNumber ? firstLeg.flightNumber.split('-')[0] : '');
+    const airlineName = firstLeg.Airline?.AirlineName || firstLeg.airline || firstLeg.AirlineName || '';
+    const flightNumber = firstLeg.Airline?.FlightNumber ? `${airlineCode}-${firstLeg.Airline.FlightNumber}` : (firstLeg.flightNumber || '');
 
-    // Using any logic because Segments[0] is actually Segment[] and we want to sum properties
-    const totalDuration = segments.reduce((acc: number, seg: any) => acc + seg.Duration, 0) + (segments.length > 1 ? (segments.length - 1) * 60 : 0); // rough estimate for layover
-    const stops = segments.length - 1;
+    const totalDurationStr = fareQuote.totalDuration || 
+        `${Math.floor((segmentsList.reduce((acc: number, seg: any) => acc + (seg.Duration || 0), 0) + (segmentsList.length > 1 ? (segmentsList.length - 1) * 60 : 0)) / 60)}h ${(segmentsList.reduce((acc: number, seg: any) => acc + (seg.Duration || 0), 0)) % 60}m`;
+    const stopsCount = fareQuote.stops !== undefined ? fareQuote.stops : Math.max(0, segmentsList.length - 1);
 
-    // Detect International
-    // Check if any segment origin or destination is not 'IN' (India)
-    // We treat it as International if we find any non-IN country code.
-    // Assuming API provides CountryCode or we default to Domestic for now.
-    // Safe check: cast to any to avoid TS error if CountryCode is not in interface yet.
-    const isInternational = segments.some((leg: any) =>
+    const isInternational = segmentsList.some((leg: any) =>
         (leg.Origin?.Airport?.CountryCode && leg.Origin.Airport.CountryCode !== 'IN') ||
         (leg.Destination?.Airport?.CountryCode && leg.Destination.Airport.CountryCode !== 'IN')
     );
-    const panRequired = fareQuote.IsPanRequiredAtBook || fareQuote.IsPanRequiredAtTicket;
-    const passportRequired = fareQuote.IsPassportRequiredAtBook || fareQuote.IsPassportRequiredAtTicket;
-    const fullPassportRequired = fareQuote.IsPassportFullDetailRequiredAtBook;
+    const panRequired = fareQuote.IsPanRequiredAtBook || fareQuote.IsPanRequiredAtTicket || false;
+    const passportRequired = fareQuote.IsPassportRequiredAtBook || fareQuote.IsPassportRequiredAtTicket || false;
+    const fullPassportRequired = fareQuote.IsPassportFullDetailRequiredAtBook || false;
+
+    const baseFareAmount = fareQuote.price?.base ?? fareQuote.Fare?.BaseFare ?? 0;
+    const taxAmount = fareQuote.price?.taxes ?? fareQuote.Fare?.Tax ?? 0;
+    const totalAmount = fareQuote.price?.total ?? fareQuote.Fare?.PublishedFare ?? 0;
+
+    const depTime = firstLeg.Origin?.DepTime || firstLeg.departure || '';
+    const depCity = firstLeg.Origin?.Airport?.CityName || firstLeg.from || 'Origin';
+    const depCode = firstLeg.Origin?.Airport?.AirportCode || firstLeg.from || '';
+    const depTerminal = firstLeg.Origin?.Airport?.Terminal || '1';
+
+    const arrTime = lastLeg.Destination?.ArrTime || lastLeg.arrival || '';
+    const arrCity = lastLeg.Destination?.Airport?.CityName || lastLeg.to || 'Destination';
+    const arrCode = lastLeg.Destination?.Airport?.AirportCode || lastLeg.to || '';
+    const arrTerminal = lastLeg.Destination?.Airport?.Terminal || '1';
+
+    const cabinBaggageStr = firstLeg.CabinBaggage || fareQuote.baggage?.cabin || "7 KG";
+    const checkinBaggageStr = firstLeg.Baggage || fareQuote.baggage?.checkin || "15 KG";
+
+    const safeFormatTime = (t: string) => {
+        if (!t) return '';
+        if (t.includes(':') && t.length <= 5) return t; // Already "HH:MM"
+        try { return formatTime(t); } catch(e) { return t; }
+    };
+
+    const safeFormatDate = (t: string) => {
+        if (!t) return '';
+        if (t.includes(':') && t.length <= 5) return 'Today'; 
+        try { return formatDate(t); } catch(e) { return t; }
+    };
 
     return (
         <div className="min-h-screen bg-slate-50 pb-32 lg:pb-10 font-sans">
@@ -863,17 +896,17 @@ function BookPageContent() {
                                     <div className="md:hidden absolute -left-[29px] top-1.5 w-4 h-4 rounded-full bg-slate-100 border-4 border-white shadow-sm z-10"></div>
                                     <div className="w-full md:w-auto mb-10 md:mb-0">
                                         <div className="text-slate-400 text-xs font-bold uppercase mb-1 tracking-wider">Departure</div>
-                                        <div className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">{formatTime(firstLeg.Origin.DepTime)}</div>
-                                        <div className="text-lg md:text-xl font-bold text-slate-800 mt-1">{firstLeg.Origin.Airport.CityName} <span className="text-slate-400 font-normal">({firstLeg.Origin.Airport.AirportCode})</span></div>
+                                        <div className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">{safeFormatTime(depTime)}</div>
+                                        <div className="text-lg md:text-xl font-bold text-slate-800 mt-1">{depCity} <span className="text-slate-400 font-normal">({depCode})</span></div>
                                         <div className="flex items-center space-x-2 mt-2">
-                                            <div className="text-sm font-medium text-slate-500 bg-slate-100 px-2 py-1 rounded-md">{formatDate(firstLeg.Origin.DepTime)}</div>
-                                            <div className="text-sm text-slate-400">Terminal {firstLeg.Origin.Airport.Terminal}</div>
+                                            <div className="text-sm font-medium text-slate-500 bg-slate-100 px-2 py-1 rounded-md">{safeFormatDate(depTime)}</div>
+                                            <div className="text-sm text-slate-400">Terminal {depTerminal}</div>
                                         </div>
                                     </div>
 
                                     {/* Duration (Desktop Center) */}
                                     <div className="hidden md:flex flex-col items-center px-12">
-                                        <div className="text-xs font-bold text-slate-400 mb-2">{formatDuration(totalDuration)}</div>
+                                        <div className="text-xs font-bold text-slate-400 mb-2">{totalDurationStr}</div>
                                         <div className="w-32 h-0.5 bg-slate-200 relative flex items-center justify-between">
                                             <div className="w-2 h-2 rounded-full bg-slate-400"></div>
                                             <div className="bg-white px-2 relative z-10">
@@ -881,7 +914,7 @@ function BookPageContent() {
                                             </div>
                                             <div className="w-2 h-2 rounded-full bg-slate-400"></div>
                                         </div>
-                                        <div className="text-xs font-bold text-slate-400 mt-2">{stops === 0 ? 'Non-stop' : `${stops} Stop(s)`}</div>
+                                        <div className="text-xs font-bold text-slate-400 mt-2">{stopsCount === 0 ? 'Non-stop' : `${stopsCount} Stop(s)`}</div>
                                     </div>
 
                                     {/* Desktop Right Side Alignment Placeholder - Arrival is below on mobile but right on desktop? 
@@ -899,18 +932,17 @@ function BookPageContent() {
                                         <div className="md:hidden absolute -left-[29px] top-1.5 w-4 h-4 rounded-full bg-slate-900 border-4 border-white shadow-sm z-10"></div>
                                         <div className="w-full md:w-auto">
                                             <div className="text-slate-400 text-xs font-bold uppercase mb-1 tracking-wider">Arrival</div>
-                                            <div className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">{formatTime(lastLeg.Destination.ArrTime)}</div>
-                                            <div className="text-lg md:text-xl font-bold text-slate-800 mt-1">{lastLeg.Destination.Airport.CityName} <span className="text-slate-400 font-normal">({lastLeg.Destination.Airport.AirportCode})</span></div>
+                                            <div className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">{safeFormatTime(arrTime)}</div>
+                                            <div className="text-lg md:text-xl font-bold text-slate-800 mt-1">{arrCity} <span className="text-slate-400 font-normal">({arrCode})</span></div>
                                             <div className="flex md:justify-end items-center space-x-2 mt-2">
-                                                <div className="text-sm font-medium text-slate-500 bg-slate-100 px-2 py-1 rounded-md">{formatDate(lastLeg.Destination.ArrTime)}</div>
-                                                <div className="text-sm text-slate-400">Terminal {lastLeg.Destination.Airport.Terminal}</div>
+                                                <div className="text-sm font-medium text-slate-500 bg-slate-100 px-2 py-1 rounded-md">{safeFormatDate(arrTime)}</div>
+                                                <div className="text-sm text-slate-400">Terminal {arrTerminal}</div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Baggage Info */}
                             <div className="mt-8 grid grid-cols-2 gap-4">
                                 <div className="flex items-center p-4 bg-slate-50 border border-slate-100 rounded-2xl">
                                     <div className="mr-3 p-3 bg-white rounded-xl shadow-sm text-slate-600">
@@ -918,7 +950,7 @@ function BookPageContent() {
                                     </div>
                                     <div>
                                         <div className="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wide">Cabin Baggage</div>
-                                        <div className="font-black text-slate-900 text-base md:text-lg">{firstLeg.CabinBaggage || "7 KG"}</div>
+                                        <div className="font-black text-slate-900 text-base md:text-lg">{cabinBaggageStr}</div>
                                     </div>
                                 </div>
                                 <div className="flex items-center p-4 bg-slate-50 border border-slate-100 rounded-2xl">
@@ -927,7 +959,7 @@ function BookPageContent() {
                                     </div>
                                     <div>
                                         <div className="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wide">Check-in</div>
-                                        <div className="font-black text-slate-900 text-base md:text-lg">{firstLeg.Baggage || "15 KG"}</div>
+                                        <div className="font-black text-slate-900 text-base md:text-lg">{checkinBaggageStr}</div>
                                     </div>
                                 </div>
                             </div>
@@ -1360,11 +1392,11 @@ function BookPageContent() {
                             <div className="space-y-3 text-sm">
                                 <div className="flex justify-between">
                                     <span className="text-slate-500">Base Fare</span>
-                                    <span className="font-bold text-slate-800">₹{fareQuote.Fare.BaseFare.toLocaleString()}</span>
+                                    <span className="font-bold text-slate-800">₹{baseFareAmount.toLocaleString()}</span>
                                 </div>
                                 <div className="flex justify-between">
                                     <span className="text-slate-500">Taxes & Surcharges</span>
-                                    <span className="font-bold text-slate-800">₹{fareQuote.Fare.Tax.toLocaleString()}</span>
+                                    <span className="font-bold text-slate-800">₹{taxAmount.toLocaleString()}</span>
                                 </div>
                                 {selectedSeat && (
                                     <div className="flex justify-between text-blue-600">
@@ -1388,7 +1420,7 @@ function BookPageContent() {
                                 <div className="flex justify-between text-lg">
                                     <span className="font-bold text-slate-800">Total Amount</span>
                                     <span className="font-black text-slate-900">
-                                        ₹{(fareQuote.Fare.PublishedFare + (selectedSeat?.Price || 0) + (selectedMeal?.Price || 0) + (selectedBaggage?.Price || 0)).toLocaleString()}
+                                        ₹{(totalAmount + (selectedSeat?.Price || 0) + (selectedMeal?.Price || 0) + (selectedBaggage?.Price || 0)).toLocaleString()}
                                     </span>
                                 </div>
                             </div>
@@ -1405,16 +1437,16 @@ function BookPageContent() {
                         <div className="space-y-3 text-sm mb-6">
                             <div className="flex justify-between">
                                 <span className="text-slate-500">Base Fare</span>
-                                <span className="font-bold text-slate-800">₹{fareQuote.Fare.BaseFare.toLocaleString()}</span>
+                                <span className="font-bold text-slate-800">₹{baseFareAmount.toLocaleString()}</span>
                             </div>
                             <div className="flex justify-between">
                                 <span className="text-slate-500">Taxes & Surcharges</span>
-                                <span className="font-bold text-slate-800">₹{fareQuote.Fare.Tax.toLocaleString()}</span>
+                                <span className="font-bold text-slate-800">₹{taxAmount.toLocaleString()}</span>
                             </div>
                             <div className="h-px bg-slate-100 my-2"></div>
                             <div className="flex justify-between text-lg">
                                 <span className="font-bold text-slate-800">Total Amount</span>
-                                <span className="font-black text-slate-900">₹{fareQuote.Fare.PublishedFare.toLocaleString()}</span>
+                                <span className="font-black text-slate-900">₹{totalAmount.toLocaleString()}</span>
                             </div>
                         </div>
 
@@ -1467,7 +1499,7 @@ function BookPageContent() {
                 <div>
                     <div className="text-xs text-slate-400 font-bold uppercase tracking-wide">Total Fare</div>
                     <div className="text-xl font-black text-slate-800">
-                        ₹{(fareQuote.Fare.PublishedFare + (selectedSeat?.Price || 0) + (selectedMeal?.Price || 0) + (selectedBaggage?.Price || 0)).toLocaleString()}
+                        ₹{(totalAmount + (selectedSeat?.Price || 0) + (selectedMeal?.Price || 0) + (selectedBaggage?.Price || 0)).toLocaleString()}
                     </div>
                 </div>
                 <button

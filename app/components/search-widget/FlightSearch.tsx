@@ -17,13 +17,17 @@ const FlightSearch = ({ initialState }: FlightSearchProps) => {
     const [travellers, setTravellers] = useState({ adults: 1, children: 0, infants: 0 });
     const [travelClass, setTravelClass] = useState('Economy');
 
-    // Helper to parse DDMMYYYY to YYYY-MM-DD
+    // Helper to parse date
     const parseInitialDate = (dStr?: string) => {
-        if (!dStr || dStr.length !== 8) return new Date().toISOString().split('T')[0];
-        const d = dStr.slice(0, 2);
-        const m = dStr.slice(2, 4);
-        const y = dStr.slice(4);
-        return `${y}-${m}-${d}`;
+        if (!dStr) return new Date().toISOString().split('T')[0];
+        if (dStr.includes('T')) return dStr.split('T')[0];
+        if (dStr.length === 8) {
+            const d = dStr.slice(0, 2);
+            const m = dStr.slice(2, 4);
+            const y = dStr.slice(4);
+            return `${y}-${m}-${d}`;
+        }
+        return new Date().toISOString().split('T')[0];
     };
 
     // One Way / Round Trip Data
@@ -119,9 +123,36 @@ const FlightSearch = ({ initialState }: FlightSearchProps) => {
     };
 
     const handleSearch = () => {
+        if (travellers.adults + travellers.children + travellers.infants > 9) {
+            alert("Total number of passenger count can not be more than 9.");
+            return;
+        }
+
+        // Use locale cache formatted specifically as YYYY-MM-DD
+        const todayTemp = new Date();
+        const yyyy = todayTemp.getFullYear();
+        const mm = String(todayTemp.getMonth() + 1).padStart(2, '0');
+        const dd = String(todayTemp.getDate()).padStart(2, '0');
+        const todayStr = `${yyyy}-${mm}-${dd}`;
+
         const params = new URLSearchParams();
 
         if (tripType === 'Multi City') {
+            for (let i = 0; i < multiCitySegments.length; i++) {
+                if (!multiCitySegments[i].from || !multiCitySegments[i].to) {
+                    alert("Origin and Destination should not be Null.");
+                    return;
+                }
+                if (multiCitySegments[i].date < todayStr) {
+                    alert("Departure Date can not be less than today's date.");
+                    return;
+                }
+                if (i > 0 && multiCitySegments[i].date < multiCitySegments[i - 1].date) {
+                    alert("Departure date of 2nd segment can't be less than arrival of 1st segment.");
+                    return;
+                }
+            }
+
             params.append('journeyType', '3');
             multiCitySegments.forEach(seg => {
                 params.append('from', seg.from.code);
@@ -132,6 +163,19 @@ const FlightSearch = ({ initialState }: FlightSearchProps) => {
                 }
             });
         } else {
+            if (!flightData.from || !flightData.to) {
+                alert("Origin and Destination should not be Null.");
+                return;
+            }
+            if (dates.departure < todayStr) {
+                alert("Departure Date can not be less than today's date.");
+                return;
+            }
+            if (tripType === 'Round Trip' && dates.return < dates.departure) {
+                alert("Departure date of 2nd segment can't be less than arrival of 1st segment.");
+                return;
+            }
+
             params.append('from', flightData.from.code);
             params.append('to', flightData.to.code);
             params.append('journeyType', tripType === 'One Way' ? '1' : '2');

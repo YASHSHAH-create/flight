@@ -25,13 +25,20 @@ const formatDuration = (minutes: number) => {
 };
 
 const formatDate = (dateStr: string | null) => {
-    if (!dateStr || dateStr.length !== 8) return dateStr || '';
-    const day = dateStr.substring(0, 2);
-    const month = dateStr.substring(2, 4);
-    const year = dateStr.substring(4, 8);
-    // Create date object (standard usage)
-    const d = new Date(`${year}-${month}-${day}`);
-    return d.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+    if (!dateStr) return '';
+    if (dateStr.includes('T')) {
+        const [y, m, d] = dateStr.split('T')[0].split('-');
+        const dateObj = new Date(`${y}-${m}-${d}`);
+        return dateObj.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+    if (dateStr.length === 8) {
+        const day = dateStr.substring(0, 2);
+        const month = dateStr.substring(2, 4);
+        const year = dateStr.substring(4, 8);
+        const d = new Date(`${year}-${month}-${day}`);
+        return d.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+    return dateStr;
 };
 
 // --- Components ---
@@ -222,6 +229,9 @@ function SearchResultsContent() {
                     let originCode, originCity, destCode, destCity;
                     let duration, stops, price, isLCC, isRefundable, seatsLeft;
                     let resultIndex, traceIdValue;
+                    let layovers: any[] = [];
+                    let totalLayoverTime = 0;
+                    let durationMinutes = 0;
 
                     // NEW API FORMAT
                     if (res.flights && res.flights.outbound) {
@@ -243,7 +253,18 @@ function SearchResultsContent() {
                         destCity = lastSeg.destinationCity;
 
                         duration = formatDuration(outbound.duration);
+                        durationMinutes = outbound.duration;
                         stops = outbound.stops === 0 ? "Non-stop" : `${outbound.stops} Stop${outbound.stops > 1 ? 's' : ''}`;
+
+                        if (segments.length > 1) {
+                            for (let i = 0; i < segments.length - 1; i++) {
+                                layovers.push({
+                                    city: segments[i].destinationCity || segments[i].destination,
+                                    time: segments[i].layoverTime || 0
+                                });
+                                totalLayoverTime += segments[i].layoverTime || 0;
+                            }
+                        }
 
                         price = Math.round(res.price.total);
                         isLCC = res.isLCC;
@@ -275,7 +296,21 @@ function SearchResultsContent() {
                         destCity = lastSegment.Destination.Airport.CityName;
 
                         duration = formatDuration(segment.Duration);
+                        durationMinutes = segment.Duration;
                         stops = segment.StopOver ? "1 Stop" : "Non-stop";
+
+                        if (allSegments.length > 1) {
+                            for (let i = 0; i < allSegments.length - 1; i++) {
+                                const arrTime = new Date(allSegments[i].Destination.ArrTime).getTime();
+                                const nextDepTime = new Date(allSegments[i + 1].Origin.DepTime).getTime();
+                                const layoverMins = Math.round((nextDepTime - arrTime) / 60000);
+                                layovers.push({
+                                    city: allSegments[i].Destination.Airport.CityName || allSegments[i].Destination.Airport.AirportCode,
+                                    time: layoverMins > 0 ? layoverMins : 0
+                                });
+                                totalLayoverTime += layoverMins > 0 ? layoverMins : 0;
+                            }
+                        }
 
                         price = Math.round(res.Fare.PublishedFare);
                         isLCC = res.IsLCC;
@@ -304,6 +339,9 @@ function SearchResultsContent() {
                         },
                         duration: duration || "",
                         stops: stops || "",
+                        layovers: layovers,
+                        totalLayoverTime: totalLayoverTime,
+                        durationMinutes: durationMinutes,
                         price: price || 0,
                         tags: isLCC ? ["Economy"] : [],
                         benefits: isRefundable ? ["Refundable"] : [],
@@ -361,6 +399,8 @@ function SearchResultsContent() {
         const resultIndex = flight.resultIndex ?? (flight.raw.ResultIndex || flight.raw.resultIndex);
         router.push(`/book?traceId=${flight.traceId}&resultIndex=${resultIndex}`);
     };
+
+    const fastestFlightId = filteredFlights.length > 0 ? [...filteredFlights].sort((a, b) => a.durationMinutes - b.durationMinutes)[0].id : null;
 
     return (
         <div className="min-h-screen bg-slate-50/50 font-sans selection:bg-blue-100 selection:text-blue-900 pb-24 md:pb-0">
@@ -519,51 +559,69 @@ function SearchResultsContent() {
                                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
 
                                             {/* Airline Info */}
-                                            <div className="flex items-center gap-4 min-w-[140px]">
-                                                <div className="w-12 h-12 rounded-xl bg-slate-50 p-2 flex items-center justify-center border border-slate-100">
-                                                    <img src={`https://images.ixigo.com/img/common-resources/airline-new/${flight.airlineCode}.png`} alt={flight.airline} className="w-full h-full object-contain" />
-                                                </div>
-                                                <div>
-                                                    <div className="font-bold text-slate-900 text-base">{flight.airline}</div>
-                                                    <div className="text-xs font-semibold text-slate-400 mt-0.5">{flight.flightNumber}</div>
-                                                </div>
-                                            </div>
-
-                                            {/* Flight Path (Desktop) */}
-                                            <div className="hidden md:flex flex-1 items-center justify-center gap-8 lg:gap-12">
-                                                <div className="text-center w-20">
-                                                    <div className="text-xl font-black text-slate-900">{flight.departure.time}</div>
-                                                    <div className="text-[11px] font-bold text-slate-400 uppercase mt-1">{flight.departure.airport}</div>
-                                                </div>
-
-                                                <div className="flex flex-col items-center flex-1 max-w-[140px]">
-                                                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">{flight.duration}</div>
-                                                    <div className="w-full h-[2px] bg-slate-100 relative rounded-full overflow-hidden">
-                                                        <div className="absolute inset-0 bg-slate-200"></div>
+                                            <div className="flex flex-col gap-2 min-w-[140px]">
+                                                {fastestFlightId === flight.id && (
+                                                    <div className="inline-flex items-center gap-1 bg-green-50 text-green-700 px-2 py-0.5 rounded-md text-[10px] font-bold w-max mb-1">
+                                                        <Zap size={10} className="fill-current" /> Fastest
                                                     </div>
-                                                    <div className="text-[10px] font-bold text-slate-500 mt-1.5">{flight.stops}</div>
-                                                </div>
-
-                                                <div className="text-center w-20">
-                                                    <div className="text-xl font-black text-slate-900">{flight.arrival.time}</div>
-                                                    <div className="text-[11px] font-bold text-slate-400 uppercase mt-1">{flight.arrival.airport}</div>
+                                                )}
+                                                <div className="flex items-center gap-4">
+                                                    <div className="w-12 h-12 rounded-xl bg-slate-50 p-2 flex items-center justify-center border border-slate-100">
+                                                        <img src={`https://images.ixigo.com/img/common-resources/airline-new/${flight.airlineCode}.png`} alt={flight.airline} className="w-full h-full object-contain" />
+                                                    </div>
+                                                    <div>
+                                                        <div className="font-bold text-slate-900 text-base">{flight.airline}</div>
+                                                        <div className="text-xs font-semibold text-slate-400 mt-0.5">{flight.flightNumber}</div>
+                                                    </div>
                                                 </div>
                                             </div>
 
-                                            {/* Mobile Flight Path */}
-                                            <div className="md:hidden flex items-center justify-between bg-slate-50 rounded-xl p-4 border border-slate-100">
-                                                <div>
-                                                    <div className="text-lg font-black text-slate-900">{flight.departure.time}</div>
-                                                    <div className="text-[10px] font-bold text-slate-500 uppercase">{flight.departure.airport}</div>
-                                                </div>
-                                                <div className="flex flex-col items-center">
-                                                    <div className="text-[10px] font-bold text-slate-400 mb-1">{flight.duration}</div>
-                                                    <Plane size={14} className="text-slate-300 rotate-90" />
-                                                    <div className="text-[10px] font-bold text-slate-400 mt-1">{flight.stops}</div>
-                                                </div>
-                                                <div className="text-right">
-                                                    <div className="text-lg font-black text-slate-900">{flight.arrival.time}</div>
-                                                    <div className="text-[10px] font-bold text-slate-500 uppercase">{flight.arrival.airport}</div>
+                                            {/* Flight Path (Desktop & Mobile) */}
+                                            <div className="flex-1 flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 lg:gap-12 mt-4 md:mt-0 w-full md:w-auto">
+                                                <div className="flex items-center justify-between w-full md:w-auto md:flex-1 gap-4 bg-slate-50 md:bg-transparent rounded-xl p-4 md:p-0 border border-slate-100 md:border-0">
+                                                    <div className="text-left md:text-center w-20 shrink-0">
+                                                        <div className="text-xl md:text-2xl font-black text-slate-900">{flight.departure.time}</div>
+                                                        <div className="text-[11px] font-bold text-slate-400 uppercase mt-1">{flight.departure.airport}</div>
+                                                    </div>
+
+                                                    <div className="flex flex-col items-center flex-1 max-w-[200px]">
+                                                        <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 flex gap-2">
+                                                            <span>{flight.duration}</span>
+                                                        </div>
+                                                        
+                                                        <div className="w-full flex items-center justify-center relative py-1">
+                                                            <div className="absolute inset-0 top-1/2 -translate-y-1/2 h-[2px] bg-slate-200 rounded-full"></div>
+                                                            {flight.stops !== "Non-stop" ? (
+                                                                <div className="z-10 flex gap-1 bg-white px-1">
+                                                                    {flight.layovers?.map((_: any, i: number) => (
+                                                                        <div key={i} className="w-2 h-2 rounded-full border-[2px] border-slate-400 bg-white"></div>
+                                                                    ))}
+                                                                </div>
+                                                            ) : (
+                                                                <Plane size={14} className="z-10 text-slate-300 bg-white/0 px-0.5 rotate-90" />
+                                                            )}
+                                                        </div>
+                                                        
+                                                        <div className="text-[10px] font-bold text-slate-500 mt-1.5 text-center">
+                                                            {flight.stops === "Non-stop" ? (
+                                                                "Non-stop"
+                                                            ) : (
+                                                                <span className="flex flex-col items-center gap-0.5">
+                                                                    <span className="text-slate-600">{flight.stops} via {flight.layovers?.map((l: any) => l.city).join(', ')}</span>
+                                                                    {flight.totalLayoverTime > 0 && (
+                                                                        <span className={flight.totalLayoverTime > 360 ? "text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded-sm" : "text-slate-400"}>
+                                                                            Layover: {formatDuration(flight.totalLayoverTime)}
+                                                                        </span>
+                                                                    )}
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="text-right md:text-center w-20 shrink-0">
+                                                        <div className="text-xl md:text-2xl font-black text-slate-900">{flight.arrival.time}</div>
+                                                        <div className="text-[11px] font-bold text-slate-400 uppercase mt-1">{flight.arrival.airport}</div>
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -718,7 +776,7 @@ function SearchResultsContent() {
                                         initialState={{
                                             fromCode: searchParams.get('from') || 'DEL',
                                             toCode: searchParams.get('to') || 'BLR',
-                                            date: searchParams.get('date')?.replace(/-/g, '') || '',
+                                            date: searchParams.get('date') || '',
                                             adults: parseInt(searchParams.get('adults') || '1'),
                                             children: parseInt(searchParams.get('children') || '0'),
                                             infants: parseInt(searchParams.get('infants') || '0'),
