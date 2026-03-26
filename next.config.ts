@@ -18,7 +18,8 @@ const nextConfig: NextConfig = {
     ],
   },
   async rewrites() {
-    const API_URL = 'http://localhost:3001';
+    const API_URL = 'https://api.paymm.in';
+  
     return [
       {
         source: '/api/:path*',
