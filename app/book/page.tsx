@@ -308,39 +308,67 @@ function BookPageContent() {
     const [bookingId, setBookingId] = useState<number | null>(null);
     const [ticketDetails, setTicketDetails] = useState<TicketFlightItinerary | null>(null);
 
-    // Initialize Passengers
+    // Initialize Passengers from localStorage (saved at search time)
     useEffect(() => {
-        const adults = parseInt(searchParams.get('adults') || '1');
-        const children = parseInt(searchParams.get('children') || '0');
-        const infants = parseInt(searchParams.get('infants') || '0');
+        if (!fareQuote) return;
+
+        // Priority 1: localStorage (saved when user clicked Book on search page)
+        const storedAdults = localStorage.getItem('pax_adults');
+        const storedChildren = localStorage.getItem('pax_children');
+        const storedInfants = localStorage.getItem('pax_infants');
+
+        let adults = 1, children = 0, infants = 0;
+
+        if (storedAdults !== null) {
+            adults = parseInt(storedAdults) || 1;
+            children = parseInt(storedChildren || '0');
+            infants = parseInt(storedInfants || '0');
+        } else if (fareQuote.PaxInfo && Array.isArray(fareQuote.PaxInfo)) {
+            // Priority 2: fareQuote.PaxInfo (TBO format)
+            fareQuote.PaxInfo.forEach((p: any) => {
+                if (p.PaxType === 1) adults = p.PaxCount || 1;
+                if (p.PaxType === 2) children = p.PaxCount || 0;
+                if (p.PaxType === 3) infants = p.PaxCount || 0;
+            });
+        } else if (fareQuote.passengers && typeof fareQuote.passengers === 'object') {
+            // Priority 3: New API format
+            adults = fareQuote.passengers.adults || fareQuote.passengers.adult || 1;
+            children = fareQuote.passengers.children || fareQuote.passengers.child || 0;
+            infants = fareQuote.passengers.infants || fareQuote.passengers.infant || 0;
+        } else {
+            // Priority 4: URL params fallback
+            adults = parseInt(searchParams.get('adults') || '1');
+            children = parseInt(searchParams.get('children') || '0');
+            infants = parseInt(searchParams.get('infants') || '0');
+        }
 
         const initialPax: Passenger[] = [];
 
         for (let i = 0; i < adults; i++) {
             initialPax.push({
-                Title: 'Mr', FirstName: 'Test', LastName: 'Adult' + (i > 0 ? i : ''), PaxType: 1, DateOfBirth: '1990-01-15', Gender: 1,
-                AddressLine1: '123, Test Address', City: 'New Delhi', CountryCode: 'IN', CountryName: 'India',
-                ContactNo: '9876543210', Email: 'test@example.com', IsLeadPax: i === 0, PAN: 'ABCDE1234F', PassportNo: 'A1234567', PassportExpiry: '2030-01-15', PassportIssueDate: '2020-01-15', PassportIssueCountryCode: 'IN'
+                Title: 'Mr', FirstName: '', LastName: '', PaxType: 1, DateOfBirth: '', Gender: 1,
+                AddressLine1: '', City: 'New Delhi', CountryCode: 'IN', CountryName: 'India',
+                ContactNo: '', Email: '', IsLeadPax: i === 0, PAN: '', PassportNo: '', PassportExpiry: '', PassportIssueDate: '', PassportIssueCountryCode: 'IN'
             });
         }
         for (let i = 0; i < children; i++) {
             initialPax.push({
-                Title: 'Master', FirstName: 'Test', LastName: 'Child' + (i > 0 ? i : ''), PaxType: 2, DateOfBirth: '2015-05-10', Gender: 1,
-                AddressLine1: '123, Test Address', City: 'New Delhi', CountryCode: 'IN',
+                Title: 'Master', FirstName: '', LastName: '', PaxType: 2, DateOfBirth: '', Gender: 1,
+                AddressLine1: '', City: 'New Delhi', CountryCode: 'IN',
                 IsLeadPax: false,
-                GuardianDetails: { Title: 'Mr', FirstName: 'Test', LastName: 'Adult', PAN: 'ABCDE1234F', PassportNo: 'A1234567' }
+                GuardianDetails: { Title: 'Mr', FirstName: '', LastName: '', PAN: '', PassportNo: '' }
             });
         }
         for (let i = 0; i < infants; i++) {
             initialPax.push({
-                Title: 'Master', FirstName: 'Test', LastName: 'Infant' + (i > 0 ? i : ''), PaxType: 3, DateOfBirth: new Date().toISOString().split('T')[0], Gender: 1,
-                AddressLine1: '123, Test Address', City: 'New Delhi', CountryCode: 'IN',
+                Title: 'Master', FirstName: '', LastName: '', PaxType: 3, DateOfBirth: '', Gender: 1,
+                AddressLine1: '', City: 'New Delhi', CountryCode: 'IN',
                 IsLeadPax: false,
-                GuardianDetails: { Title: 'Mr', FirstName: 'Test', LastName: 'Adult', PAN: 'ABCDE1234F', PassportNo: 'A1234567' }
+                GuardianDetails: { Title: 'Mr', FirstName: '', LastName: '', PAN: '', PassportNo: '' }
             });
         }
         setPassengers(initialPax);
-    }, [searchParams]);
+    }, [fareQuote]);
 
     const handlePaxChange = (index: number, field: keyof Passenger, value: any) => {
         const updated = [...passengers];
@@ -402,7 +430,7 @@ function BookPageContent() {
             const segmentsList = fareQuote.segments || fareQuote.Segments?.[0] || [];
             if (!segmentsList.length) throw new Error("No flight segments found in quote");
 
-            const isInternational = segmentsList.some((leg: any) =>
+            const isInternational = fareQuote.IsDomestic === false || fareQuote.isDomestic === false || fareQuote.IsPassportRequiredAtBook || fareQuote.isPassportRequiredAtBook || fareQuote.IsPassportRequiredAtTicket || fareQuote.isPassportRequiredAtTicket || fareQuote.IsPassportFullDetailRequiredAtBook || fareQuote.isPassportFullDetailRequiredAtBook || segmentsList.some((leg: any) =>
                 (leg.Origin?.Airport?.CountryCode && leg.Origin.Airport.CountryCode !== 'IN') ||
                 (leg.Destination?.Airport?.CountryCode && leg.Destination.Airport.CountryCode !== 'IN')
             );
@@ -426,9 +454,9 @@ function BookPageContent() {
                 throw new Error("GST Details are mandatory for this booking.");
             }
 
-            const panRequired = fareQuote.IsPanRequiredAtBook || fareQuote.IsPanRequiredAtTicket || false;
-            const passportRequired = fareQuote.IsPassportRequiredAtBook || fareQuote.IsPassportRequiredAtTicket || false;
-            const fullPassportRequired = fareQuote.IsPassportFullDetailRequiredAtBook || false;
+            const panRequired = fareQuote.IsPanRequiredAtBook || fareQuote.isPanRequiredAtBook || fareQuote.IsPanRequiredAtTicket || fareQuote.isPanRequiredAtTicket || false;
+            const passportRequired = fareQuote.IsPassportRequiredAtBook || fareQuote.isPassportRequiredAtBook || fareQuote.IsPassportRequiredAtTicket || fareQuote.isPassportRequiredAtTicket || false;
+            const fullPassportRequired = fareQuote.IsPassportFullDetailRequiredAtBook || fareQuote.isPassportFullDetailRequiredAtBook || false;
 
             for (const p of passengers) {
                 if (!p.FirstName || !p.LastName) {
@@ -516,157 +544,134 @@ function BookPageContent() {
             }
 
             // Prepare Payload Passengers
-            // Split fare per passenger (Naive split - in production, exact fare per pax type should come from pricing logic)
             const totalPax = passengers.length;
             const baseFareValue = fareQuote.price?.base ?? fareQuote.Fare?.BaseFare ?? 0;
             const taxValue = fareQuote.price?.taxes ?? fareQuote.Fare?.Tax ?? 0;
             const singleBaseFare = baseFareValue / totalPax;
             const singleTax = taxValue / totalPax;
-            // Reconstruct naive Fare object per pax
-            // Note: The API likely expects the exact breakdown from the 'FareQuote' but per passenger. 
-            // If the quote 'Fare' object is Total Fare, we must split it. If it is per pax, we use it directly.
-            // Usually 'Fare' in Quote is Total. Let's try splitting.
             const sourceFare = fareQuote.Fare || fareQuote.price || {};
-            const genericFare = {
-                BaseFare: singleBaseFare,
-                Tax: singleTax,
-                YQTax: (sourceFare.YQTax || 0) / totalPax,
-                AdditionalTxnFeePub: (sourceFare.AdditionalTxnFeePub || 0) / totalPax,
-                AdditionalTxnFeeOfrd: (sourceFare.AdditionalTxnFeeOfrd || 0) / totalPax,
-                OtherCharges: (sourceFare.OtherCharges || 0) / totalPax,
-                TransactionFee: 0, // Mandatory as per docs
-                AirTransFee: 0     // Mandatory as per docs
+
+            const formattedPassengers = passengers.map((p, index) => {
+                const paxFare = {
+                    Currency: sourceFare.Currency || "INR",
+                    BaseFare: Number(singleBaseFare.toFixed(2)),
+                    Tax: Number(singleTax.toFixed(2)),
+                    YQTax: Number(((sourceFare.YQTax || 0) / totalPax).toFixed(2)),
+                    AdditionalTxnFeePub: Number(((sourceFare.AdditionalTxnFeePub || 0) / totalPax).toFixed(2)),
+                    AdditionalTxnFeeOfrd: Number(((sourceFare.AdditionalTxnFeeOfrd || 0) / totalPax).toFixed(2)),
+                    OtherCharges: Number(((sourceFare.OtherCharges || 0) / totalPax).toFixed(2)),
+                    Discount: Number(((sourceFare.Discount || 0) / totalPax).toFixed(2)),
+                    PublishedFare: Number(((sourceFare.PublishedFare || 0) / totalPax).toFixed(2)),
+                    OfferedFare: Number(((sourceFare.OfferedFare || 0) / totalPax).toFixed(2)),
+                    TdsOnCommission: Number(((sourceFare.TdsOnCommission || 0) / totalPax).toFixed(2)),
+                    TdsOnPLB: Number(((sourceFare.TdsOnPLB || 0) / totalPax).toFixed(2)),
+                    TdsOnIncentive: Number(((sourceFare.TdsOnIncentive || 0) / totalPax).toFixed(2)),
+                    ServiceFee: Number(((sourceFare.ServiceFee || 0) / totalPax).toFixed(2))
+                };
+
+                const formattedPax: any = {
+                    Title: p.Title,
+                    FirstName: p.FirstName,
+                    LastName: p.LastName,
+                    PaxType: p.PaxType,
+                    DateOfBirth: p.DateOfBirth ? `${p.DateOfBirth}T00:00:00` : "1990-01-01T00:00:00",
+                    Gender: p.Gender,
+                    PassportNo: p.PassportNo || "",
+                    PassportExpiry: p.PassportExpiry ? `${p.PassportExpiry}T00:00:00` : "2030-01-01T00:00:00",
+                    AddressLine1: p.AddressLine1 || "123, Default Address",
+                    AddressLine2: p.AddressLine2 || "",
+                    Fare: paxFare,
+                    City: p.City || "New Delhi",
+                    CountryCode: p.CountryCode || "IN",
+                    CellCountryCode: "+91-",
+                    ContactNo: p.ContactNo || "9999999999",
+                    Nationality: "IN",
+                    Email: p.Email || "test@test.com",
+                    IsLeadPax: p.IsLeadPax || false,
+                    FFAirlineCode: p.FFAirlineCode || null,
+                    FFNumber: p.FFNumber || "",
+                    GSTCompanyAddress: gstDetails.GSTCompanyAddress || "",
+                    GSTCompanyContactNumber: gstDetails.GSTCompanyContactNumber || "",
+                    GSTCompanyName: gstDetails.GSTCompanyName || "",
+                    GSTNumber: gstDetails.GSTNumber || "",
+                    GSTCompanyEmail: gstDetails.GSTCompanyEmail || ""
+                };
+
+                if (!p.DateOfBirth && p.PaxType === 1) {
+                    delete formattedPax.DateOfBirth;
+                }
+                if (!p.PassportNo) {
+                    delete formattedPax.PassportNo;
+                    delete formattedPax.PassportExpiry;
+                }
+
+                if (index === 0 && selectedMeal && selectedMeal.Code) {
+                    formattedPax.Meal = {
+                        Code: selectedMeal.Code,
+                        Description: selectedMeal.Description || selectedMeal.AirlineDescription || ""
+                    };
+                }
+                if (index === 0 && selectedSeat && selectedSeat.Code) {
+                    formattedPax.Seat = {
+                        Code: selectedSeat.Code,
+                        Description: selectedSeat.Description || ""
+                    };
+                }
+
+                return formattedPax;
+            });
+
+            const bookRequestPayload = {
+                EndUserIp: "192.168.11.58",
+                TokenId: "TOKEN_INJECTED_BY_BACKEND",
+                TraceId: traceId,
+                ResultIndex: resultIndex,
+                Passengers: formattedPassengers
             };
 
-            const passengerDetails = passengers.map((p, index) => {
-                const paxSSR: any = { ...p, Fare: genericFare };
+            console.log("Book Request Payload:", bookRequestPayload);
 
-                if (fareQuote.IsGSTMandatory) {
-                     paxSSR.GSTCompanyName = gstDetails.GSTCompanyName;
-                     paxSSR.GSTNumber = gstDetails.GSTNumber;
-                     paxSSR.GSTCompanyEmail = gstDetails.GSTCompanyEmail;
-                     paxSSR.GSTCompanyContactNumber = gstDetails.GSTCompanyContactNumber;
-                     paxSSR.GSTCompanyAddress = gstDetails.GSTCompanyAddress;
-                }
-
-                // Ensure SSRs for ALL segments.
-                // ssrData.MealDynamic and Baggage are arrays of arrays (Segments -> Options)
-                const paxMeals: any[] = [];
-                const paxBaggage: any[] = [];
-
-                if (ssrData?.MealDynamic) {
-                    ssrData.MealDynamic.forEach((segmentOptions: any[], segIndex: number) => {
-                        // Default fallback logic
-                        let mealToUse = segmentOptions?.find((m: any) => m.Code === 'NoMeal') ||
-                            segmentOptions?.find((m: any) => m.Price === 0) ||
-                            segmentOptions?.[0] || null;
-
-                        // Force free meal for special fares
-                        if (fareQuote.ismealmandatory) {
-                            const freeMeal = segmentOptions?.find((m: any) => m.Price === 0);
-                            if (freeMeal) mealToUse = freeMeal;
-                        }
-
-                        // Override with user selection if applicable
-                        if (index === 0 && selectedMeal &&
-                            selectedMeal.Origin === segmentOptions?.[0]?.Origin &&
-                            selectedMeal.Destination === segmentOptions?.[0]?.Destination) {
-                            mealToUse = selectedMeal;
-                        }
-
-                        if (mealToUse) {
-                            paxMeals.push(mealToUse);
-                        } else {
-                            console.warn(`No meal option found for segment ${segIndex}`);
-                        }
-                    });
-                }
-
-                // Do similar for Baggage...
-                if (ssrData?.Baggage) {
-                    ssrData.Baggage.forEach((segmentOptions: any[], segIndex: number) => {
-                        let baggageToUse = segmentOptions?.find((b: any) => b.Code === 'NoBaggage') ||
-                            segmentOptions?.find((b: any) => b.Price === 0) ||
-                            segmentOptions?.[0] || null;
-
-                        // International LCC or I5 domestic free baggage
-                        // International LCC or I5 domestic free baggage
-                        const segments = fareQuote.segments || fareQuote.Segments?.[0] || [];
-                        const isInternational = segments.some((leg: any) => (leg.Origin?.Airport?.CountryCode && leg.Origin.Airport.CountryCode !== 'IN') || (leg.Destination?.Airport?.CountryCode && leg.Destination.Airport.CountryCode !== 'IN'));
-                        const isIntlLCC = isInternational && fareQuote.IsLCC;
-                        const firstAirlineCode = segments[0]?.Airline?.AirlineCode || (segments[0]?.flightNumber ? segments[0].flightNumber.split('-')[0] : '');
-                        const isI5Domestic = !isInternational && firstAirlineCode === 'I5';
-
-                        if (isIntlLCC || isI5Domestic) {
-                            const freeBaggage = segmentOptions?.find((b: any) => b.Price === 0);
-                            if (freeBaggage) baggageToUse = freeBaggage;
-                        }
-
-                        if (index === 0 && selectedBaggage &&
-                            selectedBaggage.Origin === segmentOptions?.[0]?.Origin &&
-                            selectedBaggage.Destination === segmentOptions?.[0]?.Destination) {
-                            baggageToUse = selectedBaggage;
-                        }
-
-                        if (baggageToUse) {
-                            paxBaggage.push(baggageToUse);
-                        }
-                    });
-                }
-
-                paxSSR.MealDynamic = paxMeals;
-                paxSSR.Baggage = paxBaggage;
-
-                if (index === 0 && selectedSeat) {
-                    paxSSR.SeatDynamic = [selectedSeat];
-                }
-
-                return paxSSR;
-            });
-            console.log("Final Passenger Details for Booking:", passengerDetails); // Debug Log
-
-            // --- MOCKED SUCCESS FOR TESTING (LIVE API DISABLED) ---
             setBookingStatus('booking');
 
-            setTimeout(() => {
+            try {
+                const bookRes = await fetch('/flights/book', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(bookRequestPayload)
+                });
+                
+                const bookData = await bookRes.json();
+
+                if (!bookData.success && !bookData.Response) {
+                    throw new Error(bookData.message || bookData.data?.Error?.ErrorMessage || "Booking Failed at Provider");
+                }
+
+                // Safely extract booking response depending on wrapper structure
+                const bookingResponse = bookData.data?.Response || bookData.Response || bookData.data;
+
+                if (!bookingResponse || !bookingResponse.FlightItinerary) {
+                     throw new Error("Invalid Booking Response structure");
+                }
+
+                if (bookingResponse.Error && bookingResponse.Error.ErrorCode !== 0) {
+                     throw new Error(bookingResponse.Error.ErrorMessage || "Error parsing booking response");
+                }
+
                 setBookingStatus('ticketing');
 
-                setTimeout(() => {
-                    const mockedPNR = "DUMMY" + Math.floor(Math.random() * 1000);
-                    const mockedBookingId = Math.floor(Math.random() * 100000);
+                setBookedPNR(bookingResponse.PNR || bookingResponse.FlightItinerary.PNR);
+                setBookingId(bookingResponse.BookingId || bookingResponse.FlightItinerary.BookingId);
+                setTicketDetails(bookingResponse.FlightItinerary);
+                setBookingStatus('success');
 
-                    const segmentsList = fareQuote.segments || fareQuote.Segments?.[0] || [];
-                    const mockFirstLeg = segmentsList[0] || {};
-                    const mockLastLeg = segmentsList[segmentsList.length - 1] || {};
-                    
-                    const mDepTime = mockFirstLeg.Origin?.DepTime || mockFirstLeg.departure || "2026-03-26T06:55:00";
-                    const mArrTime = mockLastLeg.Destination?.ArrTime || mockLastLeg.arrival || "2026-03-26T09:15:00";
-                    const mDepCity = mockFirstLeg.Origin?.Airport?.CityName || mockFirstLeg.from || 'Origin';
-                    const mArrCity = mockLastLeg.Destination?.Airport?.CityName || mockLastLeg.to || 'Destination';
-                    const mAirlineCode = mockFirstLeg.Airline?.AirlineCode || mockFirstLeg.airlineCode || "XX";
-                    const mAirlineName = mockFirstLeg.Airline?.AirlineName || mockFirstLeg.airline || "Dummy Airlines";
-                    const mFlightNumber = mockFirstLeg.Airline?.FlightNumber || mockFirstLeg.flightNumber || "1234";
-
-                    const mockSegments: any = [{
-                        Airline: { AirlineName: mAirlineName, FlightNumber: mFlightNumber, AirlineCode: mAirlineCode },
-                        Origin: { DepTime: mDepTime, Airport: { CityName: mDepCity } },
-                        Destination: { ArrTime: mArrTime, Airport: { CityName: mArrCity } },
-                        Duration: mockFirstLeg.Duration || 120
-                    }];
-
-                    const mockedTicketDetails: any = {
-                        PNR: mockedPNR,
-                        BookingId: mockedBookingId,
-                        AirlineCode: mAirlineCode,
-                        Segments: mockSegments
-                    };
-
-                    setBookedPNR(mockedPNR);
-                    setBookingId(mockedBookingId);
-                    setTicketDetails(mockedTicketDetails);
-                    setBookingStatus('success');
-                }, 1500);
-            }, 1000);
+                // Check and trigger Save to DB if user context is required
+                if (bookingResponse.FlightItinerary) {
+                    await saveBookingToDb(bookData.data || bookData, bookingResponse.FlightItinerary);
+                }
+            } catch (apiError: any) {
+                console.error("Flight Book API Error:", apiError);
+                throw new Error("Failed to finalize booking: " + apiError.message);
+            }
 
         } catch (err: any) {
             console.error(err);
@@ -793,13 +798,13 @@ function BookPageContent() {
         `${Math.floor((segmentsList.reduce((acc: number, seg: any) => acc + (seg.Duration || 0), 0) + (segmentsList.length > 1 ? (segmentsList.length - 1) * 60 : 0)) / 60)}h ${(segmentsList.reduce((acc: number, seg: any) => acc + (seg.Duration || 0), 0)) % 60}m`;
     const stopsCount = fareQuote.stops !== undefined ? fareQuote.stops : Math.max(0, segmentsList.length - 1);
 
-    const isInternational = segmentsList.some((leg: any) =>
+    const isInternational = fareQuote.IsDomestic === false || fareQuote.isDomestic === false || fareQuote.IsPassportRequiredAtBook || fareQuote.isPassportRequiredAtBook || fareQuote.IsPassportRequiredAtTicket || fareQuote.isPassportRequiredAtTicket || fareQuote.IsPassportFullDetailRequiredAtBook || fareQuote.isPassportFullDetailRequiredAtBook || segmentsList.some((leg: any) =>
         (leg.Origin?.Airport?.CountryCode && leg.Origin.Airport.CountryCode !== 'IN') ||
         (leg.Destination?.Airport?.CountryCode && leg.Destination.Airport.CountryCode !== 'IN')
     );
-    const panRequired = fareQuote.IsPanRequiredAtBook || fareQuote.IsPanRequiredAtTicket || false;
-    const passportRequired = fareQuote.IsPassportRequiredAtBook || fareQuote.IsPassportRequiredAtTicket || false;
-    const fullPassportRequired = fareQuote.IsPassportFullDetailRequiredAtBook || false;
+    const panRequired = fareQuote.IsPanRequiredAtBook || fareQuote.isPanRequiredAtBook || fareQuote.IsPanRequiredAtTicket || fareQuote.isPanRequiredAtTicket || false;
+    const passportRequired = fareQuote.IsPassportRequiredAtBook || fareQuote.isPassportRequiredAtBook || fareQuote.IsPassportRequiredAtTicket || fareQuote.isPassportRequiredAtTicket || false;
+    const fullPassportRequired = fareQuote.IsPassportFullDetailRequiredAtBook || fareQuote.isPassportFullDetailRequiredAtBook || false;
 
     const baseFareAmount = fareQuote.price?.base ?? fareQuote.Fare?.BaseFare ?? 0;
     const taxAmount = fareQuote.price?.taxes ?? fareQuote.Fare?.Tax ?? 0;
@@ -1094,129 +1099,100 @@ function BookPageContent() {
                                             </div>
                                         </div>
 
-                                        {/* Travel Document Details: PAN & Passport & Guardian */}
+                                        {/* Travel Document Details: based on Domestic or International */}
                                         <div className="pt-4 border-t border-slate-200/60">
                                             <div className="flex items-center mb-4 space-x-2 text-slate-800 font-bold text-sm">
                                                 <ShieldCheck size={18} className="text-blue-600" />
-                                                <span>Travel Document Details</span>
-                                                {(panRequired || passportRequired || fullPassportRequired) && (
-                                                    <span className="text-[10px] bg-red-100 text-red-600 px-2 py-0.5 rounded uppercase tracking-wide">Mandatory</span>
-                                                )}
+                                                <span>Travel Documents</span>
+                                                <span className={`text-[10px] px-2 py-0.5 rounded uppercase tracking-wide ${isInternational ? 'bg-purple-100 text-purple-600' : 'bg-blue-100 text-blue-600'}`}>
+                                                    {isInternational ? 'International' : 'Domestic'}
+                                                </span>
                                             </div>
-                                            
-                                            {/* Guardian Details for Child/Infant */}
-                                            {pax.PaxType !== 1 && (panRequired || passportRequired) && (
-                                                <div className="mb-4 bg-slate-100 p-4 rounded-xl border border-slate-200">
-                                                    <label className="text-xs font-bold text-slate-700 mb-3 block">Guardian Details Required</label>
+
+                                            {/* Guardian Details for Child/Infant on International */}
+                                            {pax.PaxType !== 1 && isInternational && (
+                                                <div className="mb-4 bg-amber-50 p-4 rounded-xl border border-amber-200">
+                                                    <label className="text-xs font-bold text-amber-700 mb-3 block">Guardian / Parent Details</label>
                                                     <div className="grid grid-cols-1 md:grid-cols-12 gap-5 mb-4">
                                                         <div className="md:col-span-4">
-                                                            <label className="text-[10px] font-bold text-slate-500 mb-1.5 block">Guardian First Name</label>
-                                                            <input
-                                                                type="text"
-                                                                value={pax.GuardianDetails?.FirstName || ''}
-                                                                onChange={(e) => handlePaxChange(i, 'GuardianDetails', { ...(pax.GuardianDetails || {Title: 'Mr', LastName: '', PAN: '', PassportNo: ''}), FirstName: e.target.value })}
-                                                                className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm font-bold text-slate-900 outline-none"
-                                                            />
+                                                            <label className="text-[10px] font-bold text-slate-500 mb-1.5 block">First Name</label>
+                                                            <input type="text" value={pax.GuardianDetails?.FirstName || ''} onChange={(e) => handlePaxChange(i, 'GuardianDetails', { ...(pax.GuardianDetails || {Title: 'Mr', LastName: '', PAN: '', PassportNo: ''}), FirstName: e.target.value })} className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm font-bold text-slate-900 outline-none" />
                                                         </div>
                                                         <div className="md:col-span-4">
-                                                            <label className="text-[10px] font-bold text-slate-500 mb-1.5 block">Guardian Last Name</label>
-                                                            <input
-                                                                type="text"
-                                                                value={pax.GuardianDetails?.LastName || ''}
-                                                                onChange={(e) => handlePaxChange(i, 'GuardianDetails', { ...(pax.GuardianDetails || {Title: 'Mr', FirstName: '', PAN: '', PassportNo: ''}), LastName: e.target.value })}
-                                                                className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm font-bold text-slate-900 outline-none"
-                                                            />
+                                                            <label className="text-[10px] font-bold text-slate-500 mb-1.5 block">Last Name</label>
+                                                            <input type="text" value={pax.GuardianDetails?.LastName || ''} onChange={(e) => handlePaxChange(i, 'GuardianDetails', { ...(pax.GuardianDetails || {Title: 'Mr', FirstName: '', PAN: '', PassportNo: ''}), LastName: e.target.value })} className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm font-bold text-slate-900 outline-none" />
+                                                        </div>
+                                                        <div className="md:col-span-4">
+                                                            <label className="text-[10px] font-bold text-slate-500 mb-1.5 block">Passport No.</label>
+                                                            <input type="text" value={pax.GuardianDetails?.PassportNo || ''} onChange={(e) => handlePaxChange(i, 'GuardianDetails', { ...(pax.GuardianDetails || {Title: 'Mr', FirstName: '', LastName: '', PAN: ''}), PassportNo: e.target.value })} className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm font-bold text-slate-900 outline-none" />
                                                         </div>
                                                     </div>
-                                                    
-                                                    {panRequired && (
-                                                        <div className="mb-4">
-                                                            <label className="text-[10px] font-bold text-slate-500 mb-1.5 block">Guardian PAN</label>
-                                                            <input
-                                                                type="text"
-                                                                value={pax.GuardianDetails?.PAN || ''}
-                                                                onChange={(e) => handlePaxChange(i, 'GuardianDetails', { ...(pax.GuardianDetails || {Title: 'Mr', FirstName: '', LastName: '', PassportNo: ''}), PAN: e.target.value })}
-                                                                className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm font-bold text-slate-900 outline-none max-w-sm"
-                                                            />
-                                                        </div>
-                                                    )}
-                                                    {(passportRequired || fullPassportRequired) && (
-                                                        <div>
-                                                            <label className="text-[10px] font-bold text-slate-500 mb-1.5 block">Guardian Passport Number</label>
-                                                            <input
-                                                                type="text"
-                                                                value={pax.GuardianDetails?.PassportNo || ''}
-                                                                onChange={(e) => handlePaxChange(i, 'GuardianDetails', { ...(pax.GuardianDetails || {Title: 'Mr', FirstName: '', LastName: '', PAN: ''}), PassportNo: e.target.value })}
-                                                                className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm font-bold text-slate-900 outline-none max-w-sm"
-                                                            />
-                                                        </div>
-                                                    )}
                                                 </div>
                                             )}
 
-                                            {/* Adult Details */}
-                                            {pax.PaxType === 1 && (
+                                            {/* DOMESTIC: PAN for Adults only */}
+                                            {!isInternational && pax.PaxType === 1 && (
                                                 <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
-                                                    {(panRequired || !isInternational) && (
-                                                        <div className="md:col-span-6">
-                                                            <label className="text-xs font-bold text-slate-500 mb-1.5 block">PAN Number</label>
-                                                            <input
-                                                                type="text"
-                                                                value={pax.PAN || ''}
-                                                                onChange={(e) => handlePaxChange(i, 'PAN', e.target.value)}
-                                                                placeholder="e.g. ABCDE1234F"
-                                                                className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 outline-none focus:border-black transition-all"
-                                                            />
-                                                        </div>
-                                                    )}
-                                                    
-                                                    {(passportRequired || isInternational) && (
-                                                        <div className="md:col-span-12 grid grid-cols-1 md:grid-cols-12 gap-5">
-                                                            <div className="md:col-span-6">
-                                                                <label className="text-xs font-bold text-slate-500 mb-1.5 block">Passport Number</label>
-                                                                <input
-                                                                    type="text"
-                                                                    value={pax.PassportNo || ''}
-                                                                    onChange={(e) => handlePaxChange(i, 'PassportNo', e.target.value)}
-                                                                    className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 outline-none"
-                                                                />
-                                                            </div>
-                                                            <div className="md:col-span-6">
-                                                                <label className="text-xs font-bold text-slate-500 mb-1.5 block">Passport Expiry</label>
-                                                                <input
-                                                                    type="date"
-                                                                    value={pax.PassportExpiry ? pax.PassportExpiry.split('T')[0] : ''}
-                                                                    onChange={(e) => handlePaxChange(i, 'PassportExpiry', e.target.value)}
-                                                                    min={new Date().toISOString().split("T")[0]}
-                                                                    className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 outline-none"
-                                                                />
-                                                            </div>
-                                                            {fullPassportRequired && (
-                                                                <>
-                                                                    <div className="md:col-span-6">
-                                                                        <label className="text-xs font-bold text-slate-500 mb-1.5 block">Passport Issue Date</label>
-                                                                        <input
-                                                                            type="date"
-                                                                            value={pax.PassportIssueDate ? pax.PassportIssueDate.split('T')[0] : ''}
-                                                                            onChange={(e) => handlePaxChange(i, 'PassportIssueDate', e.target.value)}
-                                                                            max={new Date().toISOString().split("T")[0]}
-                                                                            className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 outline-none"
-                                                                        />
-                                                                    </div>
-                                                                    <div className="md:col-span-6">
-                                                                        <label className="text-xs font-bold text-slate-500 mb-1.5 block">Issue Country Code</label>
-                                                                        <input
-                                                                            type="text"
-                                                                            value={pax.PassportIssueCountryCode || ''}
-                                                                            onChange={(e) => handlePaxChange(i, 'PassportIssueCountryCode', e.target.value)}
-                                                                            placeholder="e.g. IN"
-                                                                            className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 outline-none"
-                                                                        />
-                                                                    </div>
-                                                                </>
-                                                            )}
-                                                        </div>
-                                                    )}
+                                                    <div className="md:col-span-6">
+                                                        <label className="text-xs font-bold text-slate-500 mb-1.5 block">
+                                                            PAN Number {panRequired && <span className="text-red-500 ml-1">*Required</span>}
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            value={pax.PAN || ''}
+                                                            onChange={(e) => handlePaxChange(i, 'PAN', e.target.value.toUpperCase())}
+                                                            placeholder="e.g. ABCDE1234F"
+                                                            maxLength={10}
+                                                            className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 outline-none focus:border-black focus:ring-1 focus:ring-black transition-all tracking-widest uppercase"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {/* INTERNATIONAL: Passport for all pax types */}
+                                            {isInternational && (
+                                                <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
+                                                    <div className="md:col-span-6">
+                                                        <label className="text-xs font-bold text-slate-500 mb-1.5 block">Passport Number <span className="text-red-500 ml-1">*Required</span></label>
+                                                        <input
+                                                            type="text"
+                                                            value={pax.PassportNo || ''}
+                                                            onChange={(e) => handlePaxChange(i, 'PassportNo', e.target.value.toUpperCase())}
+                                                            placeholder="e.g. A1234567"
+                                                            className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 outline-none focus:border-black focus:ring-1 focus:ring-black transition-all tracking-widest uppercase"
+                                                        />
+                                                    </div>
+                                                    <div className="md:col-span-6">
+                                                        <label className="text-xs font-bold text-slate-500 mb-1.5 block">Nationality</label>
+                                                        <input
+                                                            type="text"
+                                                            value={pax.PassportIssueCountryCode || ''}
+                                                            onChange={(e) => handlePaxChange(i, 'PassportIssueCountryCode', e.target.value.toUpperCase())}
+                                                            placeholder="e.g. IN"
+                                                            maxLength={2}
+                                                            className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 outline-none focus:border-black focus:ring-1 focus:ring-black transition-all uppercase"
+                                                        />
+                                                    </div>
+                                                    <div className="md:col-span-6">
+                                                        <label className="text-xs font-bold text-slate-500 mb-1.5 block">Passport Issue Date</label>
+                                                        <input
+                                                            type="date"
+                                                            value={pax.PassportIssueDate ? pax.PassportIssueDate.split('T')[0] : ''}
+                                                            onChange={(e) => handlePaxChange(i, 'PassportIssueDate', e.target.value)}
+                                                            max={new Date().toISOString().split("T")[0]}
+                                                            className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 outline-none focus:border-black focus:ring-1 focus:ring-black transition-all"
+                                                        />
+                                                    </div>
+                                                    <div className="md:col-span-6">
+                                                        <label className="text-xs font-bold text-slate-500 mb-1.5 block">Passport Expiry Date <span className="text-red-500 ml-1">*Required</span></label>
+                                                        <input
+                                                            type="date"
+                                                            value={pax.PassportExpiry ? pax.PassportExpiry.split('T')[0] : ''}
+                                                            onChange={(e) => handlePaxChange(i, 'PassportExpiry', e.target.value)}
+                                                            min={new Date().toISOString().split("T")[0]}
+                                                            className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 outline-none focus:border-black focus:ring-1 focus:ring-black transition-all"
+                                                        />
+                                                    </div>
                                                 </div>
                                             )}
                                         </div>
@@ -1551,7 +1527,7 @@ function BookPageContent() {
                             <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
                                 <div>
                                     <h3 className="font-bold text-lg text-slate-900">Select Seats</h3>
-                                    <p className="text-xs text-slate-500">{airlineCode}-{flightNumber} • {firstLeg.Origin.Airport.CityName} → {firstLeg.Destination.Airport.CityName}</p>
+                                    <p className="text-xs text-slate-500">{airlineCode}-{flightNumber} • {firstLeg.Origin?.Airport?.CityName || firstLeg.from || 'Origin'} → {firstLeg.Destination?.Airport?.CityName || firstLeg.to || 'Destination'}</p>
                                 </div>
                                 <button onClick={() => setIsSeatMapOpen(false)} className="p-2 bg-slate-200 rounded-full hover:bg-slate-300">
                                     <X size={20} />

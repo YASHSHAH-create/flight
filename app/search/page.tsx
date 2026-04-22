@@ -397,7 +397,14 @@ function SearchResultsContent() {
 
     const handleBook = (flight: any) => {
         const resultIndex = flight.resultIndex ?? (flight.raw.ResultIndex || flight.raw.resultIndex);
-        router.push(`/book?traceId=${flight.traceId}&resultIndex=${resultIndex}`);
+        const adults = searchParams.get('adults') || '1';
+        const children = searchParams.get('children') || '0';
+        const infants = searchParams.get('infants') || '0';
+        // Save to localStorage so booking page can reliably read passenger counts
+        localStorage.setItem('pax_adults', adults);
+        localStorage.setItem('pax_children', children);
+        localStorage.setItem('pax_infants', infants);
+        router.push(`/book?traceId=${flight.traceId}&resultIndex=${resultIndex}&adults=${adults}&children=${children}&infants=${infants}`);
     };
 
     const fastestFlightId = filteredFlights.length > 0 ? [...filteredFlights].sort((a, b) => a.durationMinutes - b.durationMinutes)[0].id : null;
