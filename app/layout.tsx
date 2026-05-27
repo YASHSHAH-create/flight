@@ -32,10 +32,10 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: "/favicon.ico" },
-      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
-      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+      { url: "/paymm.png", sizes: "192x192", type: "image/png" },
+      { url: "/paymm.png", sizes: "512x512", type: "image/png" },
     ],
-    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+    apple: [{ url: "/paymm.png", sizes: "180x180", type: "image/png" }],
   },
   manifest: "/manifest.json",
   title: {
@@ -129,7 +129,7 @@ export default function RootLayout({
     "@type": "TravelAgency",
     name: "Paymm",
     url: "https://paymm.in",
-    logo: "https://paymm.in/logo.png",
+    logo: "https://paymm.in/paymm.png",
     description:
       "Book cheap flight tickets with Paymm. Compare airline prices and find best deals.",
     address: {

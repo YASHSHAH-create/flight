@@ -1432,31 +1432,14 @@ function BookPageContent() {
                         </div>
 
                         <button
-                            onClick={handleBook}
-                            disabled={bookingStatus === 'booking' || bookingStatus === 'ticketing' || bookingStatus === 'success'}
-                            className={`w-full bg-black text-white py-4 rounded-xl font-bold text-sm hover:bg-slate-800 transition-colors shadow-lg shadow-black/20 transform active:scale-95 transition-transform flex items-center justify-center ${bookingStatus === 'success' ? 'bg-green-600 hover:bg-green-700' : ''}`}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                alert("Payment gateway is currently pending approval.");
+                            }}
+                            className="w-full bg-slate-400 cursor-not-allowed text-white py-4 rounded-xl font-bold text-sm flex items-center justify-center"
                         >
-                            {bookingStatus === 'idle' && (
-                                <>
-                                    <span>Continue Booking</span>
-                                    <ArrowRight size={16} className="ml-2" />
-                                </>
-                            )}
-                            {(bookingStatus === 'booking' || bookingStatus === 'ticketing') && (
-                                <span className="flex items-center">
-                                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
-                                    {bookingStatus === 'booking' ? 'Booking...' : 'Ticketing...'}
-                                </span>
-                            )}
-                            {bookingStatus === 'success' && (
-                                <span className="flex items-center">
-                                    <Check size={18} className="mr-2" />
-                                    Booking Confirmed!
-                                </span>
-                            )}
-                            {bookingStatus === 'failed' && (
-                                <span>Try Again</span>
-                            )}
+                            <span>Continue Booking</span>
+                            <ArrowRight size={16} className="ml-2" />
                         </button>
 
                         {bookingStatus === 'success' && (
@@ -1479,31 +1462,14 @@ function BookPageContent() {
                     </div>
                 </div>
                 <button
-                    onClick={handleBook}
-                    disabled={bookingStatus === 'booking' || bookingStatus === 'ticketing' || bookingStatus === 'success'}
-                    className={`bg-black text-white px-8 py-3.5 rounded-2xl font-bold text-sm shadow-lg shadow-gray-900/20 active:scale-95 transition-transform flex items-center space-x-2 ${bookingStatus === 'success' ? 'bg-green-600' : ''}`}
+                    onClick={(e) => {
+                        e.preventDefault();
+                        alert("Payment gateway is currently pending approval.");
+                    }}
+                    className="bg-slate-400 cursor-not-allowed text-white px-8 py-3.5 rounded-2xl font-bold text-sm flex items-center space-x-2"
                 >
-                    {bookingStatus === 'idle' && (
-                        <>
-                            <span>Continue</span>
-                            <ArrowRight size={16} />
-                        </>
-                    )}
-                    {(bookingStatus === 'booking' || bookingStatus === 'ticketing') && (
-                        <span className="flex items-center">
-                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
-                            {bookingStatus === 'booking' ? 'Booking...' : 'Ticketing...'}
-                        </span>
-                    )}
-                    {bookingStatus === 'success' && (
-                        <span className="flex items-center">
-                            <Check size={18} className="mr-2" />
-                            Confirmed!
-                        </span>
-                    )}
-                    {bookingStatus === 'failed' && (
-                        <span>Try Again</span>
-                    )}
+                    <span>Continue</span>
+                    <ArrowRight size={16} />
                 </button>
             </div>
 

@@ -14,17 +14,23 @@ const AboutPage = () => {
                 </header>
 
                 <div className="grid md:grid-cols-2 gap-12 items-center">
-                    <div className="space-y-6">
+                    <div className="space-y-8">
                         <section>
                             <h2 className="text-2xl font-semibold text-white mb-3">Who We Are</h2>
+                            <p className="text-slate-300 leading-relaxed mb-4">
+                                PayMM is a cutting-edge travel technology platform dedicated to providing seamless, secure, and efficient booking experiences for travelers across the globe. Born out of the desire to make travel accessible and completely transparent, we have built a robust search engine that aggregates data from hundreds of airlines, allowing you to compare and find the best fares in real-time.
+                            </p>
                             <p className="text-slate-300 leading-relaxed">
-                                PayMM is a cutting-edge travel technology platform dedicated to providing seamless, secure, and efficient booking experiences for travelers. We believe that planning a trip should be as enjoyable as the journey itself.
+                                Our dedicated team of travel experts and technologists work tirelessly to ensure that you have access to exclusive deals, accurate flight data, and a smooth booking interface. Whether you are a frequent corporate flyer or a family planning your annual vacation, Paymm caters to all your travel needs with unparalleled precision and reliability.
                             </p>
                         </section>
                         <section>
-                            <h2 className="text-2xl font-semibold text-white mb-3">Our Mission</h2>
+                            <h2 className="text-2xl font-semibold text-white mb-3">Our Mission & Vision</h2>
+                            <p className="text-slate-300 leading-relaxed mb-4">
+                                Our mission is simple: To empower travelers with the best tools, transparent pricing, and exceptional support, making travel accessible and hassle-free for everyone. We believe that planning a trip should be just as enjoyable as the journey itself, devoid of hidden charges and confusing booking processes.
+                            </p>
                             <p className="text-slate-300 leading-relaxed">
-                                To empower travelers with the best tools, transparent pricing, and exceptional support, making travel accessible and hassle-free for everyone.
+                                Our vision is to become the world’s most customer-centric travel portal, where discovering new destinations and booking affordable flights is just a click away. We are constantly innovating our technology stack to bring you personalized travel recommendations, predictive pricing models, and 24/7 customer support that truly cares about your travel experience.
                             </p>
                         </section>
                     </div>

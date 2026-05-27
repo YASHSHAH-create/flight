@@ -96,7 +96,7 @@ export default async function BlogPostPage({ params }: Props) {
                     name: 'Paymm',
                     logo: {
                         '@type': 'ImageObject',
-                        url: 'https://paymm.in/logo.png',
+                        url: 'https://paymm.in/paymm.png',
                     },
                 },
                 description: post.excerpt,

@@ -4,7 +4,6 @@ import Navbar from "./components/Navbar";
 import { MoveRight } from 'lucide-react';
 import AnimatedSection from "./components/AnimatedSection";
 import JsonLd from "./components/JsonLd";
-import SEOHiddenContent from "./components/SEOHiddenContent";
 import dynamic from 'next/dynamic';
 
 const SearchWidget = dynamic(() => import('./components/search-widget'), {
@@ -110,7 +109,50 @@ export default function Home() {
 
       {/* Mobile Bottom Navigation */}
       <BottomNav />
-      <SEOHiddenContent />
+      
+      {/* Visible SEO Content Section for AdSense Compliance */}
+      <section className="w-full bg-slate-50 py-16 px-4 md:px-[6vw] border-t border-slate-200">
+        <div className="max-w-7xl mx-auto space-y-8 text-slate-600">
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900 mb-4">Book Cheap Flights & Air Tickets Online with Paymm</h2>
+            <p className="leading-relaxed text-sm md:text-base">
+              Welcome to Paymm, your ultimate travel companion for booking the most affordable flights across India and the globe. 
+              We understand that finding the right flight at the best price can be a daunting task. That's why we have built a platform 
+              that seamlessly aggregates fares from all major airlines, ensuring you get the most competitive rates available. 
+              Whether you are planning a quick business trip, a family vacation, or a spontaneous weekend getaway, Paymm provides a 
+              hassle-free booking experience with transparent pricing and no hidden fees.
+            </p>
+          </div>
+          
+          <div>
+            <h3 className="text-xl font-bold text-slate-900 mb-3">Why Choose Paymm for Your Flight Bookings?</h3>
+            <p className="leading-relaxed text-sm md:text-base mb-4">
+              With thousands of travel portals out there, what makes Paymm stand out? It's our unwavering commitment to customer satisfaction 
+              and value. We offer exclusive discounts, instant booking confirmations, and a highly intuitive search interface. 
+              Our advanced algorithms compare prices across domestic carriers like Indigo, Air India, Vistara, SpiceJet, and Akasa Air, 
+              as well as leading international airlines. By choosing Paymm, you ensure that you are always getting the best deal on your air travel.
+            </p>
+            <ul className="list-disc pl-5 space-y-2 text-sm md:text-base">
+              <li><strong>Real-Time Fare Comparison:</strong> We check hundreds of routes instantly to find you the lowest fares.</li>
+              <li><strong>Secure Payments:</strong> Your transactions are protected with industry-leading encryption and security protocols.</li>
+              <li><strong>24/7 Customer Support:</strong> Our dedicated team is always ready to assist you with modifications, cancellations, and queries.</li>
+              <li><strong>Exclusive Offers:</strong> Enjoy seasonal sales, festive discounts, and special bank offers only available on Paymm.</li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-bold text-slate-900 mb-3">Popular Domestic & International Flight Routes</h3>
+            <p className="leading-relaxed text-sm md:text-base">
+              Explore India and the world with ease. Some of our most popular domestic routes include flights from New Delhi to Mumbai, 
+              Bangalore to Hyderabad, Chennai to Kolkata, and Pune to Delhi. If you are looking to travel abroad, check out our amazing 
+              deals on flights to Dubai, London, New York, Singapore, and Bangkok. No matter your destination, Paymm ensures your 
+              journey begins on a high note. We are constantly updating our network to provide you with more options, better connectivity, 
+              and greater flexibility. Start searching today and discover how easy travel booking can be!
+            </p>
+          </div>
+        </div>
+      </section>
+
     </div>
   );
 }

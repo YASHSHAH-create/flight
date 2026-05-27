@@ -1,5 +1,5 @@
 import React from 'react';
-import { Plane, Building, Car } from 'lucide-react';
+import { Plane } from 'lucide-react';
 
 interface TabSelectorProps {
     activeTab: string;
@@ -9,8 +9,6 @@ interface TabSelectorProps {
 const TabSelector = ({ activeTab, onTabChange }: TabSelectorProps) => {
     const tabs = [
         { id: 'flight', label: 'Flight', icon: Plane },
-        { id: 'hotel', label: 'Hotel', icon: Building },
-        { id: 'car', label: 'Rent a Car', icon: Car },
     ];
 
     return (

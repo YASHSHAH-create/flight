@@ -18,40 +18,41 @@ const nextConfig: NextConfig = {
     ],
   },
   async rewrites() {
-    const API_URL = 'https://api.paymm.in';
+    const BASE_URL = 'https://api.paymm.in';
+    const FLIGHT_API_URL = 'https://api.paymm.in/flight';
   
     return [
       {
         source: '/api/:path*',
-        destination: `${API_URL}/api/:path*`, // Proxy to Backend
+        destination: `${FLIGHT_API_URL}/api/:path*`, // Proxy to Backend
       },
       {
         source: '/auth/:path*',
-        destination: `${API_URL}/auth/:path*`, // Proxy to Backend Auth
+        destination: `${FLIGHT_API_URL}/auth/:path*`, // Proxy to Backend Auth
       },
       {
         source: '/flights/search',
-        destination: `${API_URL}/search`, // Proxy specifically to /search
+        destination: `${FLIGHT_API_URL}/search`, // Proxy specifically to /flight/search
       },
       {
         source: '/flights/fare-quote',
-        destination: `${API_URL}/flights/fare-quote`,
+        destination: `${FLIGHT_API_URL}/flights/fare-quote`,
       },
       {
         source: '/flights/fare-rule',
-        destination: `${API_URL}/flights/fare-rule`,
+        destination: `${FLIGHT_API_URL}/flights/fare-rule`,
       },
       {
         source: '/flights/book',
-        destination: `${API_URL}/flights/book`,
+        destination: `${FLIGHT_API_URL}/flights/book`,
       },
       {
         source: '/flights/ticket',
-        destination: `${API_URL}/flights/ticket`,
+        destination: `${FLIGHT_API_URL}/flights/ticket`,
       },
       {
         source: '/flights/ssr',
-        destination: `${API_URL}/flights/ssr`,
+        destination: `${FLIGHT_API_URL}/flights/ssr`,
       },
     ];
   },

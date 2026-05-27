@@ -266,12 +266,14 @@ function SearchResultsContent() {
                             }
                         }
 
-                        price = Math.round(res.price.total);
-                        isLCC = res.isLCC;
-                        isRefundable = res.isRefundable;
+                        const fare = res.fares && res.fares.length > 0 ? res.fares[0] : null;
+
+                        price = fare ? Math.round(fare.price.total) : 0;
+                        isLCC = fare ? fare.isLCC : false;
+                        isRefundable = fare ? fare.isRefundable : false;
                         seatsLeft = 9;
 
-                        resultIndex = res.resultIndex;
+                        resultIndex = fare ? fare.resultIndex : null;
                         traceIdValue = res.searchId;
                     }
                     // OLD API FORMAT

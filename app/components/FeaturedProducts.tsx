@@ -4,6 +4,8 @@ import { Heart, Tag, Plane, Search } from 'lucide-react';
 
 import Image from 'next/image';
 
+import { useRouter } from 'next/navigation';
+
 const products = [
     {
         id: 1,
@@ -40,6 +42,19 @@ const products = [
 ];
 
 const FeaturedProducts = () => {
+    const router = useRouter();
+
+    const handleSearch = (destinationCode: string) => {
+        const date = new Date();
+        date.setDate(date.getDate() + 7); // Book 7 days in advance
+        const d = date.getDate().toString().padStart(2, '0');
+        const m = (date.getMonth() + 1).toString().padStart(2, '0');
+        const y = date.getFullYear();
+        const dateParam = `${d}${m}${y}`;
+        
+        router.push(`/search?from=DEL&to=${destinationCode}&date=${dateParam}&adults=1&children=0&infants=0&class=e&journeyType=1`);
+    };
+
     return (
         <section className="py-8 px-0 md:px-8 lg:px-16 w-full max-w-[1920px] mx-auto">
             <div className="px-4 md:px-0">
@@ -111,7 +126,7 @@ const FeaturedProducts = () => {
                             </div>
 
                             <div className="flex items-center gap-2 w-full mt-auto">
-                                <button className="flex-1 bg-black text-white py-2.5 md:py-3 rounded-xl font-bold text-sm hover:bg-slate-800 transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2">
+                                <button onClick={() => handleSearch(product.code)} className="flex-1 bg-black text-white py-2.5 md:py-3 rounded-xl font-bold text-sm hover:bg-slate-800 transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2">
                                     <Search size={16} />
                                     <span>Search Flight</span>
                                 </button>

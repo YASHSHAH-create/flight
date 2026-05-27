@@ -1,5 +1,5 @@
 import React from 'react';
-import SEOHiddenContent from '@/app/components/SEOHiddenContent';
+import SEOContentBlock from '@/app/components/SEOContentBlock';
 
 export default function TestSEOPage() {
     return (
@@ -11,7 +11,7 @@ export default function TestSEOPage() {
             </p>
 
             <div className="border border-slate-300 p-4 rounded shadow-sm [&>div]:!static [&>div]:!w-auto [&>div]:!h-auto [&>div]:!m-0 [&>div]:!clip-auto [&>div]:!whitespace-normal [&>div]:!overflow-visible">
-                <SEOHiddenContent />
+                <SEOContentBlock origin="Delhi" destination="Mumbai" />
             </div>
         </div>
     );

@@ -23,7 +23,7 @@ export default function JsonLd() {
                 "url": "https://paymm.in",
                 "logo": {
                     "@type": "ImageObject",
-                    "url": "https://paymm.in/logo.png"
+                    "url": "https://paymm.in/paymm.png"
                 },
                 "sameAs": [
                     "https://twitter.com/paymm",
