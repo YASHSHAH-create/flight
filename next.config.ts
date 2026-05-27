@@ -17,6 +17,20 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/blogs',
+        destination: '/blog',
+        permanent: true,
+      },
+      {
+        source: '/blogs/:path*',
+        destination: '/blog/:path*',
+        permanent: true,
+      },
+    ];
+  },
   async rewrites() {
     const BASE_URL = 'https://api.paymm.in';
     const FLIGHT_API_URL = 'https://api.paymm.in/flight';

@@ -68,7 +68,6 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: "https://paymm.in",
     languages: {
       "en-US": "https://paymm.in/en",
       "hi-IN": "https://paymm.in/hi",
@@ -126,7 +125,7 @@ export default function RootLayout({
 }>) {
   const structuredData = {
     "@context": "https://schema.org",
-    "@type": "TravelAgency",
+    "@type": ["Organization", "LocalBusiness", "TravelAgency"],
     name: "Paymm",
     url: "https://paymm.in",
     logo: "https://paymm.in/paymm.png",
@@ -134,6 +133,9 @@ export default function RootLayout({
       "Book cheap flight tickets with Paymm. Compare airline prices and find best deals.",
     address: {
       "@type": "PostalAddress",
+      streetAddress: "123 Travel Space, Tech Park",
+      addressLocality: "New Delhi",
+      postalCode: "110001",
       addressCountry: "IN",
     },
     contactPoint: {
@@ -179,6 +181,12 @@ export default function RootLayout({
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5030260303252769"
           crossOrigin="anonymous"
         />
+
+        {/* Schema.org Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
@@ -193,13 +201,7 @@ export default function RootLayout({
           />
         </noscript>
 
-        {/* Schema.org Structured Data */}
-        <Script
-          id="schema-org"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-          strategy="beforeInteractive"
-        />
+
 
         {/* Google Tag Manager */}
         <Script id="google-tag-manager" strategy="afterInteractive">

@@ -121,18 +121,34 @@ const Footer = () => {
                                     <a href="tel:+919343300271" className="text-slate-200 hover:text-white transition-colors text-sm">+91 9343300271</a>
                                 </div>
                             </li>
+                            <li className="flex items-start space-x-3">
+                                <div className="p-2 bg-slate-800 rounded-lg text-purple-400">
+                                    <MdLocationOn />
+                                </div>
+                                <div>
+                                    <p className="text-xs text-slate-500">Address</p>
+                                    <span className="text-slate-200 text-sm">123 Travel Space, Tech Park<br/>New Delhi, IN 110001</span>
+                                </div>
+                            </li>
                         </ul>
 
                         <div>
                             <p className="text-sm text-slate-400 mb-3">Follow us</p>
                             <div className="flex space-x-3">
-                                {[FaFacebook, FaTwitter, FaInstagram, FaLinkedin].map((Icon, index) => (
+                                {[
+                                    { icon: FaFacebook, url: "https://facebook.com/paymm" },
+                                    { icon: FaTwitter, url: "https://twitter.com/paymm_in" },
+                                    { icon: FaInstagram, url: "https://instagram.com/paymm" },
+                                    { icon: FaLinkedin, url: "https://linkedin.com/company/paymm" }
+                                ].map((item, index) => (
                                     <a
                                         key={index}
-                                        href="#"
+                                        href={item.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
                                         className="w-9 h-9 flex items-center justify-center rounded-lg bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white transition-all transform hover:-translate-y-1"
                                     >
-                                        <Icon />
+                                        <item.icon />
                                     </a>
                                 ))}
                             </div>

@@ -65,7 +65,43 @@ const AboutPage = () => {
                     </div>
                 </div>
 
-                <section className="bg-slate-900/50 p-8 rounded-xl border border-slate-800 mt-12">
+                <section className="mt-16">
+                    <h2 className="text-3xl font-bold text-white mb-8 text-center">Our Leadership Team</h2>
+                    <div className="grid md:grid-cols-3 gap-8">
+                        <div className="bg-slate-900/50 p-6 rounded-xl border border-slate-800 text-center">
+                            <div className="w-24 h-24 bg-slate-700 rounded-full mx-auto mb-4 overflow-hidden flex items-center justify-center text-3xl font-bold text-slate-400">
+                                JD
+                            </div>
+                            <h3 className="text-xl font-bold text-white mb-1">Jane Doe</h3>
+                            <p className="text-blue-400 mb-3 text-sm">Chief Executive Officer</p>
+                            <p className="text-slate-400 text-sm">
+                                With over 15 years in the travel tech industry, Jane leads Paymm's vision to simplify flight bookings globally.
+                            </p>
+                        </div>
+                        <div className="bg-slate-900/50 p-6 rounded-xl border border-slate-800 text-center">
+                            <div className="w-24 h-24 bg-slate-700 rounded-full mx-auto mb-4 overflow-hidden flex items-center justify-center text-3xl font-bold text-slate-400">
+                                JS
+                            </div>
+                            <h3 className="text-xl font-bold text-white mb-1">John Smith</h3>
+                            <p className="text-blue-400 mb-3 text-sm">Chief Technology Officer</p>
+                            <p className="text-slate-400 text-sm">
+                                John spearheads our engineering team, ensuring that Paymm remains lightning fast, secure, and scalable.
+                            </p>
+                        </div>
+                        <div className="bg-slate-900/50 p-6 rounded-xl border border-slate-800 text-center">
+                            <div className="w-24 h-24 bg-slate-700 rounded-full mx-auto mb-4 overflow-hidden flex items-center justify-center text-3xl font-bold text-slate-400">
+                                AP
+                            </div>
+                            <h3 className="text-xl font-bold text-white mb-1">Anjali Patel</h3>
+                            <p className="text-blue-400 mb-3 text-sm">Head of Customer Experience</p>
+                            <p className="text-slate-400 text-sm">
+                                Anjali is dedicated to providing our travelers with exceptional 24/7 support and ensuring every journey is smooth.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <section className="bg-slate-900/50 p-8 rounded-xl border border-slate-800 mt-16">
                     <h2 className="text-2xl font-semibold text-white mb-6 text-center">Company Information</h2>
                     <div className="grid md:grid-cols-2 gap-8 text-center md:text-left">
                         <div>
