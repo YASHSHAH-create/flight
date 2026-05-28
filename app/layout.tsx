@@ -176,10 +176,11 @@ export default function RootLayout({
         />
 
         {/* Google AdSense */}
-        <script
+        <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5030260303252769"
           crossOrigin="anonymous"
+          strategy="afterInteractive"
         />
 
         {/* Schema.org Structured Data */}
