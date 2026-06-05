@@ -19,7 +19,7 @@ const TermsPage = () => {
                         Welcome to PayMM. These Terms of Use ("Terms") govern your use of our website, mobile application, and services (collectively, the "Platform"). By accessing or using our Platform, you agree to be bound by these Terms. If you do not agree to these Terms, please do not use our Platform.
                     </p>
                     <p>
-                        The Platform is owned and operated by PayMM, having its GST registration number <strong>10AAMCP7167L1Z1</strong>.
+                        This platform is owned by Paymm Advisory Private Limited, having its GST registration number <strong>10AAMCP7167L1Z1</strong>.
                     </p>
                 </section>
 

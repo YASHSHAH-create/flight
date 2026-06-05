@@ -38,7 +38,7 @@ const RefundPage = () => {
                 <section className="space-y-4">
                     <h2 className="text-2xl font-semibold text-white">3. Processing Time</h2>
                     <p>
-                        Once the refund is approved by the service provider, it will be processed to your original payment method. This usually takes 5-7 business days, but in some cases, it may take longer depending on your bank's processing timelines.
+                        For approved refunds, the amount will be credited into the source account within 6-7 business days.
                     </p>
                 </section>
 
