@@ -78,57 +78,87 @@ export default async function BlogPostPage({ params }: Props) {
         relatedPosts.push(...others);
     }
 
+    const graph: any[] = [
+        {
+            '@type': 'BlogPosting',
+            headline: post.title,
+            image: [post.imageUrl],
+            datePublished: post.date,
+            dateModified: post.date,
+            author: [{
+                '@type': 'Person',
+                name: post.author,
+            }],
+            publisher: {
+                '@type': 'Organization',
+                name: 'Paymm',
+                logo: {
+                    '@type': 'ImageObject',
+                    url: 'https://paymm.in/paymm.png',
+                },
+            },
+            description: post.excerpt,
+            mainEntityOfPage: {
+                '@type': 'WebPage',
+                '@id': `https://paymm.in/blog/${post.slug}`,
+            }
+        },
+        {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+                {
+                    '@type': 'ListItem',
+                    position: 1,
+                    name: 'Home',
+                    item: 'https://paymm.in'
+                },
+                {
+                    '@type': 'ListItem',
+                    position: 2,
+                    name: 'Blog',
+                    item: 'https://paymm.in/blog'
+                },
+                {
+                    '@type': 'ListItem',
+                    position: 3,
+                    name: post.title,
+                    item: `https://paymm.in/blog/${post.slug}`
+                }
+            ]
+        }
+    ];
+
+    if (post.slug === 'cheap-international-flights-from-india-guide') {
+        graph.push({
+            '@type': 'HowTo',
+            name: 'How to Find Cheap International Flights from India',
+            description: 'Step-by-step guide to finding and booking cheap international flights from India using smart booking hacks.',
+            step: [
+                {
+                    '@type': 'HowToStep',
+                    name: 'Book in Advance, But Not Too Early',
+                    text: 'The sweet spot for international flights is usually 3-4 months before departure. Booking too early can sometimes be as expensive as booking last minute.',
+                    url: 'https://paymm.in/blog/cheap-international-flights-from-india-guide#step1'
+                },
+                {
+                    '@type': 'HowToStep',
+                    name: 'Use Flight Comparison Tools',
+                    text: 'Use platforms like Paymm to compare prices across multiple airlines instantly. Always check for hidden costs and baggage fees before booking.',
+                    url: 'https://paymm.in/blog/cheap-international-flights-from-india-guide#step2'
+                },
+                {
+                    '@type': 'HowToStep',
+                    name: 'Be Flexible with Dates',
+                    text: 'Flying mid-week (typically Tuesday or Wednesday) is often significantly cheaper than flying on weekends. Use a flexible date search calendar.',
+                    url: 'https://paymm.in/blog/cheap-international-flights-from-india-guide#step3'
+                }
+            ]
+        });
+    }
+
     const jsonLd = {
         '@context': 'https://schema.org',
-        '@graph': [
-            {
-                '@type': 'BlogPosting',
-                headline: post.title,
-                image: [post.imageUrl],
-                datePublished: post.date,
-                dateModified: post.date,
-                author: [{
-                    '@type': 'Person',
-                    name: post.author,
-                }],
-                publisher: {
-                    '@type': 'Organization',
-                    name: 'Paymm',
-                    logo: {
-                        '@type': 'ImageObject',
-                        url: 'https://paymm.in/paymm.png',
-                    },
-                },
-                description: post.excerpt,
-                mainEntityOfPage: {
-                    '@type': 'WebPage',
-                    '@id': `https://paymm.in/blog/${post.slug}`,
-                }
-            },
-            {
-                '@type': 'BreadcrumbList',
-                itemListElement: [
-                    {
-                        '@type': 'ListItem',
-                        position: 1,
-                        name: 'Home',
-                        item: 'https://paymm.in'
-                    },
-                    {
-                        '@type': 'ListItem',
-                        position: 2,
-                        name: 'Blog',
-                        item: 'https://paymm.in/blog'
-                    },
-                    {
-                        '@type': 'ListItem',
-                        position: 3,
-                        name: post.title,
-                        item: `https://paymm.in/blog/${post.slug}`
-                    }
-                ]
-            }
-        ]
+        '@graph': graph
     };
 
     return (

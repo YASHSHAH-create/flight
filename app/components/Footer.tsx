@@ -1,7 +1,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaPaperPlane, FaCcVisa, FaCcMastercard, FaCcAmex, FaPaypal } from 'react-icons/fa';
+import { FaInstagram, FaLinkedin, FaCcVisa, FaCcMastercard, FaCcAmex, FaPaypal } from 'react-icons/fa';
 import { MdEmail, MdPhone, MdLocationOn, MdVerifiedUser } from 'react-icons/md';
 
 const Footer = () => {
@@ -136,10 +136,8 @@ const Footer = () => {
                             <p className="text-sm text-slate-400 mb-3">Follow us</p>
                             <div className="flex space-x-3">
                                 {[
-                                    { icon: FaFacebook, url: "https://facebook.com/paymm" },
-                                    { icon: FaTwitter, url: "https://twitter.com/paymm_in" },
-                                    { icon: FaInstagram, url: "https://instagram.com/paymm" },
-                                    { icon: FaLinkedin, url: "https://linkedin.com/company/paymm" }
+                                    { icon: FaInstagram, url: "https://www.instagram.com/paymm_bookings/" },
+                                    { icon: FaLinkedin, url: "https://www.linkedin.com/company/paymm/" }
                                 ].map((item, index) => (
                                     <a
                                         key={index}

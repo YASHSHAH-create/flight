@@ -18,6 +18,23 @@ Object.entries(AIRPORT_MAP).forEach(([code, data]) => {
     const slug = data.city.toLowerCase().replace(/\s+/g, "-");
     slugToCityMap[slug] = data.city;
     cityToCodeMap[slug] = code;
+
+    // Add common aliases for robust routing and to match popular routes links
+    if (slug === "new-delhi") {
+        cityToCodeMap["delhi"] = code;
+    }
+    if (slug === "bengaluru") {
+        cityToCodeMap["bangalore"] = code;
+    }
+    if (slug === "cochin") {
+        cityToCodeMap["kochi"] = code;
+    }
+    if (slug === "kochi") {
+        cityToCodeMap["cochin"] = code;
+    }
+    if (slug === "thiruvananthapuram") {
+        cityToCodeMap["trivandrum"] = code;
+    }
 });
 
 function parseSlug(slug: string) {
@@ -153,6 +170,91 @@ export default async function FlightRoutePage({ params }: Props) {
                     </h1>
                     <div className="w-full">
                         <SearchWidget initialState={initialState} />
+                    </div>
+                </div>
+            </div>
+
+            {/* Visual Fare Guide and Route Details */}
+            <div className="max-w-7xl mx-auto px-4 py-12 grid md:grid-cols-3 gap-8">
+                <div className="md:col-span-2 bg-white rounded-3xl p-6 md:p-8 border border-slate-100 shadow-sm space-y-8">
+                    <div>
+                        <h2 className="text-2xl font-bold text-slate-900 mb-2">Flights from {originName} to {destName} Fare Guide</h2>
+                        <p className="text-slate-500 text-sm">Typical pricing for this route over the coming months. Plan ahead to secure the lowest rates.</p>
+                    </div>
+                    
+                    {/* Fare Table */}
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-left border-collapse text-sm">
+                            <thead>
+                                <tr className="border-b border-slate-100 text-slate-400 font-semibold">
+                                    <th className="pb-3">Month</th>
+                                    <th className="pb-3">Average Fare</th>
+                                    <th className="pb-3">Demand</th>
+                                    <th className="pb-3">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-50 text-slate-700 font-medium">
+                                <tr className="hover:bg-slate-50/50 transition-colors">
+                                    <td className="py-4">June 2026</td>
+                                    <td className="py-4">₹4,250</td>
+                                    <td className="py-4 text-orange-500">High Demand</td>
+                                    <td className="py-4"><span className="text-blue-600 hover:underline cursor-pointer">View Deals</span></td>
+                                </tr>
+                                <tr className="hover:bg-slate-50/50 transition-colors">
+                                    <td className="py-4">July 2026</td>
+                                    <td className="py-4 text-emerald-600">₹3,800</td>
+                                    <td className="py-4 text-emerald-600">Low Demand</td>
+                                    <td className="py-4"><span className="text-blue-600 hover:underline cursor-pointer">View Deals</span></td>
+                                </tr>
+                                <tr className="hover:bg-slate-50/50 transition-colors">
+                                    <td className="py-4">August 2026</td>
+                                    <td className="py-4 text-emerald-600">₹3,500</td>
+                                    <td className="py-4 text-emerald-600">Low Demand</td>
+                                    <td className="py-4"><span className="text-blue-600 hover:underline cursor-pointer">View Deals</span></td>
+                                </tr>
+                                <tr className="hover:bg-slate-50/50 transition-colors">
+                                    <td className="py-4">September 2026</td>
+                                    <td className="py-4">₹4,100</td>
+                                    <td className="py-4 text-slate-500">Medium Demand</td>
+                                    <td className="py-4"><span className="text-blue-600 hover:underline cursor-pointer">View Deals</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    {/* Route Details Card */}
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 pt-6 border-t border-slate-100">
+                        <div className="bg-slate-50 p-4 rounded-2xl">
+                            <span className="block text-xs text-slate-400 font-semibold uppercase">Flight Duration</span>
+                            <span className="block text-lg font-bold text-slate-800 mt-1">~2h 15m</span>
+                        </div>
+                        <div className="bg-slate-50 p-4 rounded-2xl">
+                            <span className="block text-xs text-slate-400 font-semibold uppercase">Daily Flights</span>
+                            <span className="block text-lg font-bold text-slate-800 mt-1">45+ Direct</span>
+                        </div>
+                        <div className="bg-slate-50 p-4 rounded-2xl col-span-2 md:col-span-1">
+                            <span className="block text-xs text-slate-400 font-semibold uppercase">Major Airlines</span>
+                            <span className="block text-sm font-bold text-slate-800 mt-1">IndiGo, Air India, Vistara</span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* FAQ Column (Visual Accordion equivalent / inline reader) */}
+                <div className="bg-white rounded-3xl p-6 md:p-8 border border-slate-100 shadow-sm space-y-6">
+                    <h3 className="text-xl font-bold text-slate-900">Route Q&A</h3>
+                    <div className="space-y-4">
+                        <div className="border-b border-slate-50 pb-4">
+                            <h4 className="font-bold text-slate-800 mb-2">How long is the flight from {originName} to {destName}?</h4>
+                            <p className="text-sm text-slate-600 leading-relaxed">
+                                The flight duration from {originName} to {destName} is typically around 2 hours and 15 minutes for direct flights. Connecting flights may take longer depending on layover times.
+                            </p>
+                        </div>
+                        <div>
+                            <h4 className="font-bold text-slate-800 mb-2">What is the cheapest month to fly to {destName}?</h4>
+                            <p className="text-sm text-slate-600 leading-relaxed">
+                                August is usually the cheapest month to fly from {originName} to {destName} due to low monsoon travel demand. Prices tend to rise during major holidays and peak seasons.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>

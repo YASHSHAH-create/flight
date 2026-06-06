@@ -1,8 +1,19 @@
 import React from 'react';
+import Navbar from "@/app/components/Navbar";
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: "About Us | Paymm – Learn About Our Flight Booking Services",
+    description: "Learn more about Paymm, a leading travel technology platform in India. Our mission is to simplify flight ticket booking with transparent pricing, citable rates, and 24/7 customer support.",
+    alternates: {
+        canonical: "https://paymm.in/about"
+    }
+};
 
 const AboutPage = () => {
     return (
-        <div className="min-h-screen bg-slate-950 text-slate-200 py-20 px-4 md:px-8">
+        <div className="min-h-screen bg-slate-950 text-slate-200 pt-32 pb-20 px-4 md:px-8">
+            <Navbar />
             <div className="max-w-4xl mx-auto space-y-8">
                 <header className="border-b border-slate-800 pb-8 text-center">
                     <h1 className="text-4xl md:text-6xl font-extrabold bg-gradient-to-r from-blue-400 via-purple-400 to-violet-400 bg-clip-text text-transparent mb-6">

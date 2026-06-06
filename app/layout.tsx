@@ -113,7 +113,6 @@ export const metadata: Metadata = {
   category: "Travel",
 };
 
-import SmoothScrolling from "./components/SmoothScrolling";
 import { AuthProvider } from "@/context/AuthContext";
 import Footer from "./components/Footer";
 import Script from "next/script";
@@ -144,9 +143,8 @@ export default function RootLayout({
       availableLanguage: ["English", "Hindi"],
     },
     sameAs: [
-      "https://twitter.com/paymm_in",
-      "https://facebook.com/paymm",
-      "https://instagram.com/paymm",
+      "https://www.instagram.com/paymm_bookings/",
+      "https://www.linkedin.com/company/paymm/",
     ],
     potentialAction: {
       "@type": "SearchAction",
@@ -232,7 +230,6 @@ export default function RootLayout({
           `}
         </Script>
 
-        <SmoothScrolling />
         <AuthProvider>{children}</AuthProvider>
         <Footer />
         <SpeedInsights />

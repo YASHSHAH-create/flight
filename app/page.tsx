@@ -16,7 +16,6 @@ const PopularRoutes = dynamic(() => import('./components/PopularRoutes'));
 const LatestBlogPosts = dynamic(() => import('./components/LatestBlogPosts'));
 const FAQSection = dynamic(() => import('./components/FAQSection'));
 const BottomNav = dynamic(() => import('./components/ClientBottomNav'));
-const LottieAnimation = dynamic(() => import('./components/LottieAnimation'));
 
 
 export default function Home() {
@@ -28,22 +27,38 @@ export default function Home() {
       <Navbar />
 
       {/* Frame 1: Hero Section */}
-      <section className="relative min-h-[100svh] w-full flex flex-col overflow-x-hidden md:overflow-visible bg-gradient-to-b from-blue-50 via-slate-50 to-white">
-        {/* Background Image - Fixed & Stable (Desktop Only) */}
-        <div className="hidden md:block fixed inset-0 z-0 h-[120vh] w-full pointer-events-none">
-          <Image
-            src="/background.jpg"
-            alt="Background"
-            fill
-            className="object-cover object-center"
-            priority
-            sizes="100vw"
-            quality={90}
-          />
-        </div>
+      <section className="relative w-full flex flex-col overflow-x-hidden md:overflow-visible bg-gradient-to-b from-blue-50/40 via-slate-50 to-white">
+        <style dangerouslySetInnerHTML={{__html: `
+          @keyframes float-slow {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-20px, 15px) scale(1.08); }
+          }
+          @keyframes float-reverse {
+            0%, 100% { transform: translate(0, 0) scale(1.05); }
+            50% { transform: translate(20px, -15px) scale(0.92); }
+          }
+        `}} />
 
-        <div className="relative z-10 flex-1 flex flex-col justify-start pt-32 md:justify-start md:pt-44 pb-32 items-center px-4 md:px-[6vw] max-w-7xl mx-auto w-full h-full gap-4 md:gap-8 pointer-events-none md:pointer-events-auto">
-          <div className="max-w-[90vw] md:max-w-3xl animate-subtle-up pointer-events-auto flex flex-col items-center text-center">
+        {/* Subtle design grid texture (dots) */}
+        <div 
+          className="absolute inset-0 opacity-60 pointer-events-none z-0" 
+          style={{ 
+            backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px)', 
+            backgroundSize: '24px 24px' 
+          }} 
+        />
+        
+        {/* Soft visual glow */}
+        <div className="absolute top-12 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-blue-100/40 rounded-full blur-[100px] pointer-events-none z-0" />
+
+        {/* Animated Background decorative orbs */}
+        <div className="absolute top-1/4 left-1/4 w-80 h-80 bg-blue-200/20 rounded-full blur-3xl pointer-events-none z-0"
+             style={{ animation: 'float-slow 12s ease-in-out infinite' }} />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-200/15 rounded-full blur-3xl pointer-events-none z-0"
+             style={{ animation: 'float-reverse 15s ease-in-out infinite' }} />
+
+        <div className="relative z-10 flex-1 flex flex-col justify-start pt-32 md:pt-40 pb-24 items-center px-4 md:px-[6vw] max-w-7xl mx-auto w-full h-full gap-4 md:gap-8 pointer-events-none md:pointer-events-auto">
+          <div className="max-w-[90vw] md:max-w-3xl pointer-events-auto flex flex-col items-center text-center">
 
             <div className="mb-4 block">
               <Link href="/packages">
@@ -79,22 +94,15 @@ export default function Home() {
           <LatestBlogPosts />
           <FAQSection />
 
-          <div className="relative overflow-hidden py-[5vh] px-[6vw] bg-slate-900 text-white mx-[4vw] md:mx-16 rounded-[clamp(1.5rem,3vw,2rem)] shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8 md:gap-16">
-            <div className="relative z-10 flex-1 flex flex-col items-center md:items-start text-center md:text-left">
-              <h2 className="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-[1.5vh] leading-tight">Ready to start your journey?</h2>
-              <p className="mb-[3vh] text-slate-400 text-[clamp(0.875rem,1.2vw,1.1rem)] max-w-md">Join millions of travelers booking cheap flights with Paymm.</p>
+          <div className="relative overflow-hidden py-16 px-8 bg-slate-900 text-white mx-[4vw] md:mx-16 rounded-[2rem] shadow-xl flex flex-col items-center text-center w-full max-w-7xl">
+            <div className="relative z-10 max-w-2xl flex flex-col items-center">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 leading-tight">Ready to start your journey?</h2>
+              <p className="mb-8 text-slate-400 max-w-md">Join millions of travelers booking cheap flights with Paymm.</p>
               <Link href="/search">
-                <button className="bg-white text-black px-[8vw] md:px-10 py-[1.5vh] md:py-4 rounded-full font-bold text-[clamp(0.875rem,1.2vw,1rem)] hover:bg-slate-200 transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-white/10">
+                <button className="bg-white text-black px-10 py-4 rounded-full font-bold text-sm hover:bg-slate-200 transition-all shadow-lg active:scale-95">
                   Get Started
                 </button>
               </Link>
-            </div>
-
-            <div className="relative z-10 w-full max-w-[250px] md:max-w-[350px]">
-              <LottieAnimation
-                url="https://lottie.host/5a07284b-0402-4545-9118-d67280780287/1B0q8X7J5j.json"
-                className="w-full h-auto drop-shadow-2xl"
-              />
             </div>
 
             {/* Decorative Background Elements */}

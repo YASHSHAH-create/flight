@@ -3,7 +3,6 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 
 const routes = [
     {
@@ -59,13 +58,9 @@ const PopularRoutes = () => {
             <h2 className="text-2xl font-bold mb-8 text-slate-900">Popular Flight Routes</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {routes.map((route, index) => (
-                    <motion.div
+                {routes.map((route) => (
+                    <div
                         key={route.city}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.4, delay: index * 0.05 }}
                         className="flex items-center gap-4 p-4 rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition-all bg-white group cursor-pointer"
                     >
                         {/* City Thumbnail */}
@@ -101,7 +96,7 @@ const PopularRoutes = () => {
                                 ))}
                             </div>
                         </div>
-                    </motion.div>
+                    </div>
                 ))}
             </div>
         </section>

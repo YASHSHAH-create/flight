@@ -54,4 +54,5 @@ export const AIRPORT_MAP: Record<string, { city: string; name: string }> = {
     MLE: { city: "Male", name: "Velana International Airport" },
     DPS: { city: "Bali", name: "Ngurah Rai International Airport" },
     HKT: { city: "Phuket", name: "Phuket International Airport" },
+    IXM: { city: "Madurai", name: "Madurai Airport" },
 };

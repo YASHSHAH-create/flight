@@ -4,7 +4,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { BLOG_POSTS } from '../lib/blog-data';
 import { ArrowRight, Calendar, Clock } from 'lucide-react';
-import { motion } from 'framer-motion';
 
 const LatestBlogPosts = () => {
     // Get latest 3 posts
@@ -26,13 +25,9 @@ const LatestBlogPosts = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {latestPosts.map((post, index) => (
-                    <motion.div
+                {latestPosts.map((post) => (
+                    <div
                         key={post.slug}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: index * 0.1 }}
                         className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 flex flex-col h-full"
                     >
                         <div className="relative h-64 overflow-hidden">
@@ -78,7 +73,7 @@ const LatestBlogPosts = () => {
                                 </Link>
                             </div>
                         </div>
-                    </motion.div>
+                    </div>
                 ))}
             </div>
         </section>
