@@ -7,13 +7,23 @@ export async function proxy(request: NextRequest) {
   if (url.pathname === '/') {
     const acceptHeader = request.headers.get('accept') || '';
     const contentTypeHeader = request.headers.get('content-type') || '';
+    const userAgent = (request.headers.get('user-agent') || '').toLowerCase();
 
-    if (
+    const isMarkdownHeader =
       acceptHeader.includes('text/markdown') ||
       acceptHeader.includes('text/x-markdown') ||
       contentTypeHeader.includes('text/markdown') ||
-      contentTypeHeader.includes('text/x-markdown')
-    ) {
+      contentTypeHeader.includes('text/x-markdown');
+
+    const isBotOrCrawler =
+      userAgent.includes('bot') ||
+      userAgent.includes('crawler') ||
+      userAgent.includes('spider') ||
+      userAgent.includes('crawl') ||
+      userAgent.includes('google-extended') ||
+      userAgent.includes('openai');
+
+    if (isMarkdownHeader || isBotOrCrawler) {
       try {
         // Fetch public/llms.txt using the incoming request's base URL
         const response = await fetch(new URL('/llms.txt', request.url));
@@ -27,7 +37,7 @@ export async function proxy(request: NextRequest) {
           });
         }
       } catch (error) {
-        console.error('Error fetching llms.txt in middleware:', error);
+        console.error('Error fetching llms.txt in proxy:', error);
       }
     }
   }
@@ -38,3 +48,5 @@ export async function proxy(request: NextRequest) {
 export const config = {
   matcher: ['/'],
 };
+
+

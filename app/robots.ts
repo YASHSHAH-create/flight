@@ -7,10 +7,6 @@ export default function robots(): MetadataRoute.Robots {
                 userAgent: '*',
                 allow: '/',
                 disallow: ['/admin/', '/api/', '/_next/'],
-            },
-            {
-                userAgent: ['GPTBot', 'ChatGPT-User', 'PerplexityBot', 'ClaudeBot', 'Google-Extended'],
-                allow: '/',
             }
         ],
         sitemap: 'https://paymm.in/sitemap.xml',
