@@ -39,6 +39,14 @@ export async function proxy(request: NextRequest) {
       } catch (error) {
         console.error('Error fetching llms.txt in proxy:', error);
       }
+    } else {
+      // Standard browser request to homepage - add Link headers
+      const response = NextResponse.next();
+      response.headers.set(
+        'Link',
+        '</.well-known/api-catalog>; rel="api-catalog", </auth.md>; rel="auth.md", </.well-known/agent-skills/index.json>; rel="agent-skills", </.well-known/oauth-protected-resource>; rel="oauth-protected-resource"'
+      );
+      return response;
     }
   }
 

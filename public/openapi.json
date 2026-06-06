@@ -1,0 +1,30 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Paymm API",
+    "version": "1.0.0",
+    "description": "API for flight booking and queries."
+  },
+  "paths": {
+    "/api/premium-data": {
+      "get": {
+        "summary": "Retrieve premium flight insights and analysis",
+        "description": "Requires machine-native HTTP payments via MPP or x402.",
+        "x-payment-info": {
+          "intent": "charge",
+          "method": "tempo",
+          "amount": "0.01",
+          "currency": "USD"
+        },
+        "responses": {
+          "200": {
+            "description": "Successful retrieval of premium insights"
+          },
+          "402": {
+            "description": "Payment Required"
+          }
+        }
+      }
+    }
+  }
+}

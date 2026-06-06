@@ -116,6 +116,7 @@ export const metadata: Metadata = {
 import { AuthProvider } from "@/context/AuthContext";
 import Footer from "./components/Footer";
 import Script from "next/script";
+import AgentCapabilities from "./components/AgentCapabilities";
 
 export default function RootLayout({
   children,
@@ -172,6 +173,12 @@ export default function RootLayout({
           rel="dns-prefetch"
           href="https://pagead2.googlesyndication.com"
         />
+
+        {/* AI Agent Discovery link tags */}
+        <link rel="api-catalog" href="/.well-known/api-catalog" type="application/linkset+json" />
+        <link rel="auth.md" href="/auth.md" type="text/markdown" />
+        <link rel="agent-skills" href="/.well-known/agent-skills/index.json" type="application/json" />
+        <link rel="oauth-protected-resource" href="/.well-known/oauth-protected-resource" type="application/json" />
 
         {/* Google AdSense */}
         <Script
@@ -230,7 +237,10 @@ export default function RootLayout({
           `}
         </Script>
 
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          {children}
+          <AgentCapabilities />
+        </AuthProvider>
         <Footer />
         <SpeedInsights />
         <Analytics />
