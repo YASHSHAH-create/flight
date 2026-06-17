@@ -1,7 +1,6 @@
 import React from 'react';
 import FeaturedProducts from '../components/FeaturedProducts';
 import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 
 export const metadata = {
     title: 'Holiday Packages | Paymm',
@@ -29,23 +28,7 @@ export default function PackagesPage() {
                 {/* Reuse FeaturedProducts as a list of packages */}
                 <FeaturedProducts />
 
-                {/* Additional Content to satisfy "sufficient content" */}
-                <section className="px-4 md:px-16 py-12 max-w-7xl mx-auto">
-                    <div className="grid md:grid-cols-2 gap-8 items-center bg-white p-8 rounded-3xl border border-slate-100 shadow-xl">
-                        <div>
-                            <h2 className="text-3xl font-bold text-slate-900 mb-4">Custom Packages?</h2>
-                            <p className="text-slate-600 mb-6 text-lg leading-relaxed">
-                                Looking for something specific? We specialize in creating custom travel itineraries tailored to your preferences and budget. From honeymoon specials to family adventures.
-                            </p>
-                            <a href="/contact" className="inline-block bg-slate-900 text-white px-8 py-3 rounded-full font-bold hover:bg-black transition-transform hover:scale-105">
-                                Contact Our Experts
-                            </a>
-                        </div>
-                        <div className="h-64 bg-slate-100 rounded-2xl flex items-center justify-center">
-                            <span className="text-slate-400 font-medium">Custom Package Illustration</span>
-                        </div>
-                    </div>
-                </section>
+
             </main>
 
             {/* Since footer is in layout, we might not need it here explicitly if layout wraps children, 
