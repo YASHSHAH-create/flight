@@ -30,8 +30,26 @@ const FAQSection = () => {
         setActiveIndex(activeIndex === index ? null : index);
     };
 
+    // JSON-LD structured data for FAQ
+    const faqSchema = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": faqs.map(faq => ({
+            "@type": "Question",
+            "name": faq.question,
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": faq.answer
+            }
+        }))
+    };
+
     return (
         <section className="py-16 px-4 md:px-16 w-full max-w-7xl mx-auto">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+            />
             <h2 className="text-2xl font-bold mb-8 text-slate-900">Frequently Asked Questions</h2>
             <div className="bg-white rounded-[2rem] border border-slate-100 shadow-sm p-4 md:p-8">
                 {faqs.map((faq, index) => (

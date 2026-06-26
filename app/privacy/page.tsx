@@ -1,4 +1,13 @@
 import React from 'react';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: "Privacy Policy | Paymm – How We Protect Your Data",
+    description: "Read the Paymm Privacy Policy to understand how we collect, use, and protect your personal information and flight booking details.",
+    alternates: {
+        canonical: "https://paymm.in/privacy"
+    }
+};
 
 const PrivacyPage = () => {
     return (

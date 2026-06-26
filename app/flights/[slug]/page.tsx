@@ -13,32 +13,39 @@ type Props = {
 
 const slugToCityMap: Record<string, string> = {};
 const cityToCodeMap: Record<string, string> = {};
+let mapsInitialized = false;
 
-Object.entries(AIRPORT_MAP).forEach(([code, data]) => {
-    const slug = data.city.toLowerCase().replace(/\s+/g, "-");
-    slugToCityMap[slug] = data.city;
-    cityToCodeMap[slug] = code;
+function ensureMapsInitialized() {
+    if (mapsInitialized) return;
+    Object.entries(AIRPORT_MAP).forEach(([code, data]) => {
+        const slug = data.city.toLowerCase().replace(/\s+/g, "-");
+        slugToCityMap[slug] = data.city;
+        cityToCodeMap[slug] = code;
 
-    // Add common aliases for robust routing and to match popular routes links
-    if (slug === "new-delhi") {
-        cityToCodeMap["delhi"] = code;
-    }
-    if (slug === "bengaluru") {
-        cityToCodeMap["bangalore"] = code;
-    }
-    if (slug === "cochin") {
-        cityToCodeMap["kochi"] = code;
-    }
-    if (slug === "kochi") {
-        cityToCodeMap["cochin"] = code;
-    }
-    if (slug === "thiruvananthapuram") {
-        cityToCodeMap["trivandrum"] = code;
-    }
-});
+        // Add common aliases for robust routing and to match popular routes links
+        if (slug === "new-delhi") {
+            cityToCodeMap["delhi"] = code;
+        }
+        if (slug === "bengaluru") {
+            cityToCodeMap["bangalore"] = code;
+        }
+        if (slug === "cochin") {
+            cityToCodeMap["kochi"] = code;
+        }
+        if (slug === "kochi") {
+            cityToCodeMap["cochin"] = code;
+        }
+        if (slug === "thiruvananthapuram") {
+            cityToCodeMap["trivandrum"] = code;
+        }
+    });
+    mapsInitialized = true;
+}
 
 function parseSlug(slug: string) {
-    const parts = slug.split("-to-");
+    ensureMapsInitialized();
+    const normalizedSlug = slug.toLowerCase().replace(/\/+$/, "");
+    const parts = normalizedSlug.split("-to-");
     if (parts.length !== 2) return null;
 
     const originSlug = parts[0];

@@ -127,10 +127,15 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": ["Organization", "LocalBusiness", "TravelAgency"],
     name: "Paymm",
+    legalName: "PAYMM ADVISORY PRIVATE LIMITED",
+    taxID: "10AAMCP7167L1Z1",
     url: "https://paymm.in",
     logo: "https://paymm.in/paymm.png",
+    image: "https://paymm.in/paymm.png",
     description:
       "Book cheap flight tickets with Paymm. Compare airline prices and find best deals.",
+    telephone: "+91-9343300271",
+    email: "support@paymm.in",
     address: {
       "@type": "PostalAddress",
       streetAddress: "123 Travel Space, Tech Park",
@@ -140,8 +145,10 @@ export default function RootLayout({
     },
     contactPoint: {
       "@type": "ContactPoint",
+      telephone: "+91-9343300271",
       contactType: "Customer Service",
       availableLanguage: ["English", "Hindi"],
+      email: "support@paymm.in"
     },
     sameAs: [
       "https://www.instagram.com/paymm_bookings/",

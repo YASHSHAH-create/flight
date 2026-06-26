@@ -25,8 +25,51 @@ export async function getAllPosts(): Promise<BlogPost[]> {
         await dbConnect();
         // Fetch from DB
         const dbPosts = await Post.find({}).sort({ createdAt: -1 }).lean();
-        const mappedDbPosts = dbPosts.map(mapDocToPost);
-        return [...mappedDbPosts, ...STATIC_POSTS.map(p => ({ ...p, views: 0 }))];
+        
+        // Auto-seed if empty
+        if (dbPosts.length === 0) {
+            console.log("DB is empty. Auto-seeding static posts...");
+            const postsToInsert = STATIC_POSTS.map(p => ({
+                title: p.title,
+                slug: p.slug,
+                excerpt: p.excerpt,
+                content: p.content,
+                date: p.date,
+                author: p.author,
+                category: p.category,
+                readTime: p.readTime,
+                imageUrl: p.imageUrl,
+                keywords: p.keywords,
+                views: 0
+            }));
+            await Post.insertMany(postsToInsert);
+            return STATIC_POSTS.map(p => ({ ...p, views: 0 }));
+        }
+
+        // If there are missing posts, sync them
+        const dbSlugs = new Set(dbPosts.map(p => p.slug));
+        const missingPosts = STATIC_POSTS.filter(p => !dbSlugs.has(p.slug));
+        if (missingPosts.length > 0) {
+            console.log(`Auto-seeding ${missingPosts.length} missing static posts...`);
+            const postsToInsert = missingPosts.map(p => ({
+                title: p.title,
+                slug: p.slug,
+                excerpt: p.excerpt,
+                content: p.content,
+                date: p.date,
+                author: p.author,
+                category: p.category,
+                readTime: p.readTime,
+                imageUrl: p.imageUrl,
+                keywords: p.keywords,
+                views: 0
+            }));
+            await Post.insertMany(postsToInsert);
+            const updatedDbPosts = await Post.find({}).sort({ createdAt: -1 }).lean();
+            return updatedDbPosts.map(mapDocToPost);
+        }
+
+        return dbPosts.map(mapDocToPost);
     } catch (error) {
         console.warn("Database fetch failed in getAllPosts, falling back to static content:", error);
         return STATIC_POSTS.map(p => ({ ...p, views: 0 }));
@@ -40,11 +83,19 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
         if (dbPost) {
             return mapDocToPost(dbPost);
         }
+
+        // Auto-seed this post if it exists in static list
+        const staticPost = STATIC_POSTS.find(p => p.slug === slug);
+        if (staticPost) {
+            console.log(`Auto-seeding post ${slug} on demand...`);
+            const created = await Post.create({ ...staticPost, views: 0 });
+            return mapDocToPost(created);
+        }
     } catch (error) {
         console.warn(`Database fetch failed in getPostBySlug for ${slug}:`, error);
     }
 
-    // Check static
+    // Check static fallback
     const staticPost = STATIC_POSTS.find(p => p.slug === slug);
     if (staticPost) {
         return { ...staticPost, views: 0 };

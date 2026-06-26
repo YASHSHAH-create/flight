@@ -6,7 +6,7 @@ export const metadata = {
     title: "How to Book Cheap Flights - A Complete Guide | Paymm",
     description: "Learn the best tips and tricks on how to book cheap flights, including finding the cheapest days to fly and utilizing flight comparison tools effectively.",
     alternates: {
-        canonical: "/how-to-book-cheap-flights",
+        canonical: "https://paymm.in/how-to-book-cheap-flights",
     }
 };
 
