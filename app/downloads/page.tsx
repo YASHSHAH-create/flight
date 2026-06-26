@@ -1,5 +1,4 @@
-import React from "react";
-import Navbar from "@/app/components/Navbar";
+
 import { Metadata } from "next";
 import { 
   Smartphone, 
@@ -27,9 +26,9 @@ export default function DownloadsPage() {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 selection:bg-blue-600 selection:text-white">
       {/* Navbar with fixed positioning */}
-      <Navbar />
+   
 
-      <main className="pt-28 md:pt-36 pb-24 overflow-hidden relative">
+      <main className="pt-12 md:pt-36 pb-24 overflow-hidden relative">
         {/* Ambient Decorative Background Glows */}
         <div className="absolute top-1/4 left-1/10 w-96 h-96 bg-blue-600/10 rounded-full blur-[120px] pointer-events-none z-0" />
         <div className="absolute top-1/2 right-1/10 w-96 h-96 bg-purple-600/10 rounded-full blur-[120px] pointer-events-none z-0" />
@@ -110,180 +109,11 @@ export default function DownloadsPage() {
 
               </div>
 
-              {/* Scan to Download Card */}
-              <div className="hidden sm:flex items-center gap-6 p-5 bg-slate-900/60 backdrop-blur-md rounded-3xl border border-slate-800/80 max-w-md mx-auto lg:mx-0">
-                <div className="p-3 bg-white rounded-2xl shadow-inner flex items-center justify-center shrink-0">
-                  {/* Styled QR Code using inline SVG */}
-                  <svg className="w-24 h-24 text-slate-900" viewBox="0 0 100 100">
-                    <rect width="100" height="100" fill="white" />
-                    {/* Corner Position Detection Pattern (Top Left) */}
-                    <rect x="5" y="5" width="25" height="25" fill="black" />
-                    <rect x="9" y="9" width="17" height="17" fill="white" />
-                    <rect x="13" y="13" width="9" height="9" fill="black" />
-                    
-                    {/* Corner Position Detection Pattern (Top Right) */}
-                    <rect x="70" y="5" width="25" height="25" fill="black" />
-                    <rect x="74" y="9" width="17" height="17" fill="white" />
-                    <rect x="78" y="13" width="9" height="9" fill="black" />
-                    
-                    {/* Corner Position Detection Pattern (Bottom Left) */}
-                    <rect x="5" y="70" width="25" height="25" fill="black" />
-                    <rect x="9" y="74" width="17" height="17" fill="white" />
-                    <rect x="13" y="78" width="9" height="9" fill="black" />
-                    
-                    {/* Small Alignment Pattern */}
-                    <rect x="70" y="70" width="9" height="9" fill="black" />
-                    <rect x="72" y="72" width="5" height="5" fill="white" />
-                    <rect x="74" y="74" width="1" height="1" fill="black" />
-                    
-                    {/* Generated QR Code Data Dots (representative grid) */}
-                    <rect x="35" y="5" width="4" height="4" fill="black" /><rect x="43" y="5" width="8" height="4" fill="black" /><rect x="55" y="5" width="4" height="8" fill="black" /><rect x="63" y="9" width="4" height="4" fill="black" />
-                    <rect x="35" y="13" width="8" height="4" fill="black" /><rect x="47" y="13" width="4" height="8" fill="black" /><rect x="59" y="17" width="8" height="4" fill="black" />
-                    <rect x="39" y="21" width="4" height="4" fill="black" /><rect x="51" y="21" width="4" height="4" fill="black" /><rect x="63" y="21" width="4" height="8" fill="black" />
-                    <rect x="5" y="35" width="4" height="8" fill="black" /><rect x="13" y="39" width="8" height="4" fill="black" /><rect x="25" y="35" width="4" height="4" fill="black" /><rect x="33" y="35" width="12" height="4" fill="black" /><rect x="49" y="35" width="4" height="4" fill="black" /><rect x="57" y="35" width="8" height="8" fill="black" /><rect x="69" y="35" width="4" height="4" fill="black" /><rect x="77" y="35" width="4" height="8" fill="black" /><rect x="85" y="35" width="8" height="4" fill="black" />
-                    <rect x="9" y="47" width="4" height="4" fill="black" /><rect x="21" y="47" width="8" height="4" fill="black" /><rect x="33" y="43" width="4" height="8" fill="black" /><rect x="41" y="47" width="8" height="4" fill="black" /><rect x="53" y="47" width="4" height="4" fill="black" /><rect x="65" y="43" width="8" height="8" fill="black" /><rect x="81" y="47" width="4" height="4" fill="black" /><rect x="89" y="43" width="4" height="8" fill="black" />
-                    <rect x="5" y="55" width="8" height="4" fill="black" /><rect x="17" y="59" width="4" height="4" fill="black" /><rect x="25" y="55" width="4" height="8" fill="black" /><rect x="37" y="59" width="8" height="4" fill="black" /><rect x="49" y="55" width="4" height="4" fill="black" /><rect x="57" y="59" width="4" height="8" fill="black" /><rect x="69" y="55" width="8" height="4" fill="black" /><rect x="81" y="55" width="4" height="4" fill="black" /><rect x="89" y="59" width="8" height="4" fill="black" />
-                    <rect x="35" y="70" width="4" height="8" fill="black" /><rect x="43" y="70" width="8" height="4" fill="black" /><rect x="55" y="70" width="4" height="4" fill="black" /><rect x="63" y="74" width="4" height="4" fill="black" /><rect x="83" y="70" width="4" height="8" fill="black" /><rect x="91" y="74" width="4" height="4" fill="black" />
-                    <rect x="39" y="82" width="8" height="4" fill="black" /><rect x="51" y="78" width="4" height="8" fill="black" /><rect x="59" y="82" width="8" height="4" fill="black" /><rect x="87" y="82" width="8" height="4" fill="black" />
-                    <rect x="35" y="91" width="4" height="4" fill="black" /><rect x="47" y="91" width="4" height="4" fill="black" /><rect x="55" y="89" width="4" height="8" fill="black" /><rect x="63" y="91" width="4" height="4" fill="black" /><rect x="71" y="91" width="8" height="4" fill="black" /><rect x="83" y="89" width="4" height="8" fill="black" /><rect x="91" y="91" width="4" height="4" fill="black" />
-                  </svg>
-                </div>
-                <div className="space-y-1">
-                  <p className="font-bold text-white text-sm">Scan QR code to install</p>
-                  <p className="text-xs text-slate-400 leading-normal">
-                    Point your phone camera at the QR code to quickly open the app on your App Store or Google Play Store.
-                  </p>
-                </div>
-              </div>
+           
 
             </div>
 
-            {/* Right Phone Mockup Column */}
-            <div className="lg:col-span-5 flex justify-center relative select-none">
-              
-              {/* Decorative radial lighting behind phone */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-indigo-500/20 rounded-full blur-[80px] z-0 pointer-events-none" />
-
-              {/* Phone Container */}
-              <div className="relative w-[300px] h-[600px] rounded-[50px] border-[10px] border-slate-800 bg-slate-900 shadow-2xl shadow-indigo-900/30 overflow-hidden ring-4 ring-slate-800/40 z-10 transition-all duration-500 hover:scale-[1.02]">
-                
-                {/* Speaker Grill & Camera Notch */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-slate-800 rounded-b-2xl z-50 flex items-center justify-center gap-1.5">
-                  <div className="w-12 h-1 bg-slate-900 rounded-full" />
-                  <div className="w-3.5 h-3.5 bg-slate-900 rounded-full flex items-center justify-center">
-                    <div className="w-1.5 h-1.5 bg-blue-900/50 rounded-full" />
-                  </div>
-                </div>
-
-                {/* Phone Screen Mockup Content */}
-                <div className="w-full h-full bg-[#0a0f1d] flex flex-col justify-between pt-8 pb-4 px-4 font-sans text-xs">
-                  
-                  {/* App Header Status Bar */}
-                  <div className="flex justify-between items-center text-slate-400 font-semibold px-1 py-1">
-                    <span>9:41</span>
-                    <div className="flex items-center gap-1">
-                      <span className="w-3.5 h-2 border border-slate-400 rounded-sm inline-block relative pr-0.5">
-                        <span className="w-2.5 h-1 bg-slate-400 absolute top-0.5 left-0.5" />
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* App Logo & Brand Header */}
-                  <div className="flex items-center justify-between mt-3 px-1">
-                    <div className="flex items-center gap-2">
-                      <div className="relative w-7 h-7 rounded-lg overflow-hidden bg-white ring-1 ring-white/10 flex items-center justify-center">
-                        {/* Inline simplified logo */}
-                        <div className="w-5 h-5 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-md flex items-center justify-center">
-                          <Plane size={11} className="text-white transform -rotate-45" />
-                        </div>
-                      </div>
-                      <span className="text-sm font-black tracking-tight text-white">Paymm</span>
-                    </div>
-                    <span className="bg-emerald-500/15 text-emerald-400 px-2 py-0.5 rounded-full text-[9px] font-bold">24/7 Support</span>
-                  </div>
-
-                  {/* Dynamic Mockup Card (Flight search details) */}
-                  <div className="bg-slate-900/80 border border-slate-800/80 rounded-2xl p-3.5 mt-4 space-y-3 shadow-xl shadow-black/30">
-                    
-                    {/* Destination Selection */}
-                    <div className="flex items-center justify-between border-b border-slate-800/80 pb-2">
-                      <div>
-                        <p className="text-[9px] text-slate-500 font-semibold uppercase">From</p>
-                        <p className="text-sm font-bold text-white">DEL</p>
-                        <p className="text-[9px] text-slate-400 truncate w-20">New Delhi</p>
-                      </div>
-                      <div className="w-7 h-7 bg-blue-500/10 rounded-full flex items-center justify-center text-blue-400 border border-blue-500/25">
-                        ✈
-                      </div>
-                      <div className="text-right">
-                        <p className="text-[9px] text-slate-500 font-semibold uppercase">To</p>
-                        <p className="text-sm font-bold text-white">BOM</p>
-                        <p className="text-[9px] text-slate-400 truncate w-20">Mumbai</p>
-                      </div>
-                    </div>
-
-                    {/* Flight Details & Dates */}
-                    <div className="grid grid-cols-2 gap-2 text-[10px]">
-                      <div>
-                        <p className="text-[9px] text-slate-500 font-semibold uppercase">Departure</p>
-                        <p className="font-bold text-slate-300">28 Jun, Sun</p>
-                      </div>
-                      <div>
-                        <p className="text-[9px] text-slate-500 font-semibold uppercase">Travelers</p>
-                        <p className="font-bold text-slate-300">1 Adult, Economy</p>
-                      </div>
-                    </div>
-
-                    {/* App Special Promo Tag */}
-                    <div className="bg-indigo-600/15 border border-indigo-500/20 p-2 rounded-xl flex items-center justify-between">
-                      <div className="flex items-center gap-1.5">
-                        <Ticket size={12} className="text-indigo-400" />
-                        <span className="text-[9px] text-indigo-300 font-bold">App Code: PAYMMAPP</span>
-                      </div>
-                      <span className="text-[9px] text-emerald-400 font-bold">-40% OFF</span>
-                    </div>
-
-                    {/* CTA Search Button */}
-                    <button className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold py-2.5 rounded-xl shadow-lg shadow-blue-900/30 hover:brightness-110 active:scale-95 transition-all text-center flex items-center justify-center gap-1.5">
-                      <span>Search Flights</span>
-                      <ArrowRight size={12} />
-                    </button>
-
-                  </div>
-
-                  {/* Flight Selection Card (Quick preview of result) */}
-                  <div className="bg-slate-900/40 border border-slate-800/60 rounded-2xl p-3 space-y-2 mt-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1">
-                        <div className="w-4 h-4 bg-red-600 rounded-full flex items-center justify-center text-[7px] text-white font-bold font-sans">AI</div>
-                        <span className="text-[9px] font-bold text-slate-300">Air India • AI-802</span>
-                      </div>
-                      <span className="text-xs font-black text-white">₹5,142</span>
-                    </div>
-                    <div className="flex justify-between items-center text-[9px] text-slate-400">
-                      <span>08:00 - 10:15</span>
-                      <span>2h 15m (Non-stop)</span>
-                    </div>
-                  </div>
-
-                  {/* Social Proof Star Review inside App */}
-                  <div className="bg-slate-900/20 border border-slate-800/40 rounded-xl p-2 mt-auto text-center flex items-center justify-center gap-1">
-                    <div className="flex text-amber-400">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} size={8} fill="currentColor" />
-                      ))}
-                    </div>
-                    <span className="text-[8px] text-slate-400 font-medium">4.8 Rating on Play Store</span>
-                  </div>
-
-                  {/* Phone Navigation Bar */}
-                  <div className="w-20 h-1 bg-slate-700 rounded-full mx-auto mt-2" />
-
-                </div>
-
-              </div>
-
-            </div>
+            
 
           </div>
 
