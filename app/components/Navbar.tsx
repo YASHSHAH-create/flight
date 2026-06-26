@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ChevronDown, Menu, LogOut, User, Globe, Package, CalendarDays, Settings, Briefcase, X, BookOpen } from 'lucide-react';
+import { ChevronDown, Menu, LogOut, User, Globe, Package, CalendarDays, Settings, Briefcase, X, BookOpen, Smartphone } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import AppBanner from './AppBanner';
@@ -63,6 +63,7 @@ const Navbar = () => {
                         { name: 'Travel Blog', href: '/blog', icon: BookOpen },
                         { name: 'Account Settings', href: '/profile', icon: Settings },
                         { name: 'My Bookings', href: '/bookings', icon: Briefcase },
+                        { name: 'Download App', href: '/downloads', icon: Smartphone },
                     ].map((item) => (
                         <Link
                             key={item.name}
@@ -187,6 +188,7 @@ const Navbar = () => {
                                     { name: 'Travel Blog', href: '/blog', icon: BookOpen },
                                     { name: 'Account Settings', href: '#', icon: Settings },
                                     { name: 'My Bookings', href: '/bookings', icon: Briefcase },
+                                    { name: 'Download App', href: '/downloads', icon: Smartphone },
                                 ].map((item) => (
                                     <Link
                                         key={item.name}

@@ -61,6 +61,12 @@ const Footer = () => {
                                     </Link>
                                 </li>
                             ))}
+                            <li>
+                                <Link href="/downloads" className="text-slate-400 hover:text-blue-400 transition-colors flex items-center group">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-slate-600 mr-2 group-hover:bg-blue-400 transition-colors"></span>
+                                    Download App
+                                </Link>
+                            </li>
                             {/* Add more links if present in the app */}
                             <li>
                                 <Link href="/" className="text-slate-400 hover:text-blue-400 transition-colors flex items-center group">
