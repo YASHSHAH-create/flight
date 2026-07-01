@@ -68,6 +68,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
+    canonical: "https://paymm.in",
     languages: {
       "en-US": "https://paymm.in/en",
       "hi-IN": "https://paymm.in/hi",

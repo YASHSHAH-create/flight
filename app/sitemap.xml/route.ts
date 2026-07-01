@@ -4,35 +4,11 @@ export async function GET() {
     const baseUrl = 'https://paymm.in';
 
     const sitemaps = [
-        'cf-a2b-freq',
+        'f-static',
+        'cf-misc',
         'cf-a2b-dom',
         'cf-a2b-int-out',
-        'cf-a2b-int-in',
-        'cf-a2b-int-int',
-        'c-to-c',
-        'f-a2b-by-airline',
-        'f-airline',
-        'f-airline-status',
-        'f-static',
-        't-train',
-        't-station',
-        't-static',
-        't-train-running-status',
-        't-train-seat-availability',
-        'tp-a2b-freq-train',
-        'tp-a2b-other-train',
-        'o-static',
-        'offers',
-        'plan',
-        'f-to-d',
-        'fs-code',
-        'cf-misc',
-        'cf-search',
-        'hotels-in-city',
-        'hotels-detail',
-        'airport-arrival-departure-status',
-        'a2b-flight-status',
-        'long-tail-flights'
+        'cf-a2b-int-in'
     ];
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
