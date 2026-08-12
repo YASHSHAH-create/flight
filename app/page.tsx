@@ -21,7 +21,7 @@ const BottomNav = dynamic(() => import('./components/ClientBottomNav'));
 
 export const metadata: Metadata = {
   alternates: {
-    canonical: "https://paymm.in",
+    canonical: "https://www.paymm.in",
   },
 };
 

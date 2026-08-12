@@ -6,7 +6,7 @@ export const metadata = {
     title: 'Holiday Packages | Paymm',
     description: 'Explore the best holiday packages and flight deals to top destinations. Curated tours, honeymoon specials, and budget getaways from India with Paymm.',
     alternates: {
-        canonical: 'https://paymm.in/packages',
+        canonical: 'https://www.paymm.in/packages',
     },
 };
 

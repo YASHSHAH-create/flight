@@ -6,7 +6,7 @@ export const metadata = {
     title: 'Flight Schedule | Paymm',
     description: 'Check flight schedules and availability for all major airlines. View daily departure and arrival timings for domestic and international flights across India.',
     alternates: {
-        canonical: 'https://paymm.in/schedule',
+        canonical: 'https://www.paymm.in/schedule',
     },
 };
 

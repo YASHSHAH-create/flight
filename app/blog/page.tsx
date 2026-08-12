@@ -9,12 +9,12 @@ export const metadata: Metadata = {
     title: 'Travel Blog | Paymm - Tips, Guides & Destinations',
     description: 'Explore expert travel tips, destination guides, and the latest trends in tourism with the Paymm Travel Blog. Plan your next adventure today.',
     alternates: {
-        canonical: 'https://paymm.in/blog',
+        canonical: 'https://www.paymm.in/blog',
     },
     openGraph: {
         title: 'Travel Blog | Paymm',
         description: 'Read our latest stories on travel destinations, flight hacks, and holiday planning.',
-        url: 'https://paymm.in/blog',
+        url: 'https://www.paymm.in/blog',
         type: 'website',
         images: [
             {
@@ -37,13 +37,13 @@ export default async function BlogListingPage() {
                 '@type': 'ListItem',
                 position: 1,
                 name: 'Home',
-                item: 'https://paymm.in'
+                item: 'https://www.paymm.in'
             },
             {
                 '@type': 'ListItem',
                 position: 2,
                 name: 'Blog',
-                item: 'https://paymm.in/blog'
+                item: 'https://www.paymm.in/blog'
             }
         ]
     };

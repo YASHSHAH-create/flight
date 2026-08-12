@@ -91,13 +91,13 @@ export async function generateMetadata(
         title: content.title,
         description: content.description,
         alternates: {
-            canonical: `https://paymm.in/flights/${canonicalSlug}`
+            canonical: `https://www.paymm.in/flights/${canonicalSlug}`
         },
         robots: isIndexable ? "index, follow" : "noindex, follow",
         openGraph: {
             title: content.title,
             description: content.description,
-            url: `https://paymm.in/flights/${canonicalSlug}`,
+            url: `https://www.paymm.in/flights/${canonicalSlug}`,
             type: "website",
             siteName: "Paymm"
         }
@@ -178,19 +178,19 @@ export default async function FlightRoutePage({ params }: Props) {
                 "@type": "ListItem",
                 "position": 1,
                 "name": "Home",
-                "item": "https://paymm.in"
+                "item": "https://www.paymm.in"
             },
             {
                 "@type": "ListItem",
                 "position": 2,
                 "name": "Flights",
-                "item": "https://paymm.in/flights"
+                "item": "https://www.paymm.in/flights"
             },
             {
                 "@type": "ListItem",
                 "position": 3,
                 "name": `Flights from ${originName} to ${destName}`,
-                "item": `https://paymm.in/flights/${canonicalSlug}`
+                "item": `https://www.paymm.in/flights/${canonicalSlug}`
             }
         ]
     };
@@ -209,8 +209,8 @@ export default async function FlightRoutePage({ params }: Props) {
 
     const webPageLd = {
         "@type": "WebPage",
-        "@id": `https://paymm.in/flights/${canonicalSlug}`,
-        "url": `https://paymm.in/flights/${canonicalSlug}`,
+        "@id": `https://www.paymm.in/flights/${canonicalSlug}`,
+        "url": `https://www.paymm.in/flights/${canonicalSlug}`,
         "name": content.title,
         "description": content.description,
         "publisher": {
@@ -218,7 +218,7 @@ export default async function FlightRoutePage({ params }: Props) {
             "name": "Paymm",
             "logo": {
                 "@type": "ImageObject",
-                "url": "https://paymm.in/paymm.png"
+                "url": "https://www.paymm.in/paymm.png"
             }
         },
         "author": {

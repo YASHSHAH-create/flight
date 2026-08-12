@@ -2,9 +2,9 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
   const resourceMetadata = {
-    resource: "https://paymm.in/api",
+    resource: "https://www.paymm.in/api",
     authorization_servers: [
-      "https://paymm.in"
+      "https://www.paymm.in"
     ],
     scopes_supported: [
       "read:flights",

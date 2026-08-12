@@ -7,12 +7,12 @@ export default function JsonLd() {
             {
                 "@type": "WebSite",
                 "name": "Paymm",
-                "url": "https://paymm.in",
+                "url": "https://www.paymm.in",
                 "potentialAction": {
                     "@type": "SearchAction",
                     "target": {
                         "@type": "EntryPoint",
-                        "urlTemplate": "https://paymm.in/search?q={search_term_string}"
+                        "urlTemplate": "https://www.paymm.in/search?q={search_term_string}"
                     },
                     "query-input": "required name=search_term_string"
                 }
@@ -22,10 +22,10 @@ export default function JsonLd() {
                 "name": "Paymm",
                 "legalName": "PAYMM ADVISORY PRIVATE LIMITED",
                 "taxID": "10AAMCP7167L1Z1",
-                "url": "https://paymm.in",
+                "url": "https://www.paymm.in",
                 "logo": {
                     "@type": "ImageObject",
-                    "url": "https://paymm.in/paymm.png"
+                    "url": "https://www.paymm.in/paymm.png"
                 },
                 "address": {
                     "@type": "PostalAddress",
@@ -48,7 +48,7 @@ export default function JsonLd() {
             {
                 "@type": "Product",
                 "name": "Flight Tickets",
-                "image": "https://paymm.in/og-image.jpg",
+                "image": "https://www.paymm.in/og-image.jpg",
                 "description": "Book cheap flight tickets from India to anywhere in the world.",
                 "brand": {
                     "@type": "Brand",
@@ -56,7 +56,7 @@ export default function JsonLd() {
                 },
                 "offers": {
                     "@type": "Offer",
-                    "url": "https://paymm.in",
+                    "url": "https://www.paymm.in",
                     "priceCurrency": "INR",
                     "price": "3000",
                     "availability": "https://schema.org/InStock",

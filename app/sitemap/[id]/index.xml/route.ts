@@ -8,7 +8,7 @@ export async function GET(
     { params }: { params: Promise<{ id: string }> }
 ) {
     const { id } = await params;
-    const baseUrl = 'https://paymm.in';
+    const baseUrl = 'https://www.paymm.in';
 
     // Keep lastmod stable between deploys. Using new Date() on every request
     // makes Google distrust the sitemap's lastmod signal entirely.

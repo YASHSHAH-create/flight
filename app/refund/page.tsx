@@ -5,7 +5,7 @@ export const metadata: Metadata = {
     title: "Refund & Cancellation Policy | Paymm – Quick Cancellation & Refunds",
     description: "Read the Paymm Refund and Cancellation Policy to understand how to cancel your flight tickets and check processing times for refund amounts.",
     alternates: {
-        canonical: "https://paymm.in/refund"
+        canonical: "https://www.paymm.in/refund"
     }
 };
 

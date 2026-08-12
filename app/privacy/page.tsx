@@ -5,7 +5,7 @@ export const metadata: Metadata = {
     title: "Privacy Policy | Paymm – How We Protect Your Data",
     description: "Read the Paymm Privacy Policy to understand how we collect, use, and protect your personal information and flight booking details.",
     alternates: {
-        canonical: "https://paymm.in/privacy"
+        canonical: "https://www.paymm.in/privacy"
     }
 };
 

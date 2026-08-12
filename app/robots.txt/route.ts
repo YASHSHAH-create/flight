@@ -19,7 +19,7 @@ Disallow: /flights/ssr
 Disallow: /test-seo
 Disallow: /auth/
 
-Sitemap: https://paymm.in/sitemap.xml`;
+Sitemap: https://www.paymm.in/sitemap.xml`;
 
   return new Response(robotsTxt, {
     headers: {

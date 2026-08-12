@@ -11,13 +11,13 @@ export const metadata: Metadata = {
     description:
         "Browse all popular flight routes from India. Compare fares on domestic routes like Delhi to Mumbai and international routes like Delhi to Dubai. Book cheap air tickets with Paymm.",
     alternates: {
-        canonical: "https://paymm.in/flights",
+        canonical: "https://www.paymm.in/flights",
     },
     openGraph: {
         title: "All Flight Routes | Paymm",
         description:
             "Browse all popular domestic and international flight routes. Compare airline fares and book cheap tickets.",
-        url: "https://paymm.in/flights",
+        url: "https://www.paymm.in/flights",
         type: "website",
         siteName: "Paymm",
     },
@@ -89,8 +89,8 @@ export default function FlightsHubPage() {
         "@graph": [
             {
                 "@type": "CollectionPage",
-                "@id": "https://paymm.in/flights",
-                url: "https://paymm.in/flights",
+                "@id": "https://www.paymm.in/flights",
+                url: "https://www.paymm.in/flights",
                 name: "All Flight Routes in India & International | Paymm",
                 description:
                     "Directory of all popular domestic and international flight routes bookable on Paymm.",
@@ -99,7 +99,7 @@ export default function FlightsHubPage() {
                     name: "Paymm",
                     logo: {
                         "@type": "ImageObject",
-                        url: "https://paymm.in/paymm.png",
+                        url: "https://www.paymm.in/paymm.png",
                     },
                 },
             },
@@ -110,13 +110,13 @@ export default function FlightsHubPage() {
                         "@type": "ListItem",
                         position: 1,
                         name: "Home",
-                        item: "https://paymm.in",
+                        item: "https://www.paymm.in",
                     },
                     {
                         "@type": "ListItem",
                         position: 2,
                         name: "Flights",
-                        item: "https://paymm.in/flights",
+                        item: "https://www.paymm.in/flights",
                     },
                 ],
             },

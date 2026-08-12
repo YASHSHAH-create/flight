@@ -6,7 +6,7 @@ export const metadata: Metadata = {
     title: "About Us | Paymm – Learn About Our Flight Booking Services",
     description: "Learn more about Paymm, a leading travel technology platform in India. Our mission is to simplify flight ticket booking with transparent pricing, citable rates, and 24/7 customer support.",
     alternates: {
-        canonical: "https://paymm.in/about"
+        canonical: "https://www.paymm.in/about"
     }
 };
 

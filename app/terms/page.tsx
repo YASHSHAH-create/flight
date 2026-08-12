@@ -5,7 +5,7 @@ export const metadata: Metadata = {
     title: "Terms of Use | Paymm – Platform Rules & Terms of Service",
     description: "Read the Paymm Terms of Use to understand booking regulations, refund guidelines, and the terms of service of our travel booking platform.",
     alternates: {
-        canonical: "https://paymm.in/terms"
+        canonical: "https://www.paymm.in/terms"
     }
 };
 

@@ -4,22 +4,22 @@ export async function GET() {
   const catalog = {
     linkset: [
       {
-        anchor: "https://paymm.in/api",
+        anchor: "https://www.paymm.in/api",
         "service-desc": [
           {
-            "href": "https://paymm.in/openapi.json",
+            "href": "https://www.paymm.in/openapi.json",
             "type": "application/json"
           }
         ],
         "service-doc": [
           {
-            "href": "https://paymm.in/auth.md",
+            "href": "https://www.paymm.in/auth.md",
             "type": "text/markdown"
           }
         ],
         "status": [
           {
-            "href": "https://paymm.in/api/status",
+            "href": "https://www.paymm.in/api/status",
             "type": "application/json"
           }
         ]

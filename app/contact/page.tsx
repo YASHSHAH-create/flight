@@ -6,7 +6,7 @@ export const metadata: Metadata = {
     title: "Contact Us | Paymm – 24/7 Flight Support & Helpline",
     description: "Get in touch with Paymm for any flight booking support, cancellations, refunds, or general queries. We provide 24/7 customer care service.",
     alternates: {
-        canonical: "https://paymm.in/contact"
+        canonical: "https://www.paymm.in/contact"
     }
 };
 

@@ -17,6 +17,6 @@ export const SITE_KEYWORDS = [
 export const DEFAULT_SEO = {
     title: "Paymm - Book Cheap Flights & Air Tickets Online",
     description: "Find and book the cheapest flights with Paymm. Compare airline prices, get exclusive deals on air tickets for Indigo, Air India, Vistara & more. Best flight booking site in India.",
-    siteUrl: "https://paymm.in",
+    siteUrl: "https://www.paymm.in",
     twitterHandle: "@paymm_in", // Assuming
 };

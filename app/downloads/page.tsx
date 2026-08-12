@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   description:
     "Download the Paymm App for Android and iOS. Book cheap flight tickets, compare airline fares, and get exclusive mobile-only deals and real-time status alerts.",
   alternates: {
-    canonical: "https://paymm.in/downloads",
+    canonical: "https://www.paymm.in/downloads",
   },
 };
 

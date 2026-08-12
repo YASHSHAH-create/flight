@@ -27,13 +27,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         description: post.excerpt,
         keywords: post.keywords,
         alternates: {
-            canonical: `https://paymm.in/blog/${post.slug}`,
+            canonical: `https://www.paymm.in/blog/${post.slug}`,
         },
         openGraph: {
             title: post.title,
             description: post.excerpt,
             type: 'article',
-            url: `https://paymm.in/blog/${post.slug}`,
+            url: `https://www.paymm.in/blog/${post.slug}`,
             publishedTime: post.date,
             authors: [post.author],
             images: [
@@ -98,13 +98,13 @@ export default async function BlogPostPage({ params }: Props) {
                 name: 'Paymm',
                 logo: {
                     '@type': 'ImageObject',
-                    url: 'https://paymm.in/paymm.png',
+                    url: 'https://www.paymm.in/paymm.png',
                 },
             },
             description: post.excerpt,
             mainEntityOfPage: {
                 '@type': 'WebPage',
-                '@id': `https://paymm.in/blog/${post.slug}`,
+                '@id': `https://www.paymm.in/blog/${post.slug}`,
             }
         },
         {
@@ -114,19 +114,19 @@ export default async function BlogPostPage({ params }: Props) {
                     '@type': 'ListItem',
                     position: 1,
                     name: 'Home',
-                    item: 'https://paymm.in'
+                    item: 'https://www.paymm.in'
                 },
                 {
                     '@type': 'ListItem',
                     position: 2,
                     name: 'Blog',
-                    item: 'https://paymm.in/blog'
+                    item: 'https://www.paymm.in/blog'
                 },
                 {
                     '@type': 'ListItem',
                     position: 3,
                     name: post.title,
-                    item: `https://paymm.in/blog/${post.slug}`
+                    item: `https://www.paymm.in/blog/${post.slug}`
                 }
             ]
         }
@@ -142,19 +142,19 @@ export default async function BlogPostPage({ params }: Props) {
                     '@type': 'HowToStep',
                     name: 'Book in Advance, But Not Too Early',
                     text: 'The sweet spot for international flights is usually 3-4 months before departure. Booking too early can sometimes be as expensive as booking last minute.',
-                    url: 'https://paymm.in/blog/cheap-international-flights-from-india-guide#step1'
+                    url: 'https://www.paymm.in/blog/cheap-international-flights-from-india-guide#step1'
                 },
                 {
                     '@type': 'HowToStep',
                     name: 'Use Flight Comparison Tools',
                     text: 'Use platforms like Paymm to compare prices across multiple airlines instantly. Always check for hidden costs and baggage fees before booking.',
-                    url: 'https://paymm.in/blog/cheap-international-flights-from-india-guide#step2'
+                    url: 'https://www.paymm.in/blog/cheap-international-flights-from-india-guide#step2'
                 },
                 {
                     '@type': 'HowToStep',
                     name: 'Be Flexible with Dates',
                     text: 'Flying mid-week (typically Tuesday or Wednesday) is often significantly cheaper than flying on weekends. Use a flexible date search calendar.',
-                    url: 'https://paymm.in/blog/cheap-international-flights-from-india-guide#step3'
+                    url: 'https://www.paymm.in/blog/cheap-international-flights-from-india-guide#step3'
                 }
             ]
         });

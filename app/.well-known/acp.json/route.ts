@@ -6,7 +6,7 @@ export async function GET() {
       name: "acp",
       version: "1.0.0"
     },
-    api_base_url: "https://paymm.in/api",
+    api_base_url: "https://www.paymm.in/api",
     supported_transports: ["rest"],
     capabilities: {
       services: [

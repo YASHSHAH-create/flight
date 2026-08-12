@@ -9,7 +9,7 @@ export async function GET() {
     },
     transport: {
       type: "streamable-http",
-      endpoint: "https://paymm.in/api/mcp"
+      endpoint: "https://www.paymm.in/api/mcp"
     },
     capabilities: {
       tools: {

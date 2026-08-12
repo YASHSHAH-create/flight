@@ -10,7 +10,7 @@ export async function GET() {
             "version": "2026-04-08",
             "spec": "https://ucp.dev/specification/overview",
             "transport": "rest",
-            "endpoint": "https://paymm.in/api/ucp"
+            "endpoint": "https://www.paymm.in/api/ucp"
           }
         ]
       },

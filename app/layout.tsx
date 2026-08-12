@@ -28,7 +28,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://paymm.in"),
+  metadataBase: new URL("https://www.paymm.in"),
   icons: {
     icon: [
       { url: "/favicon.ico" },
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     "Book cheap flight tickets with Paymm. Compare airline prices, find best deals on air tickets, and enjoy fast, secure flight booking online. Save up to 40% on flights.",
   keywords: SITE_KEYWORDS,
   applicationName: "Paymm",
-  authors: [{ name: "Paymm Team", url: "https://paymm.in" }],
+  authors: [{ name: "Paymm Team", url: "https://www.paymm.in" }],
   creator: "Paymm",
   publisher: "Paymm",
   formatDetection: {
@@ -70,7 +70,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://paymm.in",
+    url: "https://www.paymm.in",
     siteName: "Paymm",
     title: "Paymm – Cheap Flight Tickets | Compare & Book Air Tickets Online",
     description:
@@ -119,9 +119,9 @@ export default function RootLayout({
     name: "Paymm",
     legalName: "PAYMM ADVISORY PRIVATE LIMITED",
     taxID: "10AAMCP7167L1Z1",
-    url: "https://paymm.in",
-    logo: "https://paymm.in/paymm.png",
-    image: "https://paymm.in/paymm.png",
+    url: "https://www.paymm.in",
+    logo: "https://www.paymm.in/paymm.png",
+    image: "https://www.paymm.in/paymm.png",
     description:
       "Book cheap flight tickets with Paymm. Compare airline prices and find best deals.",
     telephone: "+91-9343300271",
@@ -145,7 +145,7 @@ export default function RootLayout({
     ],
     potentialAction: {
       "@type": "SearchAction",
-      target: "https://paymm.in/search?q={search_term_string}",
+      target: "https://www.paymm.in/search?q={search_term_string}",
       "query-input": "required name=search_term_string",
     },
   };

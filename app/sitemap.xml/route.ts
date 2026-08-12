@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-    const baseUrl = 'https://paymm.in';
+    const baseUrl = 'https://www.paymm.in';
 
     const sitemaps = [
         'f-static',
