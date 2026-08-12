@@ -1,4 +1,5 @@
 import { AIRPORT_MAP } from './airports';
+import { DETAILED_PROFILE_CODES } from './routeContentGenerator';
 
 // 10 Tier 1 Hubs in India
 export const TIER_1_HUBS = new Set([
@@ -39,6 +40,13 @@ export function isRouteValid(originCode: string, destCode: string): boolean {
  */
 export function isRouteIndexable(originCode: string, destCode: string): boolean {
     if (!isRouteValid(originCode, destCode)) {
+        return false;
+    }
+
+    // Quality gate: only index routes where BOTH cities have a hand-written
+    // profile in routeContentGenerator. Boilerplate-only pages get noindex,
+    // which is what triggered Google's "low value content" classification.
+    if (!DETAILED_PROFILE_CODES.has(originCode) || !DETAILED_PROFILE_CODES.has(destCode)) {
         return false;
     }
 

@@ -222,10 +222,10 @@ export default async function FlightRoutePage({ params }: Props) {
             }
         },
         "author": {
-            "@type": "Person",
+            "@type": "Organization",
             "name": content.author
         },
-        "dateModified": "2026-07-02T00:00:00+05:30",
+        "dateModified": "2026-08-13T00:00:00+05:30",
         "datePublished": "2026-01-10T00:00:00+05:30"
     };
 
@@ -310,7 +310,7 @@ export default async function FlightRoutePage({ params }: Props) {
                             <div className="bg-slate-50 p-4 rounded-2xl col-span-2 md:col-span-1 flex flex-col justify-between">
                                 <span className="text-xs text-slate-400 font-semibold uppercase">Major Airlines</span>
                                 <span className="text-sm font-bold text-slate-800 mt-1 flex items-center gap-1.5">
-                                    <Plane size={18} className="text-emerald-500" /> {originCode === "DEL" && destCode === "BOM" ? "IndiGo, Air India, Vistara" : "IndiGo, Air India"}
+                                    <Plane size={18} className="text-emerald-500" /> {content.airlines.split(', ').slice(0, 3).join(', ')}
                                 </span>
                             </div>
                         </div>
@@ -322,7 +322,7 @@ export default async function FlightRoutePage({ params }: Props) {
                             Typical Airfare Calendar & Trends
                         </h2>
                         <p className="text-slate-500 text-sm">
-                            Typical pricing for this route over the coming months. Plan ahead to secure the lowest rates.
+                            Indicative fares for this route over the coming months, based on distance and seasonal demand trends. Live prices in the search widget may vary.
                         </p>
                         
                         <div className="overflow-x-auto">
@@ -336,30 +336,14 @@ export default async function FlightRoutePage({ params }: Props) {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-slate-50 text-slate-700 font-medium">
-                                    <tr className="hover:bg-slate-50/50 transition-colors">
-                                        <td className="py-4">July 2026</td>
-                                        <td className="py-4 text-emerald-600">₹3,800</td>
-                                        <td className="py-4 text-emerald-600">Low Demand</td>
-                                        <td className="py-4 text-slate-500">Best price</td>
-                                    </tr>
-                                    <tr className="hover:bg-slate-50/50 transition-colors">
-                                        <td className="py-4">August 2026</td>
-                                        <td className="py-4 text-emerald-600">₹3,500</td>
-                                        <td className="py-4 text-emerald-600">Low Demand</td>
-                                        <td className="py-4 text-slate-500">Monsoon Off-peak</td>
-                                    </tr>
-                                    <tr className="hover:bg-slate-50/50 transition-colors">
-                                        <td className="py-4">September 2026</td>
-                                        <td className="py-4">₹4,100</td>
-                                        <td className="py-4 text-slate-500">Medium Demand</td>
-                                        <td className="py-4 text-slate-500">Book 3 weeks early</td>
-                                    </tr>
-                                    <tr className="hover:bg-slate-50/50 transition-colors">
-                                        <td className="py-4">October 2026</td>
-                                        <td className="py-4 text-orange-600">₹5,200</td>
-                                        <td className="py-4 text-orange-500">High Demand</td>
-                                        <td className="py-4 text-slate-500">Festival season booking</td>
-                                    </tr>
+                                    {content.fareCalendar.map((fm, idx) => (
+                                        <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
+                                            <td className="py-4">{fm.month}</td>
+                                            <td className={`py-4 ${fm.demand === 'Low Demand' ? 'text-emerald-600' : fm.demand === 'High Demand' ? 'text-orange-600' : ''}`}>{fm.fare}</td>
+                                            <td className={`py-4 ${fm.demand === 'Low Demand' ? 'text-emerald-600' : fm.demand === 'High Demand' ? 'text-orange-500' : 'text-slate-500'}`}>{fm.demand}</td>
+                                            <td className="py-4 text-slate-500">{fm.note}</td>
+                                        </tr>
+                                    ))}
                                 </tbody>
                             </table>
                         </div>
