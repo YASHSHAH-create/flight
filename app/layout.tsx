@@ -67,13 +67,6 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  alternates: {
-    canonical: "https://paymm.in",
-    languages: {
-      "en-US": "https://paymm.in/en",
-      "hi-IN": "https://paymm.in/hi",
-    },
-  },
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -101,13 +94,9 @@ export const metadata: Metadata = {
       "Book cheap flight tickets with Paymm. Compare airline prices, find best deals on air tickets, and enjoy fast, secure flight booking online.",
     images: ["/og-image.jpg"],
   },
-  verification: {
-    google: "f08c47fec0942fa0",
-    yandex: "yandex-verification-code",
-    other: {
-      "msvalidate.01": "bing-verification-code",
-    },
-  },
+  // NOTE: Add your REAL Google Search Console verification token here.
+  // The previous values were placeholders (fake), which do nothing.
+  // verification: { google: "YOUR-GSC-VERIFICATION-TOKEN" },
   other: {
     "google-adsense-account": "ca-pub-5030260303252769",
   },
@@ -139,9 +128,8 @@ export default function RootLayout({
     email: "support@paymm.in",
     address: {
       "@type": "PostalAddress",
-      streetAddress: "123 Travel Space, Tech Park",
       addressLocality: "New Delhi",
-      postalCode: "110001",
+      addressRegion: "Delhi",
       addressCountry: "IN",
     },
     contactPoint: {

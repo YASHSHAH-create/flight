@@ -5,6 +5,19 @@ Disallow: /api/
 Disallow: /admin/
 Disallow: /payment/
 Disallow: /profile/
+Disallow: /search
+Disallow: /book
+Disallow: /bookings
+Disallow: /hotels/search
+Disallow: /hotels/checkout
+Disallow: /flights/search
+Disallow: /flights/fare-quote
+Disallow: /flights/fare-rule
+Disallow: /flights/book
+Disallow: /flights/ticket
+Disallow: /flights/ssr
+Disallow: /test-seo
+Disallow: /auth/
 
 Sitemap: https://paymm.in/sitemap.xml`;
 

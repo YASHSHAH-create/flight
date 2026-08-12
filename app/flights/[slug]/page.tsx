@@ -78,21 +78,26 @@ export async function generateMetadata(
         };
     }
 
-    const { originCode, destCode } = data;
+    const { originCode, destCode, originName, destName } = data;
     const isIndexable = isRouteIndexable(originCode, destCode);
     const content = generateRouteContent(originCode, destCode, isIndexable);
+
+    // Always canonicalize to the primary city-name slug so alias URLs
+    // (e.g. /flights/delhi-to-mumbai vs /flights/new-delhi-to-mumbai)
+    // consolidate into a single indexed page instead of competing duplicates.
+    const canonicalSlug = `${originName.toLowerCase().replace(/\s+/g, "-")}-to-${destName.toLowerCase().replace(/\s+/g, "-")}`;
 
     return {
         title: content.title,
         description: content.description,
         alternates: {
-            canonical: `https://paymm.in/flights/${slug}`
+            canonical: `https://paymm.in/flights/${canonicalSlug}`
         },
         robots: isIndexable ? "index, follow" : "noindex, follow",
         openGraph: {
             title: content.title,
             description: content.description,
-            url: `https://paymm.in/flights/${slug}`,
+            url: `https://paymm.in/flights/${canonicalSlug}`,
             type: "website",
             siteName: "Paymm"
         }
@@ -110,6 +115,8 @@ export default async function FlightRoutePage({ params }: Props) {
     const { originCode, destCode, originName, destName } = data;
     const isIndexable = isRouteIndexable(originCode, destCode);
     const content = generateRouteContent(originCode, destCode, isIndexable);
+
+    const canonicalSlug = `${originName.toLowerCase().replace(/\s+/g, "-")}-to-${destName.toLowerCase().replace(/\s+/g, "-")}`;
 
     const today = new Date();
     const tomorrow = new Date(today);
@@ -183,7 +190,7 @@ export default async function FlightRoutePage({ params }: Props) {
                 "@type": "ListItem",
                 "position": 3,
                 "name": `Flights from ${originName} to ${destName}`,
-                "item": `https://paymm.in/flights/${slug}`
+                "item": `https://paymm.in/flights/${canonicalSlug}`
             }
         ]
     };
@@ -202,8 +209,8 @@ export default async function FlightRoutePage({ params }: Props) {
 
     const webPageLd = {
         "@type": "WebPage",
-        "@id": `https://paymm.in/flights/${slug}`,
-        "url": `https://paymm.in/flights/${slug}`,
+        "@id": `https://paymm.in/flights/${canonicalSlug}`,
+        "url": `https://paymm.in/flights/${canonicalSlug}`,
         "name": content.title,
         "description": content.description,
         "publisher": {

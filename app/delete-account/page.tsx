@@ -3,6 +3,13 @@ import React from 'react';
 export const metadata = {
     title: 'Delete Account | PayMM',
     description: 'Instructions on how to delete your PayMM account.',
+    alternates: {
+        canonical: 'https://paymm.in/delete-account',
+    },
+    robots: {
+        index: false,
+        follow: true,
+    },
 };
 
 const DeleteAccountPage = () => {

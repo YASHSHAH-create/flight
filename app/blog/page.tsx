@@ -8,6 +8,9 @@ import Navbar from '@/app/components/Navbar';
 export const metadata: Metadata = {
     title: 'Travel Blog | Paymm - Tips, Guides & Destinations',
     description: 'Explore expert travel tips, destination guides, and the latest trends in tourism with the Paymm Travel Blog. Plan your next adventure today.',
+    alternates: {
+        canonical: 'https://paymm.in/blog',
+    },
     openGraph: {
         title: 'Travel Blog | Paymm',
         description: 'Read our latest stories on travel destinations, flight hacks, and holiday planning.',

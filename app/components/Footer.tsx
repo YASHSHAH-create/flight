@@ -133,7 +133,7 @@ const Footer = () => {
                                 </div>
                                 <div>
                                     <p className="text-xs text-slate-500">Address</p>
-                                    <span className="text-slate-200 text-sm">123 Travel Space, Tech Park<br/>New Delhi, IN 110001</span>
+                                    <span className="text-slate-200 text-sm">New Delhi, India</span>
                                 </div>
                             </li>
                         </ul>

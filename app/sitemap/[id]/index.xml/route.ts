@@ -10,6 +10,11 @@ export async function GET(
     const { id } = await params;
     const baseUrl = 'https://paymm.in';
 
+    // Keep lastmod stable between deploys. Using new Date() on every request
+    // makes Google distrust the sitemap's lastmod signal entirely.
+    // Bump this date whenever page content meaningfully changes.
+    const SITE_LAST_UPDATED = '2026-08-13T00:00:00.000Z';
+
     interface SitemapUrl {
         url: string;
         lastModified: string;
@@ -27,11 +32,12 @@ export async function GET(
         case 'f-static':
             const staticRoutes = [
                 '', '/about', '/contact', '/privacy',
-                '/refund', '/terms', '/blog', '/packages', '/schedule', '/how-to-book-cheap-flights'
+                '/refund', '/terms', '/blog', '/packages', '/schedule', '/how-to-book-cheap-flights',
+                '/flights', '/downloads'
             ];
             urls = staticRoutes.map(route => ({
                 url: `${baseUrl}${route}`,
-                lastModified: new Date().toISOString(),
+                lastModified: SITE_LAST_UPDATED,
                 changeFrequency: 'weekly',
                 priority: route === '' ? 1.0 : 0.8
             }));
@@ -54,7 +60,7 @@ export async function GET(
                         const toCity = AIRPORT_MAP[to].city.toLowerCase().replace(/\s+/g, '-');
                         urls.push({
                             url: `${baseUrl}/flights/${fromCity}-to-${toCity}`,
-                            lastModified: new Date().toISOString(),
+                            lastModified: SITE_LAST_UPDATED,
                             changeFrequency: 'daily',
                             priority: 0.9
                         });
@@ -71,7 +77,7 @@ export async function GET(
                         const toCity = AIRPORT_MAP[to].city.toLowerCase().replace(/\s+/g, '-');
                         urls.push({
                             url: `${baseUrl}/flights/${fromCity}-to-${toCity}`,
-                            lastModified: new Date().toISOString(),
+                            lastModified: SITE_LAST_UPDATED,
                             changeFrequency: 'daily',
                             priority: 0.8
                         });
@@ -88,7 +94,7 @@ export async function GET(
                         const toCity = AIRPORT_MAP[to].city.toLowerCase().replace(/\s+/g, '-');
                         urls.push({
                             url: `${baseUrl}/flights/${fromCity}-to-${toCity}`,
-                            lastModified: new Date().toISOString(),
+                            lastModified: SITE_LAST_UPDATED,
                             changeFrequency: 'daily',
                             priority: 0.8
                         });

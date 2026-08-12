@@ -29,9 +29,8 @@ export default function JsonLd() {
                 },
                 "address": {
                     "@type": "PostalAddress",
-                    "streetAddress": "123 Travel Space, Tech Park",
                     "addressLocality": "New Delhi",
-                    "postalCode": "110001",
+                    "addressRegion": "Delhi",
                     "addressCountry": "IN"
                 },
                 "contactPoint": {

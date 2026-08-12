@@ -26,10 +26,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         title: `${post.title} | Paymm Blog`,
         description: post.excerpt,
         keywords: post.keywords,
+        alternates: {
+            canonical: `https://paymm.in/blog/${post.slug}`,
+        },
         openGraph: {
             title: post.title,
             description: post.excerpt,
             type: 'article',
+            url: `https://paymm.in/blog/${post.slug}`,
             publishedTime: post.date,
             authors: [post.author],
             images: [

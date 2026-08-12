@@ -11,11 +11,14 @@ export async function GET() {
         'cf-a2b-int-in'
     ];
 
+    // Keep lastmod stable between deploys — bump when content meaningfully changes.
+    const SITE_LAST_UPDATED = '2026-08-13T00:00:00.000Z';
+
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${sitemaps.map(name => `  <sitemap>
     <loc>${baseUrl}/sitemap/${name}/index.xml</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
+    <lastmod>${SITE_LAST_UPDATED}</lastmod>
   </sitemap>`).join('\n')}
 </sitemapindex>`;
 

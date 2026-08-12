@@ -1,6 +1,14 @@
 import React from 'react';
 import SEOContentBlock from '@/app/components/SEOContentBlock';
 
+export const metadata = {
+    title: 'SEO Debug Preview',
+    robots: {
+        index: false,
+        follow: false,
+    },
+};
+
 export default function TestSEOPage() {
     return (
         <div className="p-10">

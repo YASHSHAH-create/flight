@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
 import Navbar from "./components/Navbar";
 import { MoveRight } from 'lucide-react';
 import AnimatedSection from "./components/AnimatedSection";
@@ -17,6 +18,12 @@ const LatestBlogPosts = dynamic(() => import('./components/LatestBlogPosts'));
 const FAQSection = dynamic(() => import('./components/FAQSection'));
 const BottomNav = dynamic(() => import('./components/ClientBottomNav'));
 
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "https://paymm.in",
+  },
+};
 
 export default function Home() {
   return (
