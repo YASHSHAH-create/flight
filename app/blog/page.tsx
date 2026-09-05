@@ -6,7 +6,7 @@ import Navbar from '@/app/components/Navbar';
 
 
 export const metadata: Metadata = {
-    title: 'Travel Blog | Paymm - Tips, Guides & Destinations',
+    title: 'Travel Blog – Flight Tips, Destination Guides & Fare Trends',
     description: 'Explore expert travel tips, destination guides, and the latest trends in tourism with the Paymm Travel Blog. Plan your next adventure today.',
     alternates: {
         canonical: 'https://www.paymm.in/blog',

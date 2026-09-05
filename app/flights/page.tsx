@@ -7,7 +7,7 @@ import Footer from "@/app/components/Footer";
 import { Plane } from "lucide-react";
 
 export const metadata: Metadata = {
-    title: "All Flight Routes in India & International | Paymm",
+    title: "All Flight Routes in India & International",
     description:
         "Browse all popular flight routes from India. Compare fares on domestic routes like Delhi to Mumbai and international routes like Delhi to Dubai. Book cheap air tickets with Paymm.",
     alternates: {
@@ -224,7 +224,7 @@ export default function FlightsHubPage() {
                     </h2>
                     <p className="text-slate-600 leading-relaxed text-sm">
                         Every route page above includes live fare comparison across major
-                        airlines like IndiGo, Air India, Vistara, Akasa Air and SpiceJet,
+                        airlines like IndiGo, Air India, Air India Express, Akasa Air and SpiceJet,
                         along with flight duration, distance, airport guides, best time to
                         book, and month-by-month fare trends. For maximum savings, book
                         domestic flights around 3 weeks in advance and international

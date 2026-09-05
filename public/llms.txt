@@ -8,10 +8,14 @@
 - **GST Registration**: 10AAMCP7167L1Z1
 - **Contact Email**: support@paymm.in
 - **Contact Phone**: +91 9343300271
-- **Address**: New Delhi, India
+- **Registered Office**: Bihar, India (GST state code 10)
+- **Support Hours**: Phone Mon–Sat 9:00 AM – 6:00 PM IST; email 7 days a week
+- **Founder**: Yash Shah (https://www.paymm.in/author/yash-shah)
+- **Apps**: Android https://play.google.com/store/apps/details?id=in.paymm.app · iOS https://apps.apple.com/app/id6780256299
 - **Socials**:
   - Instagram: https://www.instagram.com/paymm_bookings/
   - LinkedIn: https://www.linkedin.com/company/paymm/
+  - X: https://x.com/paymm_in
 
 ## Popular Flight Routes
 
@@ -39,7 +43,7 @@ Our detailed guide to the top travel destinations in India for 2026:
 
 ### How to Find Cheap International Flights from India
 1. **Timing**: Book 3-4 months before departure. Too early or late increases price.
-2. **Tools**: Use Paymm to compare across domestic (IndiGo, Air India, Vistara) and international carriers.
+2. **Tools**: Use Paymm to compare across domestic (IndiGo, Air India, Air India Express, Akasa Air) and international carriers.
 3. **Flexibility**: Fly mid-week (Tuesday/Wednesday) to avoid weekend fare spikes.
 
 ## FAQ

@@ -80,7 +80,7 @@ export const BLOG_POSTS: BlogPost[] = [
       <p><strong>Travel Tip:</strong> Rent a two-wheeler to cruise around White Town and enjoy French croissants at local bakeries.</p>
     `,
         date: "2026-01-02",
-        author: "Paymm Travel Team",
+        author: "Paymm Editorial Team",
         category: "Destinations",
         readTime: "10 min read",
         imageUrl: "/blog/img1.png",
@@ -99,7 +99,7 @@ export const BLOG_POSTS: BlogPost[] = [
       <p>Flying mid-week (typically Tuesday or Wednesday) is often significantly cheaper than flying on weekends. Use a flexible calendar search tool to scan for the lowest priced days on your route.</p>
     `,
         date: "2025-12-28",
-        author: "Paymm Travel Team",
+        author: "Paymm Editorial Team",
         category: "Travel Tips",
         readTime: "4 min read",
         imageUrl: "/blog/img4.png",
@@ -118,7 +118,7 @@ export const BLOG_POSTS: BlogPost[] = [
       <p>Basic first aid, painkillers, band-aids, and any personal medication. Don't rely on finding specific brands abroad.</p>
     `,
         date: "2025-12-15",
-        author: "Paymm Travel Team",
+        author: "Paymm Editorial Team",
         category: "Travel Tips",
         readTime: "3 min read",
         imageUrl: "/blog/img4.png",
@@ -135,7 +135,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>June to September is ideal as the roads are clear. Winter expeditions are for the brave!</p>
         `,
         date: "2026-01-05",
-        author: "Aditi Sharma",
+        author: "Paymm Editorial Team",
         category: "Adventure",
         readTime: "6 min read",
         imageUrl: "/blog/img1.png",
@@ -152,7 +152,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>Planning is key as you need entry permits. Book well in advance to secure your spot in paradise.</p>
         `,
         date: "2026-01-06",
-        author: "Rahul Verma",
+        author: "Paymm Editorial Team",
         category: "Beaches",
         readTime: "4 min read",
         imageUrl: "/blog/img2.png",
@@ -169,7 +169,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>Visit Mawlynnong, renowned for its cleanliness and community-led eco-tourism.</p>
         `,
         date: "2026-01-07",
-        author: "Arun Roy",
+        author: "Paymm Editorial Team",
         category: "Nature",
         readTime: "5 min read",
         imageUrl: "/blog/img1.png",
@@ -186,7 +186,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>Explore Osaka for food, Hokkaido for nature, and Nara for its famous deer park.</p>
         `,
         date: "2026-01-08",
-        author: "Paymm Travel Team",
+        author: "Paymm Editorial Team",
         category: "International",
         readTime: "7 min read",
         imageUrl: "/blog/img3.png",
@@ -203,7 +203,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>Start in Hanoi, cruise Halong Bay, visit the lantern city of Hoi An, and end in bustling Ho Chi Minh City.</p>
         `,
         date: "2026-01-09",
-        author: "Sneha Gupta",
+        author: "Paymm Editorial Team",
         category: "International",
         readTime: "6 min read",
         imageUrl: "/blog/img3.png",
@@ -220,7 +220,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>Even in shoulder seasons, you might catch a glimpse of the Aurora Borealis in northern parts like Tromso.</p>
         `,
         date: "2026-01-10",
-        author: "Paymm Travel Team",
+        author: "Paymm Editorial Team",
         category: "Travel Trends",
         readTime: "5 min read",
         imageUrl: "/blog/img1.png",
@@ -237,7 +237,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>Experience amazing street food and city vibes with a more relaxed atmosphere and lower prices.</p>
         `,
         date: "2026-01-11",
-        author: "Karan Singh",
+        author: "Paymm Editorial Team",
         category: "Travel Hacks",
         readTime: "4 min read",
         imageUrl: "/blog/img2.png",
@@ -254,7 +254,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>Japan for safety, Thailand for social hostels, and Iceland for easy navigation and friendly locals.</p>
         `,
         date: "2026-01-12",
-        author: "Priya Malik",
+        author: "Paymm Editorial Team",
         category: "Solo Travel",
         readTime: "5 min read",
         imageUrl: "/blog/img4.png",
@@ -271,7 +271,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>Crystal clear views of the Milky Way and a chance to visit the Indian Astronomical Observatory.</p>
         `,
         date: "2026-01-13",
-        author: "Vikram Sethi",
+        author: "Paymm Editorial Team",
         category: "Adventure",
         readTime: "4 min read",
         imageUrl: "/blog/img1.png",
@@ -288,7 +288,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>Bali finally has a dedicated visa for remote workers, making legal long-term stays easier.</p>
         `,
         date: "2026-01-14",
-        author: "Paymm Travel Team",
+        author: "Paymm Editorial Team",
         category: "Digital Nomad",
         readTime: "6 min read",
         imageUrl: "/blog/img4.png",
@@ -305,7 +305,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>Combine beach leisure with a visit to this 2,000-year-old temple.</p>
         `,
         date: "2026-01-15",
-        author: "Anjali Menon",
+        author: "Paymm Editorial Team",
         category: "Beaches",
         readTime: "3 min read",
         imageUrl: "/blog/img2.png",
@@ -322,7 +322,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>Meet the local Apatani tribe, famous for their facial tattoos and sustainable living practices.</p>
         `,
         date: "2026-01-16",
-        author: "Rohan Das",
+        author: "Paymm Editorial Team",
         category: "Culture",
         readTime: "4 min read",
         imageUrl: "/blog/img3.png",
@@ -339,7 +339,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>A short trek leads to this cascading beauty, perfect for a refreshing dip.</p>
         `,
         date: "2026-01-17",
-        author: "Paymm Travel Team",
+        author: "Paymm Editorial Team",
         category: "Destinations",
         readTime: "4 min read",
         imageUrl: "/blog/img4.png",
@@ -356,7 +356,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>With limited connectivity, Gurez is the place to disconnect and immerse in nature.</p>
         `,
         date: "2026-01-18",
-        author: "Ishaan Khan",
+        author: "Paymm Editorial Team",
         category: "Adventure",
         readTime: "5 min read",
         imageUrl: "/blog/img1.png",
@@ -373,7 +373,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>Carry a reusable bottle and bag. It's a small step that makes a huge difference.</p>
         `,
         date: "2026-01-19",
-        author: "Green Earth Team",
+        author: "Paymm Editorial Team",
         category: "Travel Tips",
         readTime: "3 min read",
         imageUrl: "/blog/img1.png",
@@ -390,7 +390,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>See the monuments like Hawa Mahal and Albert Hall Museum beautifully illuminated at night.</p>
         `,
         date: "2026-01-20",
-        author: "Paymm Travel Team",
+        author: "Paymm Editorial Team",
         category: "Heritage",
         readTime: "5 min read",
         imageUrl: "/blog/img3.png",
@@ -407,7 +407,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>Local eateries (Warungs) serve delicious Nasi Goreng and Mie Goreng for just a few dollars.</p>
         `,
         date: "2026-01-21",
-        author: "Tara Singh",
+        author: "Paymm Editorial Team",
         category: "International",
         readTime: "4 min read",
         imageUrl: "/blog/img2.png",
@@ -424,7 +424,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>Head to the Gulf side for the best and cheapest scuba diving certifications in the world.</p>
         `,
         date: "2026-01-22",
-        author: "Paymm Travel Team",
+        author: "Paymm Editorial Team",
         category: "International",
         readTime: "6 min read",
         imageUrl: "/blog/img2.png",
@@ -441,7 +441,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>Conquer Rohtang La, Baralacha La, and Tanglang La. The views are worth the rough roads.</p>
         `,
         date: "2026-01-23",
-        author: "Biker Boyz",
+        author: "Paymm Editorial Team",
         category: "Adventure",
         readTime: "7 min read",
         imageUrl: "/blog/img4.png",
@@ -458,7 +458,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>Visit the Matrimandir and experience the unique experimental township dedicated to human unity.</p>
         `,
         date: "2026-01-24",
-        author: "Paymm Travel Team",
+        author: "Paymm Editorial Team",
         category: "Culture",
         readTime: "4 min read",
         imageUrl: "/blog/img3.png",
@@ -475,7 +475,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>Phase 2 of the Gondola takes you up to Mt. Apharwat offering panoramic Himalayan views.</p>
         `,
         date: "2026-01-25",
-        author: "Snow Patrol",
+        author: "Paymm Editorial Team",
         category: "Adventure",
         readTime: "5 min read",
         imageUrl: "/blog/img4.png",
@@ -492,7 +492,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>Take a traditional round boat ride on the Tungabhadra River during sunset.</p>
         `,
         date: "2026-01-26",
-        author: "History Buff",
+        author: "Paymm Editorial Team",
         category: "Heritage",
         readTime: "5 min read",
         imageUrl: "/blog/img3.png",
@@ -509,7 +509,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>Plan your trips around events like Tomorrowland, Coachella, or Lollapalooza India.</p>
         `,
         date: "2026-01-27",
-        author: "Paymm Travel Team",
+        author: "Paymm Editorial Team",
         category: "Travel Trends",
         readTime: "3 min read",
         imageUrl: "/blog/img3.png",
@@ -526,7 +526,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>A UNESCO World Heritage experience, the slow steam train is pure nostalgia.</p>
         `,
         date: "2026-01-28",
-        author: "Paymm Travel Team",
+        author: "Paymm Editorial Team",
         category: "Hill Stations",
         readTime: "4 min read",
         imageUrl: "/blog/img1.png",
@@ -543,7 +543,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>Learn how tea is processed from leaf to cup at the Tata Tea Museum.</p>
         `,
         date: "2026-01-29",
-        author: "Kerala Calling",
+        author: "Paymm Editorial Team",
         category: "Hill Stations",
         readTime: "4 min read",
         imageUrl: "/blog/img1.png",
@@ -560,7 +560,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>One of the few living forts in the world where people still reside inside the ancient walls.</p>
         `,
         date: "2026-01-30",
-        author: "Desert Rose",
+        author: "Paymm Editorial Team",
         category: "Heritage",
         readTime: "5 min read",
         imageUrl: "/blog/img3.png",
@@ -577,7 +577,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>The Buddhist caves of Ajanta act as a museum of ancient Indian painting.</p>
         `,
         date: "2026-01-31",
-        author: "Heritage Hunter",
+        author: "Paymm Editorial Team",
         category: "Heritage",
         readTime: "5 min read",
         imageUrl: "/blog/img3.png",
@@ -594,7 +594,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>For the best Tibetan food, Laphing, and cafe vibes in Delhi.</p>
         `,
         date: "2026-02-01",
-        author: "Foodie Express",
+        author: "Paymm Editorial Team",
         category: "Food",
         readTime: "4 min read",
         imageUrl: "/blog/img3.png",
@@ -611,7 +611,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>India's largest earth dam, offering speed boating and stunning island views.</p>
         `,
         date: "2026-02-02",
-        author: "Nature Lover",
+        author: "Paymm Editorial Team",
         category: "Nature",
         readTime: "4 min read",
         imageUrl: "/blog/img1.png",
@@ -628,7 +628,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>Gokarna is also a temple town. The vibe is a unique mix of spirituality and chill.</p>
         `,
         date: "2026-02-03",
-        author: "Beach Bum",
+        author: "Paymm Editorial Team",
         category: "Beaches",
         readTime: "4 min read",
         imageUrl: "/blog/img2.png",
@@ -645,7 +645,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>Experience culture, food, and shopping from 90+ countries in one place.</p>
         `,
         date: "2026-02-04",
-        author: "Dubai Diaries",
+        author: "Paymm Editorial Team",
         category: "International",
         readTime: "5 min read",
         imageUrl: "/blog/img1.png",
@@ -662,7 +662,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>Visit the Indo-China border. The permit process is easier now for Indian tourists.</p>
         `,
         date: "2026-02-05",
-        author: "North East Explorer",
+        author: "Paymm Editorial Team",
         category: "Heritage",
         readTime: "6 min read",
         imageUrl: "/blog/img3.png",
@@ -679,7 +679,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>For a closer look at village life, take a sunrise kayaking tour through narrow canals.</p>
         `,
         date: "2026-02-06",
-        author: "Kerala Calling",
+        author: "Paymm Editorial Team",
         category: "Destinations",
         readTime: "4 min read",
         imageUrl: "/blog/img2.png",
@@ -696,7 +696,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>Visit the ancient Silk Route grandeur at the Chinese border (permits required).</p>
         `,
         date: "2026-02-07",
-        author: "Sikkim Stories",
+        author: "Paymm Editorial Team",
         category: "Hill Stations",
         readTime: "5 min read",
         imageUrl: "/blog/img1.png",
@@ -713,7 +713,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>Witness the high-energy beating retreat ceremony at the India-Pakistan border.</p>
         `,
         date: "2026-02-08",
-        author: "Punjab Traveller",
+        author: "Paymm Editorial Team",
         category: "Culture",
         readTime: "4 min read",
         imageUrl: "/blog/img3.png",
@@ -730,7 +730,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>A serene beach town with a famous Ganesh temple right on the shore.</p>
         `,
         date: "2026-02-09",
-        author: "Road Tripper",
+        author: "Paymm Editorial Team",
         category: "Adventure",
         readTime: "6 min read",
         imageUrl: "/blog/img2.png",
@@ -747,7 +747,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>More laid back, famous for the mist-covered Kodai Lake and pillar rocks.</p>
         `,
         date: "2026-02-10",
-        author: "Hill Hopper",
+        author: "Paymm Editorial Team",
         category: "Hill Stations",
         readTime: "4 min read",
         imageUrl: "/blog/img1.png",
@@ -764,7 +764,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>The highest point in Kutch offering panoramic views of the salt desert.</p>
         `,
         date: "2026-02-11",
-        author: "Gujarat Diaries",
+        author: "Paymm Editorial Team",
         category: "Culture",
         readTime: "5 min read",
         imageUrl: "/blog/img3.png",
@@ -781,7 +781,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>Bhutan's high-value, low-volume tourism policy ensures an uncrowded and pristine experience.</p>
         `,
         date: "2026-02-12",
-        author: "Himalayan Soul",
+        author: "Paymm Editorial Team",
         category: "International",
         readTime: "5 min read",
         imageUrl: "/blog/img1.png",
@@ -798,7 +798,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>Famous for whale watching and surfing. The southern coast is stunning.</p>
         `,
         date: "2026-02-13",
-        author: "Island Explorer",
+        author: "Paymm Editorial Team",
         category: "International",
         readTime: "6 min read",
         imageUrl: "/blog/img2.png",
@@ -815,7 +815,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>A short trek to the Bhagsu waterfall leads to this iconic hippie hangout.</p>
         `,
         date: "2026-02-14",
-        author: "Cafe Crawler",
+        author: "Paymm Editorial Team",
         category: "Food",
         readTime: "3 min read",
         imageUrl: "/blog/img1.png",
@@ -832,7 +832,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>Sitting against the backdrop of snowy peaks, the temple vibe is indescribable.</p>
         `,
         date: "2026-02-15",
-        author: "Pilgrim Soul",
+        author: "Paymm Editorial Team",
         category: "Spiritual",
         readTime: "5 min read",
         imageUrl: "/blog/img1.png",
@@ -849,7 +849,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>Home to the one-horned rhinoceros. The elephant safari here is unique.</p>
         `,
         date: "2026-02-16",
-        author: "Wild Life",
+        author: "Paymm Editorial Team",
         category: "Wildlife",
         readTime: "5 min read",
         imageUrl: "/blog/img4.png",
@@ -866,7 +866,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>Try authentic French bakeries and crepe stations in White Town.</p>
         `,
         date: "2026-02-17",
-        author: "Weekend Warrior",
+        author: "Paymm Editorial Team",
         category: "Destinations",
         readTime: "3 min read",
         imageUrl: "/blog/img3.png",
@@ -883,7 +883,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>Combine the trek with a visit to the high-altitude Sikh pilgrimage site nearby.</p>
         `,
         date: "2026-02-18",
-        author: "Trekker Life",
+        author: "Paymm Editorial Team",
         category: "Adventure",
         readTime: "5 min read",
         imageUrl: "/blog/img1.png",
@@ -900,7 +900,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>Book accommodation months in advance as Kohima gets packed.</p>
         `,
         date: "2026-02-19",
-        author: "Tribal Trails",
+        author: "Paymm Editorial Team",
         category: "Culture",
         readTime: "4 min read",
         imageUrl: "/blog/img3.png",
@@ -917,7 +917,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <p>Day passes to luxury resorts allow you to experience the glam without the stay cost.</p>
         `,
         date: "2026-02-20",
-        author: "Budget Beach",
+        author: "Paymm Editorial Team",
         category: "International",
         readTime: "5 min read",
         imageUrl: "/blog/img2.png",

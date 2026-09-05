@@ -24,6 +24,12 @@ export interface RouteContent {
     sources: string[];
     author: string;
     lastUpdated: string;
+    /** Hand-written, route-specific paragraph(s). Only priority routes have one. */
+    routeNotes?: string[];
+    /** Route-specific FAQs written by hand (merged ahead of generated ones). */
+    routeFaqs?: { question: string; answer: string }[];
+    /** One-sentence direct answer shown at the top of the page (AEO). */
+    quickAnswer: string;
     wordCount: number;
     distance: number;
     durationStr: string;
@@ -461,7 +467,67 @@ const CITY_PROFILES: Record<string, CityProfile> = {
             "Tuk-tuks in Phuket charge fixed high rates; the Smart Bus or Grab is far cheaper for beach-to-beach travel."
         ],
         nearbyCities: ["Phi Phi Islands - 45 km by boat", "Phang Nga Bay (James Bond Island) - 75 km", "Krabi & Railay Beach - 165 km"]
-    }
+    },
+    NAG: {
+        about: "Nagpur, the 'Orange City', sits almost exactly at the geographic centre of India and is Maharashtra's winter capital. It is a fast-growing logistics and IT hub (MIHAN SEZ) and the gateway to the Tadoba and Pench tiger reserves.",
+        attractions: ["Zero Mile Stone, the survey marker for the centre of India", "Deekshabhoomi, the vast Buddhist stupa where Dr Ambedkar converted in 1956", "Futala Lake promenade and its evening fountain show", "Tadoba-Andhari Tiger Reserve (about 150 km) for tiger safaris"],
+        food: ["Saoji mutton and chicken, Nagpur's famously fiery cuisine", "Tarri poha and Santra barfi (orange fudge) from Haldiram's original home city"],
+        airportDetails: "Dr. Babasaheb Ambedkar International Airport (NAG) in Sonegaon is about 8 km south of the city centre. It has a single integrated terminal handling domestic flights plus a handful of Gulf services, with quick kerb-to-gate times and rarely more than 30 minutes at security.",
+        transit: "Ola and Uber pick up outside arrivals and reach Sitabuldi (city centre) in 20-25 minutes for roughly ₹250-350. A prepaid taxi counter operates inside the terminal; Nagpur Metro's Aqua Line stops at Airport South station, a short auto ride from the terminal.",
+        bestTime: "October to February, when days are dry and cool; summers regularly cross 45°C",
+        weather: "Nagpur has one of India's hottest summers (April-June often exceed 44°C), a strong monsoon from late June to September, and pleasant, dry winters with nights around 10-12°C.",
+        tips: [
+            "Buy oranges and orange barfi from Sitabuldi or the airport shop; December to February is peak orange season.",
+            "Tadoba safari permits sell out weeks ahead for weekend slots; book online before you fly.",
+            "Morning departures out of Nagpur are cheaper than the evening bank of flights to Mumbai and Delhi."
+        ],
+        nearbyCities: ["Tadoba National Park - 150 km", "Pench National Park - 90 km", "Ramtek temple town - 50 km"]
+    },
+    IDR: {
+        about: "Indore is the commercial capital of Madhya Pradesh and has been ranked India's cleanest city in the Swachh Survekshan survey year after year. It blends Holkar-era palaces with a legendary street-food culture and a booming IT and pharma sector.",
+        attractions: ["Rajwada Palace, the seven-storey Holkar seat in the old city", "Lal Bagh Palace and its European-style interiors", "Sarafa Bazaar's night food market (open from 8 pm)", "Day trips to Mandu's Afghan-era monuments and Omkareshwar jyotirlinga"],
+        food: ["Poha-jalebi breakfast, the Indore ritual", "Bhutte ka kees (spiced grated corn)", "Khopra patties and shikanji at Sarafa or Chappan Dukan"],
+        airportDetails: "Devi Ahilyabai Holkar Airport (IDR) is Madhya Pradesh's busiest airport, about 8 km west of the city centre. The single terminal handles 60+ daily movements, mostly IndiGo, Air India and Air India Express, with direct links to every metro plus Dubai and Sharjah.",
+        transit: "App cabs reach Vijay Nagar or Rajwada in 20-30 minutes (₹200-300). AICTSL city buses stop outside the airport gate, and a prepaid taxi booth operates in arrivals.",
+        bestTime: "October to March; the monsoon (July-September) is also pleasant and green, but Mandu roads can be slow",
+        weather: "Indore has a semi-arid climate: hot summers (up to 42°C in May), a moderate monsoon, and cool, dry winters with nights near 8-10°C in January.",
+        tips: [
+            "Sarafa Bazaar only comes alive after 8 pm; plan a late dinner rather than an early one.",
+            "Pune-Indore and Mumbai-Indore fares spike around Diwali and the Simhastha/Ujjain festival dates; book 4-6 weeks ahead.",
+            "Ujjain's Mahakaleshwar temple is 55 km away; the 4 am Bhasma Aarti needs advance online registration."
+        ],
+        nearbyCities: ["Ujjain - 55 km", "Mandu - 95 km", "Omkareshwar - 80 km"]
+    },
+    BDQ: {
+        about: "Vadodara (Baroda) is Gujarat's cultural capital, shaped by the Gaekwad dynasty and home to the Maharaja Sayajirao University. It is a major petrochemical and engineering hub on the Mumbai-Delhi industrial corridor.",
+        attractions: ["Laxmi Vilas Palace, four times the size of Buckingham Palace", "Sayaji Baug gardens and the Baroda Museum", "Champaner-Pavagadh Archaeological Park, a UNESCO World Heritage Site 45 km away", "Statue of Unity at Kevadia, about 90 km"],
+        food: ["Sev usal and Baroda-style bhakarwadi", "Lilo chevdo and Gujarati thali at Mandap or Sanman", "Kadhi-khichdi and shrikhand from the old city"],
+        airportDetails: "Vadodara Airport (BDQ) at Harni is just 6 km north-east of the city centre and has a modern glass terminal opened in 2016. It handles domestic flights only, chiefly IndiGo and Air India to Delhi, Mumbai, Bengaluru and Hyderabad.",
+        transit: "App cabs and auto-rickshaws reach Alkapuri or the railway station in 15-20 minutes for ₹150-250. The airport is small enough that 45 minutes before a domestic departure is ample.",
+        bestTime: "October to March; Navratri (September-October) is spectacular but hotels fill up",
+        weather: "Hot, dry summers reaching 42°C, a moderate monsoon from June to September, and mild winters with daytime highs around 28°C.",
+        tips: [
+            "Vadodara is on the Mumbai-Ahmedabad rail line; for Ahmedabad it is faster and cheaper to take the train than to fly via Mumbai.",
+            "Laxmi Vilas Palace tickets include an audio guide; go in the morning before the heat builds.",
+            "Combine the Statue of Unity and Champaner in one day trip by car."
+        ],
+        nearbyCities: ["Ahmedabad - 110 km", "Statue of Unity (Kevadia) - 90 km", "Champaner-Pavagadh - 45 km"]
+    },
+    GAU: {
+        about: "Guwahati is the largest city in North-East India and the gateway to all seven sister states. It sits on the south bank of the Brahmaputra and is the base for Kaziranga, Shillong, Tawang and the Kamakhya temple.",
+        attractions: ["Kamakhya Temple on Nilachal Hill, one of the 51 Shakti Peethas", "Umananda Island, the world's smallest inhabited river island", "Brahmaputra sunset cruises from Fancy Bazaar ghat", "Kaziranga National Park (about 190 km) for one-horned rhinos"],
+        food: ["Assamese thali with khar, tenga (sour fish curry) and pitika", "Silkworm and duck dishes at Paradise or Khorikaa", "Fresh Assam tea and pitha rice cakes"],
+        airportDetails: "Lokpriya Gopinath Bordoloi International Airport (GAU) at Borjhar is about 25 km west of the city. A new integrated terminal is under construction; the current terminal handles 100+ daily flights from IndiGo, Air India, Air India Express, Akasa and SpiceJet, plus a few international services to Bangkok and Singapore.",
+        transit: "Prepaid taxis and app cabs take 45-60 minutes to Paltan Bazaar (₹600-900). ASTC airport buses run to the city and to Shillong; shared cabs to Shillong (100 km, 3 hours) leave from just outside the terminal.",
+        bestTime: "October to April; Kaziranga is closed for the monsoon from May to mid-October",
+        weather: "Humid subtropical: heavy monsoon rain from June to September, warm and sticky summers, and mild, foggy winters with mornings around 10°C.",
+        tips: [
+            "If you are heading to Shillong, book a shared Sumo or a taxi at the airport counter rather than going into Guwahati first.",
+            "Kamakhya temple queues run to 3-4 hours on weekends; buy a VIP darshan ticket or arrive before 6 am.",
+            "Delhi-Guwahati fares roughly double around Bihu (mid-April) and Durga Puja; book at least 6 weeks ahead."
+        ],
+        nearbyCities: ["Shillong - 100 km", "Kaziranga National Park - 190 km", "Tezpur - 180 km"]
+    },
 };
 
 /**
@@ -526,7 +592,8 @@ function calculateRouteStats(originCode: string, destCode: string) {
         DPS: [-8.748, 115.167], HKT: [8.113, 98.317], LKO: [26.760, 80.880],
         JDH: [26.250, 73.010], IXZ: [11.640, 92.730], IXC: [30.670, 76.780],
         ATQ: [31.700, 74.800], TRV: [8.480, 76.920], VNS: [25.450, 82.850],
-        PAT: [25.590, 85.080]
+        PAT: [25.590, 85.080], NAG: [21.092, 79.047], IDR: [22.722, 75.801],
+        BDQ: [22.336, 73.226], GAU: [26.106, 91.586]
     };
 
     const p1 = coords[originCode] || [20, 78];
@@ -598,6 +665,165 @@ function generateFareCalendar(distance: number, isInt: boolean): FareMonth[] {
     return months;
 }
 
+interface RouteNotes {
+    notes: string[];
+    faqs?: { question: string; answer: string }[];
+}
+
+const pairKey = (a: string, b: string) => (a < b ? `${a}-${b}` : `${b}-${a}`);
+
+/**
+ * Hand-written facts for the highest-demand routes. These are what make a
+ * priority route page different from every other route page. Keep them
+ * factual and dated; update when schedules change.
+ */
+const ROUTE_NOTES: Record<string, RouteNotes> = {
+    'BOM-DEL': {
+        notes: [
+            "Delhi–Mumbai is the busiest air corridor in India with 60+ non-stop flights a day spread across IndiGo, Air India, Akasa Air, Air India Express and SpiceJet. Departures run almost every 15 minutes between 5:30 am and 11 pm, so you can nearly always find a seat, but the 6–9 am and 5–8 pm business banks are priced ₹1,500–2,500 higher than the 11 am–3 pm flights.",
+            "Air India and Akasa operate from Delhi Terminal 3 and Mumbai Terminal 2; IndiGo splits between Delhi T1/T2/T3 and Mumbai T1/T2 depending on the flight number, so check your boarding pass before booking a cab. Mumbai T1 (Santacruz) is a separate building 1.5 km from T2 with a free shuttle.",
+            "Flight time is scheduled at 2h 10m–2h 20m. Both airports use slot-controlled runways, so add 20–30 minutes of taxi/holding time in the evening bank, particularly at Mumbai between 6 and 9 pm."
+        ],
+        faqs: [
+            { question: "How many flights a day are there from Delhi to Mumbai?", answer: "More than 60 non-stop flights operate daily between Delhi (DEL) and Mumbai (BOM), making it India's busiest domestic route. IndiGo has the most departures, followed by Air India, Akasa Air, Air India Express and SpiceJet." },
+            { question: "What is the cheapest day to fly Delhi to Mumbai?", answer: "Tuesday and Wednesday midday departures are consistently the cheapest. Friday evening and Sunday evening flights are the most expensive because of business commuters returning home." }
+        ]
+    },
+    'BLR-DEL': {
+        notes: [
+            "Delhi–Bengaluru is a 2h 45m–3h non-stop flight and India's second-busiest route with 40+ daily services. IndiGo, Air India, Akasa Air and Air India Express all fly it; Air India uses its widebody aircraft on a few morning and evening rotations, which is the only way to get lie-flat business class on a domestic sector.",
+            "Bengaluru's Terminal 2 handles Air India, Akasa and international flights, while IndiGo and Air India Express use Terminal 1. Kempegowda Airport is 35–40 km from the city, so allow 90 minutes by road in the evening or take the BMTC Vayu Vajra bus."
+        ],
+        faqs: [
+            { question: "Which terminal do Delhi–Bengaluru flights use at Bengaluru airport?", answer: "Air India and Akasa Air arrive at Kempegowda Airport Terminal 2; IndiGo and Air India Express use Terminal 1. At Delhi, most Bengaluru flights depart from Terminal 3, with some IndiGo services from Terminal 1." }
+        ]
+    },
+    'BLR-BOM': {
+        notes: [
+            "Mumbai–Bengaluru is a 1h 30m–1h 45m hop with 35+ non-stop flights daily. Because both cities are corporate hubs, Monday morning flights out of Mumbai and Friday evening flights out of Bengaluru carry the highest fares; a Saturday morning departure is often 40% cheaper.",
+            "IndiGo operates the most frequencies; Air India, Akasa and Air India Express fill the rest. Fares typically sit between ₹3,500 and ₹6,500 one-way outside holiday weeks."
+        ]
+    },
+    'DEL-HYD': {
+        notes: [
+            "Delhi–Hyderabad takes about 2h 10m non-stop with 30+ daily flights from IndiGo, Air India, Akasa Air and Air India Express. Hyderabad's Rajiv Gandhi International Airport at Shamshabad has a single integrated terminal, so there is no terminal confusion on arrival.",
+            "Fares rise sharply during Bonalu (July) and Sankranti (mid-January) when Hyderabad residents travel home; the cheapest window is the monsoon months of August and September."
+        ]
+    },
+    'BOM-NAG': {
+        notes: [
+            "Mumbai–Nagpur is one of the strongest intra-Maharashtra routes with 8–10 daily non-stops from IndiGo, Air India and Air India Express, taking 1h 20m–1h 30m. It is popular with government and MIHAN business travellers, so mid-week morning flights sell out first.",
+            "Rail is the alternative (Vidarbha Express / Duronto take 11–12 hours overnight), which is why airfares here stay competitive: ₹3,000–4,500 one-way is normal when booked three weeks out, rising to ₹8,000+ on Diwali and the winter assembly session dates."
+        ],
+        faqs: [
+            { question: "How long is the flight from Mumbai to Nagpur?", answer: "A non-stop flight from Mumbai (BOM) to Nagpur (NAG) takes about 1 hour 25 minutes. IndiGo, Air India and Air India Express operate 8–10 direct flights every day." }
+        ]
+    },
+    'IDR-PNQ': {
+        notes: [
+            "Pune–Indore is served by IndiGo with 2–3 non-stop flights a day taking about 1h 25m; the alternative is a 13-hour road journey, so demand is steady from Pune's IT crowd with families in Madhya Pradesh. Book 3–4 weeks ahead for ₹3,500–5,000 fares; last-minute tickets around Diwali and Rangpanchami often exceed ₹9,000.",
+            "Indore's airport is only 8 km from Vijay Nagar, and Pune Airport (Lohegaon) is 10 km from Koregaon Park, so this is one of the few routes where total door-to-door time is under four hours."
+        ]
+    },
+    'BOM-PAT': {
+        notes: [
+            "Patna–Mumbai is a 2h 30m non-stop with 6–8 daily flights from IndiGo, Air India Express, SpiceJet and Akasa Air. It is a heavy migrant-worker and student corridor, so fares are most volatile around Chhath Puja (October/November), Holi and the June exam-results season, when one-way tickets can exceed ₹12,000.",
+            "Outside those peaks, booking three weeks ahead usually gets ₹4,500–6,000. Patna's Jay Prakash Narayan Airport has a short single runway and frequent winter fog; December–January morning departures are the most likely to be delayed."
+        ],
+        faqs: [
+            { question: "When are Patna to Mumbai flights cheapest?", answer: "Fares are lowest from mid-July to September and in February–March, outside Chhath, Holi and the summer holiday rush. Booking 3–4 weeks in advance typically saves 30–40% versus last-minute prices." }
+        ]
+    },
+    'MAA-VNS': {
+        notes: [
+            "Chennai–Varanasi is a pilgrimage route: IndiGo operates 1–2 daily non-stops taking about 2h 30m, and Air India adds seasonal frequencies during Dev Deepawali and Maha Shivaratri. Many South Indian travellers combine Kashi with Ayodhya and Prayagraj, all reachable by road from Varanasi within 3–4 hours.",
+            "Non-stop seats sell out quickly for Kartik Purnima (November); one-stop options via Delhi or Hyderabad are plentiful and often ₹2,000 cheaper if you can spare the extra 2 hours."
+        ]
+    },
+    'BOM-LKO': {
+        notes: [
+            "Lucknow–Mumbai takes about 2h 15m non-stop with 8–10 daily flights from IndiGo, Air India, Akasa Air and Air India Express. Lucknow's Chaudhary Charan Singh Airport opened a new integrated Terminal 3 in 2024, so check the terminal on your ticket; T2 still handles some domestic services.",
+            "This is a strong VFR (visiting friends and relatives) route, so Friday evening Mumbai departures and Sunday evening Lucknow departures are the most expensive; Tuesday and Wednesday fares run ₹4,000–5,500."
+        ]
+    },
+    'DEL-GAU': {
+        notes: [
+            "Delhi–Guwahati is the main air gateway into the North-East with 15+ daily non-stops taking 2h 20m–2h 40m from IndiGo, Air India, Air India Express, Akasa and SpiceJet. Onward connections to Imphal, Agartala, Dibrugarh and Silchar depart from the same terminal, and Shillong is a 3-hour shared taxi ride from the airport.",
+            "Fares roughly double around Bihu (mid-April), Durga Puja and the Christmas–New Year peak when Kaziranga safaris are most popular; the cheapest weeks are during the monsoon from June to September."
+        ],
+        faqs: [
+            { question: "Is there a direct flight from Delhi to Guwahati?", answer: "Yes. IndiGo, Air India, Air India Express, Akasa Air and SpiceJet together operate more than 15 non-stop flights a day from Delhi (DEL) to Guwahati (GAU). Flight time is about 2 hours 30 minutes." }
+        ]
+    },
+    'BDQ-HYD': {
+        notes: [
+            "Vadodara–Hyderabad is served by IndiGo with one or two daily non-stops taking about 1h 40m. It connects Gujarat's petrochemical belt with Hyderabad's pharma corridor, so most passengers are corporate; mid-week fares are higher than weekends, the reverse of leisure routes.",
+            "If the non-stop is full, one-stop options via Mumbai are frequent, and Ahmedabad (110 km from Vadodara by road) has 6+ daily Hyderabad flights across IndiGo, Air India and Akasa."
+        ]
+    },
+    'DEL-GOI': {
+        notes: [
+            "Delhi–Goa takes about 2h 30m non-stop and has 20+ daily flights across IndiGo, Air India, Akasa Air, Air India Express and SpiceJet. Goa now has two airports: Dabolim (GOI) in the south near Vasco, and Manohar International (GOX) at Mopa in the north, closer to Calangute, Anjuna and Arambol. Check which one your fare uses, since a wrong choice adds 60–90 minutes by road.",
+            "Peak fares run from 20 December to 5 January and over Holi; the monsoon months of June–September are the cheapest and Goa is green and quiet."
+        ],
+        faqs: [
+            { question: "Should I fly to Dabolim (GOI) or Mopa (GOX) from Delhi?", answer: "Choose Dabolim (GOI) for South Goa beaches such as Colva, Palolem and Benaulim. Choose Manohar International (GOX, Mopa) for North Goa beaches such as Calangute, Baga, Anjuna and Arambol. Both are served by non-stop flights from Delhi." }
+        ]
+    },
+    'BOM-GOI': {
+        notes: [
+            "Mumbai–Goa is a short 1h–1h 15m flight with 20+ daily non-stops, competing against the Vande Bharat and Tejas trains and the 10-hour road drive. IndiGo, Air India, Akasa and SpiceJet fly it; fares can drop below ₹2,500 mid-week in the monsoon and exceed ₹10,000 on 24–31 December.",
+            "Manohar International (GOX) at Mopa is now used by several Mumbai flights and is the better choice for North Goa; Dabolim (GOI) is closer to Panaji and South Goa."
+        ]
+    },
+    'DEL-DXB': {
+        notes: [
+            "Delhi–Dubai is India's busiest international route with 25+ daily non-stops: Emirates and flydubai fly to DXB, Air India, IndiGo, Air India Express, Akasa and SpiceJet fly to both DXB and, in some cases, Al Maktoum (DWC). Flight time is 3h 30m–3h 50m westbound.",
+            "Indian passport holders need a UAE visa arranged in advance (most travellers use an e-visa arranged through the airline or a travel agent); US/UK/Schengen visa holders can get visa on arrival. Return fares from ₹18,000–25,000 are common in the low season (May–September); Dubai Shopping Festival (January) and Diwali weeks push economy fares past ₹40,000."
+        ],
+        faqs: [
+            { question: "Do Indians need a visa to fly from Delhi to Dubai?", answer: "Yes. Indian citizens need a UAE visa before travel unless they hold a valid US, UK, EU/Schengen or certain other visas, in which case a visa on arrival is available. Paymm can arrange a 30-day UAE e-visa with your flight booking." }
+        ]
+    },
+    'BOM-DXB': {
+        notes: [
+            "Mumbai–Dubai is a 3h 15m flight with 20+ daily services from Emirates, Air India, IndiGo, Air India Express, flydubai, Akasa and SpiceJet. Emirates operates the A380 on some Mumbai rotations, one of the few chances to fly the double-decker from India.",
+            "Mumbai T2 is the departure terminal for all international flights; arrive 3 hours before departure as immigration queues at 1–4 am, when most Gulf flights leave, can stretch to 45 minutes."
+        ]
+    },
+    'DEL-SIN': {
+        notes: [
+            "Delhi–Singapore is a 5h 30m–5h 45m non-stop served by Singapore Airlines, Air India, IndiGo and Air India Express. Singapore Airlines' morning departure connects to its Australia and Southeast Asia network, while IndiGo's late-evening flight is usually the cheapest at ₹14,000–18,000 one-way.",
+            "Indian passport holders need a Singapore e-visa applied through an authorised agent; processing takes 3–5 working days, so do not leave it to the last week."
+        ]
+    },
+    'DEL-BKK': {
+        notes: [
+            "Delhi–Bangkok is a 4h 15m flight with daily non-stops from Air India, IndiGo, Thai Airways, Thai AirAsia X and Air India Express. Thailand has extended visa-free entry for Indian passport holders (60 days as of 2026), which is why this is one of the fastest-growing routes out of Delhi.",
+            "Bangkok has two airports: Suvarnabhumi (BKK) for full-service carriers and Don Mueang (DMK) for Thai AirAsia and some low-cost flights; check yours before booking hotels and transfers."
+        ],
+        faqs: [
+            { question: "Do Indians need a visa for Bangkok?", answer: "Indian passport holders can currently enter Thailand visa-free for tourism stays of up to 60 days. You need a passport valid for six months, a return ticket and proof of accommodation. Check the Royal Thai Embassy website before you fly, as the rule is reviewed periodically." }
+        ]
+    },
+    'DEL-LHR': {
+        notes: [
+            "Delhi–London Heathrow is an 8h 45m–9h 15m non-stop flown by Air India, British Airways and Virgin Atlantic, with Air India offering up to four daily departures. One-stop options via the Gulf (Emirates, Qatar Airways, Etihad) are usually ₹8,000–15,000 cheaper in economy and add 3–5 hours.",
+            "Peak pricing runs June–August (UK summer holidays) and the last two weeks of December; the cheapest months are February, March and November. A UK Standard Visitor visa takes about 3 weeks to process in India, so plan ahead."
+        ]
+    },
+    'DEL-JFK': {
+        notes: [
+            "Delhi–New York JFK is a 15–16 hour ultra-long-haul non-stop operated by Air India and American Airlines. Air India also flies Delhi–Newark (EWR), which is often cheaper and equally convenient for Manhattan and New Jersey.",
+            "Non-stop fares start around ₹70,000–85,000 return in the low season (February–April, September–October); one-stop itineraries via the Gulf, Europe or Istanbul are typically ₹15,000–25,000 cheaper."
+        ]
+    },
+};
+
+function getRouteNotes(originCode: string, destCode: string): RouteNotes | undefined {
+    return ROUTE_NOTES[pairKey(originCode, destCode)];
+}
+
 /**
  * Returns dynamic content details.
  */
@@ -613,12 +839,12 @@ export function generateRouteContent(originCode: string, destCode: string, isTop
     // Choose airlines based on route type
     const isInt = Object.keys(AIRPORT_MAP).indexOf(originCode) >= 32 || Object.keys(AIRPORT_MAP).indexOf(destCode) >= 32;
     const airlinesList = isInt 
-        ? "Air India, IndiGo, Emirates, Singapore Airlines, Qatar Airways, Etihad"
-        : "IndiGo, Air India, Vistara, Akasa Air, SpiceJet";
+        ? "Air India, IndiGo, Air India Express, Emirates, Singapore Airlines, Qatar Airways, Etihad"
+        : "IndiGo, Air India, Air India Express, Akasa Air, SpiceJet";
 
     // Generate dynamic H1 and metadata
     const h1 = `Book Flights from ${originCity} to ${destCity}`;
-    const title = `Book Cheap Flights from ${originCity} to ${destCity} | Paymm`;
+    const title = `Cheap Flights from ${originCity} to ${destCity} – Fares, Airlines & Duration`;
     const description = `Compare & book cheap flights from ${originCity} to ${destCity} on Paymm. View airfares, travel duration, flight schedules, airlines, and expert travel guides.`;
 
     // Dynamic paragraphs to build unique helpful content
@@ -665,6 +891,15 @@ export function generateRouteContent(originCode: string, destCode: string, isTop
         }
     ];
 
+    const notes = getRouteNotes(originCode, destCode);
+    if (notes?.faqs) {
+        faqs.unshift(...notes.faqs);
+    }
+
+    const cheapest = [...MONTH_SEASONALITY].map((m, i) => ({ ...m, i })).sort((a, b) => a.mult - b.mult)[0];
+    const cheapestMonth = new Date(2026, cheapest.i, 1).toLocaleString('en-IN', { month: 'long' });
+    const quickAnswer = `${originCity} to ${destCity} is about ${distance} km and a non-stop flight takes roughly ${durationStr}. Airlines flying the route include ${airlinesList.split(', ').slice(0, 3).join(', ')}. Fares are usually lowest in ${cheapestMonth} and mid-week; book ${isInt ? '6-8 weeks' : '3-4 weeks'} ahead for the best price.`;
+
     // Expand content length if it's a top route (1200+ words)
     let fullText = `${intro} ${routeOverview} ${departureAirportGuide} ${arrivalAirportGuide} ${seasonality} ${destinationGuide} ${travelTips.join(' ')}`;
     let wordCount = fullText.split(/\s+/).length;
@@ -684,10 +919,11 @@ export function generateRouteContent(originCode: string, destCode: string, isTop
     }
 
     const sources = [
-        "Directorate General of Civil Aviation (DGCA), India",
-        `Official Airport Portal of ${originCity} (${originCode})`,
-        `Official Airport Portal of ${destCity} (${destCode})`,
-        `Ministry of Tourism, India`
+        "Directorate General of Civil Aviation (DGCA) monthly traffic statistics – https://www.dgca.gov.in",
+        "Airports Authority of India traffic reports – https://www.aai.aero",
+        `${AIRPORT_MAP[originCode]?.name || originCity} (${originCode}) and ${AIRPORT_MAP[destCode]?.name || destCity} (${destCode}) operator websites`,
+        "Airline timetables: IndiGo, Air India, Air India Express, Akasa Air, SpiceJet",
+        "Ministry of Tourism, Government of India – https://tourism.gov.in"
     ];
 
     return {
@@ -706,7 +942,10 @@ export function generateRouteContent(originCode: string, destCode: string, isTop
         fareCalendar: generateFareCalendar(distance, isInt),
         sources,
         author: "Paymm Editorial Team",
-        lastUpdated: "August 2026",
+        lastUpdated: "6 September 2026",
+        routeNotes: notes?.notes,
+        routeFaqs: notes?.faqs,
+        quickAnswer,
         wordCount,
         distance,
         durationStr

@@ -3,7 +3,7 @@ import FeaturedProducts from '../components/FeaturedProducts';
 import Navbar from '../components/Navbar';
 
 export const metadata = {
-    title: 'Holiday Packages | Paymm',
+    title: 'Holiday Packages from India – Flights + Hotels Deals',
     description: 'Explore the best holiday packages and flight deals to top destinations. Curated tours, honeymoon specials, and budget getaways from India with Paymm.',
     alternates: {
         canonical: 'https://www.paymm.in/packages',

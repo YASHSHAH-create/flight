@@ -3,7 +3,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
 export const metadata = {
-    title: "How to Book Cheap Flights - A Complete Guide | Paymm",
+    title: "How to Book Cheap Flights in India – A Complete Guide",
     description: "Learn the best tips and tricks on how to book cheap flights, including finding the cheapest days to fly and utilizing flight comparison tools effectively.",
     alternates: {
         canonical: "https://www.paymm.in/how-to-book-cheap-flights",
@@ -16,6 +16,10 @@ export default function HowToBookCheapFlights() {
         "@type": "HowTo",
         "name": "How to Book Cheap Flights Online",
         "description": "A step-by-step guide to finding and booking the cheapest flight tickets available.",
+        "totalTime": "PT20M",
+        "estimatedCost": { "@type": "MonetaryAmount", "currency": "INR", "value": "0" },
+        "author": { "@type": "Organization", "name": "Paymm Editorial Team", "url": "https://www.paymm.in/author/paymm-editorial-team" },
+        "dateModified": "2026-09-06",
         "step": [
             {
                 "@type": "HowToStep",
@@ -55,6 +59,7 @@ export default function HowToBookCheapFlights() {
                         How to Book Cheap Flights: The Ultimate Guide
                     </h1>
                     
+                    <p className="text-sm text-slate-400 mb-6">By <a href="/author/paymm-editorial-team" className="underline hover:text-blue-600">Paymm Editorial Team</a> · Updated 6 September 2026</p>
                     <p className="text-xl text-slate-600 mb-12 leading-relaxed">
                         Finding cheap flight tickets doesn't have to be a stressful experience. With a little flexibility and the right tools, you can save a significant amount of money on your next trip. Here is our comprehensive guide to getting the best airfare deals.
                     </p>

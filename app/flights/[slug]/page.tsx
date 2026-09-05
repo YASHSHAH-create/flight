@@ -1,14 +1,16 @@
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { AIRPORT_MAP } from "@/app/lib/airports";
 import { BLOG_POSTS } from "@/app/lib/blog-data";
-import { isRouteValid, isRouteIndexable } from "@/app/lib/routeValidator";
+import { isRouteValid, isRouteIndexable, getIndexableRoutes } from "@/app/lib/routeValidator";
+import { ORG_ID } from "@/app/lib/company";
+import { AUTHORS, authorLd, authorUrl } from "@/app/lib/authors";
 import { generateRouteContent } from "@/app/lib/routeContentGenerator";
 import Navbar from "@/app/components/Navbar";
 import dynamic from 'next/dynamic';
 import Footer from "@/app/components/Footer";
 import Link from "next/link";
-import { Calendar, Clock, MapPin, ShieldCheck, User, Info, Plane, Award, FileText } from "lucide-react";
+import { Calendar, Clock, MapPin, ShieldCheck, User, Info, Plane, Award, FileText, Zap } from "lucide-react";
 
 const SearchWidget = dynamic(() => import('@/app/components/search-widget'), { ssr: true });
 
@@ -118,6 +120,13 @@ export default async function FlightRoutePage({ params }: Props) {
 
     const canonicalSlug = `${originName.toLowerCase().replace(/\s+/g, "-")}-to-${destName.toLowerCase().replace(/\s+/g, "-")}`;
 
+    // Alias slugs (delhi-to-mumbai, bangalore-to-goa, ...) 308 to the canonical
+    // slug so Google sees one URL per route instead of "duplicate, Google chose
+    // different canonical" entries.
+    if (slug.toLowerCase() !== canonicalSlug) {
+        permanentRedirect(`/flights/${canonicalSlug}`);
+    }
+
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
@@ -146,29 +155,20 @@ export default async function FlightRoutePage({ params }: Props) {
     const fillBlogs = BLOG_POSTS.filter(post => !matchedBlogs.includes(post)).slice(0, 3 - matchedBlogs.length);
     const relatedBlogs = [...matchedBlogs, ...fillBlogs];
 
-    // Find related/alternative routes from our indexable list
-    // Select routes that share origin or destination
-    const relatedRoutesList: { name: string; slug: string }[] = [];
-    const domesticAirports = Object.keys(AIRPORT_MAP).slice(0, 32);
-    
-    // Scan some common combinations
-    const hubs = ['DEL', 'BOM', 'BLR', 'HYD', 'MAA', 'CCU'];
-    for (const hub of hubs) {
-        if (hub !== originCode && hub !== destCode) {
-            // Origin to Hub
-            if (isRouteIndexable(originCode, hub) && relatedRoutesList.length < 3) {
-                const city = AIRPORT_MAP[hub].city;
-                const pathSlug = `${originName.toLowerCase().replace(/\s+/g, "-")}-to-${city.toLowerCase().replace(/\s+/g, "-")}`;
-                relatedRoutesList.push({ name: `${originName} to ${city}`, slug: pathSlug });
-            }
-            // Hub to Destination
-            if (isRouteIndexable(hub, destCode) && relatedRoutesList.length < 6) {
-                const city = AIRPORT_MAP[hub].city;
-                const pathSlug = `${city.toLowerCase().replace(/\s+/g, "-")}-to-${destName.toLowerCase().replace(/\s+/g, "-")}`;
-                relatedRoutesList.push({ name: `${city} to ${destName}`, slug: pathSlug });
-            }
-        }
-    }
+    // Related routes: every indexed route sharing this origin or destination,
+    // so the priority pages link to each other instead of being orphans.
+    const allIndexable = getIndexableRoutes();
+    const sameOrigin = allIndexable.filter(r => r.origin === originCode && r.dest !== destCode).slice(0, 8);
+    const sameDest = allIndexable.filter(r => r.dest === destCode && r.origin !== originCode).slice(0, 8);
+    const reverse = allIndexable.find(r => r.origin === destCode && r.dest === originCode);
+    const relatedRoutesList = [
+        ...(reverse ? [reverse] : []),
+        ...sameOrigin,
+        ...sameDest,
+    ].filter((r, i, arr) => arr.findIndex(x => x.slug === r.slug) === i);
+
+    const author = AUTHORS["paymm-editorial-team"];
+    const reviewer = AUTHORS["yash-shah"];
 
     // JSON-LD Schemas: WebPage, BreadcrumbList, FAQPage, Organization
     const breadcrumbLd = {
@@ -213,19 +213,13 @@ export default async function FlightRoutePage({ params }: Props) {
         "url": `https://www.paymm.in/flights/${canonicalSlug}`,
         "name": content.title,
         "description": content.description,
-        "publisher": {
-            "@type": "Organization",
-            "name": "Paymm",
-            "logo": {
-                "@type": "ImageObject",
-                "url": "https://www.paymm.in/paymm.png"
-            }
-        },
-        "author": {
-            "@type": "Organization",
-            "name": content.author
-        },
-        "dateModified": "2026-08-13T00:00:00+05:30",
+        "publisher": { "@id": ORG_ID },
+        "author": authorLd(author),
+        "reviewedBy": authorLd(reviewer),
+        "isPartOf": { "@id": "https://www.paymm.in/#website" },
+        "inLanguage": "en-IN",
+        "speakable": { "@type": "SpeakableSpecification", "cssSelector": ["h1", "#quick-answer"] },
+        "dateModified": "2026-09-06T00:00:00+05:30",
         "datePublished": "2026-01-10T00:00:00+05:30"
     };
 
@@ -269,7 +263,10 @@ export default async function FlightRoutePage({ params }: Props) {
                         {/* EEAT Author / Date Header */}
                         <div className="flex flex-wrap items-center gap-4 text-xs text-slate-400 pb-4 border-b border-slate-100">
                             <span className="flex items-center gap-1">
-                                <User size={14} /> Author: {content.author}
+                                <User size={14} /> By <Link href={authorUrl(author).replace("https://www.paymm.in", "")} className="text-slate-600 hover:text-blue-600 underline">{author.name}</Link>
+                            </span>
+                            <span className="flex items-center gap-1">
+                                Reviewed by <Link href={authorUrl(reviewer).replace("https://www.paymm.in", "")} className="text-slate-600 hover:text-blue-600 underline">{reviewer.name}</Link>
                             </span>
                             <span className="flex items-center gap-1">
                                 <Calendar size={14} /> Updated: {content.lastUpdated}
@@ -279,9 +276,26 @@ export default async function FlightRoutePage({ params }: Props) {
                             </span>
                         </div>
 
+                        {/* Direct answer first (featured-snippet / AI Overview friendly) */}
+                        <div id="quick-answer" className="bg-blue-50 border border-blue-100 rounded-2xl p-4 md:p-5 flex gap-3">
+                            <Zap size={18} className="text-blue-600 shrink-0 mt-0.5" />
+                            <p className="text-slate-800 text-sm md:text-base leading-relaxed font-medium">
+                                {content.quickAnswer}
+                            </p>
+                        </div>
+
                         <p className="text-slate-600 leading-relaxed text-base">
                             {content.intro}
                         </p>
+
+                        {content.routeNotes && content.routeNotes.length > 0 && (
+                            <div className="space-y-3 pt-2">
+                                <h3 className="text-lg font-bold text-slate-900">What to know about this route</h3>
+                                {content.routeNotes.map((note, idx) => (
+                                    <p key={idx} className="text-slate-600 leading-relaxed text-sm md:text-base">{note}</p>
+                                ))}
+                            </div>
+                        )}
                     </section>
 
                     {/* Flight Schedule & Details Card */}
@@ -422,7 +436,7 @@ export default async function FlightRoutePage({ params }: Props) {
                         </p>
                         <ul className="list-disc pl-5 text-xs text-slate-400 space-y-1">
                             {content.sources.map((src, idx) => (
-                                <li key={idx}>{src}</li>
+                                <li key={idx}>{src.startsWith('http') ? <a href={src} target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 underline">{src}</a> : src}</li>
                             ))}
                         </ul>
                         <p className="text-[10px] text-slate-400 italic mt-2">
@@ -475,6 +489,7 @@ export default async function FlightRoutePage({ params }: Props) {
                             <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
                                 Related Flight Routes
                             </h3>
+                            <p className="text-[11px] text-slate-400">Other routes from {originName} and flights into {destName}.</p>
                             <ul className="space-y-2 text-xs">
                                 {relatedRoutesList.map((routeLink, idx) => (
                                     <li key={idx}>
@@ -482,7 +497,7 @@ export default async function FlightRoutePage({ params }: Props) {
                                             href={`/flights/${routeLink.slug}`}
                                             className="text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1"
                                         >
-                                            ✈️ Flights {routeLink.name}
+                                            ✈️ {routeLink.name} flights
                                         </Link>
                                     </li>
                                 ))}

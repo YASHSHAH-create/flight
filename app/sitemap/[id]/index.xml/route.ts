@@ -1,7 +1,9 @@
 import { NextResponse } from 'next/server';
 import { AIRPORT_MAP } from '@/app/lib/airports';
 import { BLOG_POSTS } from '@/app/lib/blog-data';
-import { isRouteIndexable } from '@/app/lib/routeValidator';
+import { getIndexableRoutes } from '@/app/lib/routeValidator';
+import { SITE_LAST_UPDATED } from '@/app/lib/company';
+import { AUTHORS } from '@/app/lib/authors';
 
 export async function GET(
     request: Request,
@@ -10,10 +12,8 @@ export async function GET(
     const { id } = await params;
     const baseUrl = 'https://www.paymm.in';
 
-    // Keep lastmod stable between deploys. Using new Date() on every request
-    // makes Google distrust the sitemap's lastmod signal entirely.
-    // Bump this date whenever page content meaningfully changes.
-    const SITE_LAST_UPDATED = '2026-08-13T00:00:00.000Z';
+    // lastmod comes from company.ts (SITE_LAST_UPDATED); bump it there when
+    // page content meaningfully changes. Never use new Date() here.
 
     interface SitemapUrl {
         url: string;
@@ -26,14 +26,14 @@ export async function GET(
 
     const airportKeys = Object.keys(AIRPORT_MAP);
     const domesticAirports = airportKeys.slice(0, 32);
-    const internationalAirports = airportKeys.slice(32);
 
     switch (id) {
         case 'f-static':
             const staticRoutes = [
                 '', '/about', '/contact', '/privacy',
                 '/refund', '/terms', '/blog', '/packages', '/schedule', '/how-to-book-cheap-flights',
-                '/flights', '/downloads'
+                '/flights', '/downloads',
+                ...Object.keys(AUTHORS).map(a => `/author/${a}`)
             ];
             urls = staticRoutes.map(route => ({
                 url: `${baseUrl}${route}`,
@@ -46,62 +46,30 @@ export async function GET(
         case 'cf-misc': // Blogs
             urls = BLOG_POSTS.map(post => ({
                 url: `${baseUrl}/blog/${post.slug}`,
-                lastModified: post.date ? new Date(post.date).toISOString() : new Date().toISOString(),
+                lastModified: post.date ? new Date(post.date).toISOString() : SITE_LAST_UPDATED,
                 changeFrequency: 'weekly',
                 priority: 0.7
             }));
             break;
 
         case 'cf-a2b-dom':
-            domesticAirports.forEach(from => {
-                domesticAirports.forEach(to => {
-                    if (from !== to && isRouteIndexable(from, to)) {
-                        const fromCity = AIRPORT_MAP[from].city.toLowerCase().replace(/\s+/g, '-');
-                        const toCity = AIRPORT_MAP[to].city.toLowerCase().replace(/\s+/g, '-');
-                        urls.push({
-                            url: `${baseUrl}/flights/${fromCity}-to-${toCity}`,
-                            lastModified: SITE_LAST_UPDATED,
-                            changeFrequency: 'daily',
-                            priority: 0.9
-                        });
-                    }
-                });
-            });
-            break;
-
         case 'cf-a2b-int-out':
-            domesticAirports.forEach(from => {
-                internationalAirports.forEach(to => {
-                    if (isRouteIndexable(from, to)) {
-                        const fromCity = AIRPORT_MAP[from].city.toLowerCase().replace(/\s+/g, '-');
-                        const toCity = AIRPORT_MAP[to].city.toLowerCase().replace(/\s+/g, '-');
-                        urls.push({
-                            url: `${baseUrl}/flights/${fromCity}-to-${toCity}`,
-                            lastModified: SITE_LAST_UPDATED,
-                            changeFrequency: 'daily',
-                            priority: 0.8
-                        });
-                    }
-                });
-            });
+        case 'cf-a2b-int-in': {
+            const isDom = (code: string) => domesticAirports.includes(code);
+            urls = getIndexableRoutes()
+                .filter(r => {
+                    if (id === 'cf-a2b-dom') return isDom(r.origin) && isDom(r.dest);
+                    if (id === 'cf-a2b-int-out') return isDom(r.origin) && !isDom(r.dest);
+                    return !isDom(r.origin) && isDom(r.dest);
+                })
+                .map(r => ({
+                    url: `${baseUrl}/flights/${r.slug}`,
+                    lastModified: SITE_LAST_UPDATED,
+                    changeFrequency: 'weekly',
+                    priority: id === 'cf-a2b-dom' ? 0.9 : 0.8
+                }));
             break;
-
-        case 'cf-a2b-int-in':
-            internationalAirports.forEach(from => {
-                domesticAirports.forEach(to => {
-                    if (isRouteIndexable(from, to)) {
-                        const fromCity = AIRPORT_MAP[from].city.toLowerCase().replace(/\s+/g, '-');
-                        const toCity = AIRPORT_MAP[to].city.toLowerCase().replace(/\s+/g, '-');
-                        urls.push({
-                            url: `${baseUrl}/flights/${fromCity}-to-${toCity}`,
-                            lastModified: SITE_LAST_UPDATED,
-                            changeFrequency: 'daily',
-                            priority: 0.8
-                        });
-                    }
-                });
-            });
-            break;
+        }
 
         default:
             break;

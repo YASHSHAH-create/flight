@@ -2,7 +2,7 @@ import React from 'react';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: "Terms of Use | Paymm – Platform Rules & Terms of Service",
+    title: "Terms of Use – Paymm Booking Rules & Terms of Service",
     description: "Read the Paymm Terms of Use to understand booking regulations, refund guidelines, and the terms of service of our travel booking platform.",
     alternates: {
         canonical: "https://www.paymm.in/terms"
@@ -18,7 +18,7 @@ const TermsPage = () => {
                         Terms of Use
                     </h1>
                     <p className="text-slate-400">
-                        Last Updated: {new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
+                        Last Updated: 6 September 2026
                     </p>
                 </header>
 

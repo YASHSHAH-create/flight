@@ -1,7 +1,10 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { FaInstagram, FaLinkedin, FaCcVisa, FaCcMastercard, FaCcAmex, FaPaypal } from 'react-icons/fa';
+import { FaInstagram, FaLinkedin, FaXTwitter, FaGooglePlay, FaApple } from 'react-icons/fa6';
+import { FaCcVisa, FaCcMastercard, FaCcAmex } from 'react-icons/fa';
+import { COMPANY, formatAddress } from '@/app/lib/company';
+import { FOOTER_ROUTES } from '@/app/lib/routeValidator';
 import { MdEmail, MdPhone, MdLocationOn, MdVerifiedUser } from 'react-icons/md';
 
 const Footer = () => {
@@ -32,13 +35,13 @@ const Footer = () => {
                             </span>
                         </Link>
                         <p className="text-slate-400 leading-relaxed text-sm">
-                            Experience the future of travel booking. Seamless flights, secure payments, and 24/7 support for your journey.
+                            Compare and book flights, hotels and bus tickets from one app. Secure payments, GST invoices, and real people on support ({COMPANY.support.phoneHours}).
                         </p>
                         <div className="flex items-start space-x-3 p-4 bg-slate-900/50 rounded-xl border border-slate-800/50 backdrop-blur-sm">
                             <MdVerifiedUser className="text-emerald-400 text-xl mt-0.5" />
                             <div>
-                                <p className="text-xs text-slate-500 uppercase tracking-wide font-semibold">PAYMM ADVISORY PRIVATE LIMITED</p>
-                                <p className="text-sm font-medium text-slate-200 tracking-wider font-mono mt-1">GST: 10AAMCP7167L1Z1</p>
+                                <p className="text-xs text-slate-500 uppercase tracking-wide font-semibold">{COMPANY.legalName}</p>
+                                <p className="text-sm font-medium text-slate-200 tracking-wider font-mono mt-1">GSTIN: {COMPANY.gstin}</p>
                             </div>
                         </div>
                     </div>
@@ -61,12 +64,19 @@ const Footer = () => {
                                     </Link>
                                 </li>
                             ))}
-                            <li>
-                                <Link href="/downloads" className="text-slate-400 hover:text-blue-400 transition-colors flex items-center group">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-slate-600 mr-2 group-hover:bg-blue-400 transition-colors"></span>
-                                    Download App
-                                </Link>
-                            </li>
+                            {[
+                                { name: 'All Flight Routes', href: '/flights' },
+                                { name: 'Travel Blog', href: '/blog' },
+                                { name: 'How to Book Cheap Flights', href: '/how-to-book-cheap-flights' },
+                                { name: 'Download App', href: '/downloads' },
+                            ].map((l) => (
+                                <li key={l.href}>
+                                    <Link href={l.href} className="text-slate-400 hover:text-blue-400 transition-colors flex items-center group">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-slate-600 mr-2 group-hover:bg-blue-400 transition-colors"></span>
+                                        {l.name}
+                                    </Link>
+                                </li>
+                            ))}
                             {/* Add more links if present in the app */}
                             <li>
                                 <Link href="/" className="text-slate-400 hover:text-blue-400 transition-colors flex items-center group">
@@ -115,7 +125,7 @@ const Footer = () => {
                                 </div>
                                 <div>
                                     <p className="text-xs text-slate-500">Email Support</p>
-                                    <a href="mailto:support@paymm.in" className="text-slate-200 hover:text-white transition-colors text-sm">support@paymm.in</a>
+                                    <a href={`mailto:${COMPANY.email}`} className="text-slate-200 hover:text-white transition-colors text-sm">{COMPANY.email}</a>
                                 </div>
                             </li>
                             <li className="flex items-start space-x-3">
@@ -123,8 +133,8 @@ const Footer = () => {
                                     <MdPhone />
                                 </div>
                                 <div>
-                                    <p className="text-xs text-slate-500">Helpline</p>
-                                    <a href="tel:+919343300271" className="text-slate-200 hover:text-white transition-colors text-sm">+91 9343300271</a>
+                                    <p className="text-xs text-slate-500">Helpline · {COMPANY.support.phoneHours}</p>
+                                    <a href={`tel:${COMPANY.phoneTel}`} className="text-slate-200 hover:text-white transition-colors text-sm">{COMPANY.phoneDisplay}</a>
                                 </div>
                             </li>
                             <li className="flex items-start space-x-3">
@@ -132,8 +142,8 @@ const Footer = () => {
                                     <MdLocationOn />
                                 </div>
                                 <div>
-                                    <p className="text-xs text-slate-500">Address</p>
-                                    <span className="text-slate-200 text-sm">New Delhi, India</span>
+                                    <p className="text-xs text-slate-500">Registered Office</p>
+                                    <span className="text-slate-200 text-sm">{formatAddress()}</span>
                                 </div>
                             </li>
                         </ul>
@@ -142,12 +152,17 @@ const Footer = () => {
                             <p className="text-sm text-slate-400 mb-3">Follow us</p>
                             <div className="flex space-x-3">
                                 {[
-                                    { icon: FaInstagram, url: "https://www.instagram.com/paymm_bookings/" },
-                                    { icon: FaLinkedin, url: "https://www.linkedin.com/company/paymm/" }
+                                    { icon: FaInstagram, url: COMPANY.social.instagram, label: "Paymm on Instagram" },
+                                    { icon: FaLinkedin, url: COMPANY.social.linkedin, label: "Paymm on LinkedIn" },
+                                    { icon: FaXTwitter, url: COMPANY.social.x, label: `Paymm on X (${COMPANY.social.xHandle})` },
+                                    { icon: FaGooglePlay, url: COMPANY.social.playStore, label: "Paymm on Google Play" },
+                                    { icon: FaApple, url: COMPANY.social.appStore, label: "Paymm on the App Store" },
                                 ].map((item, index) => (
                                     <a
                                         key={index}
                                         href={item.url}
+                                        aria-label={item.label}
+                                        title={item.label}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="w-9 h-9 flex items-center justify-center rounded-lg bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white transition-all transform hover:-translate-y-1"
@@ -160,17 +175,30 @@ const Footer = () => {
                     </div>
                 </div>
 
+                {/* Popular routes: gives every route page a sitewide inbound link */}
+                <nav aria-label="Popular flight routes" className="border-t border-slate-800/50 pt-8 mt-4">
+                    <p className="text-xs uppercase tracking-wider text-slate-500 font-semibold mb-3">Popular flight routes</p>
+                    <ul className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-slate-400">
+                        {FOOTER_ROUTES.map((r) => (
+                            <li key={r.slug}>
+                                <Link href={`/flights/${r.slug}`} className="hover:text-blue-400 transition-colors">{r.name} flights</Link>
+                            </li>
+                        ))}
+                        <li><Link href="/flights" className="text-blue-400 hover:underline">All routes →</Link></li>
+                    </ul>
+                </nav>
+
                 {/* Bottom Bar */}
                 <div className="border-t border-slate-800/50 pt-8 mt-8">
                     <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                         <p className="text-slate-500 text-sm order-2 md:order-1">
-                            &copy; {new Date().getFullYear()} PayMM. All rights reserved. Made with <span className="text-red-500 animate-pulse">❤</span> in India.
+                            &copy; {new Date().getFullYear()} {COMPANY.legalName}. All rights reserved. Made with <span className="text-red-500 animate-pulse">❤</span> in India.
                         </p>
                         <div className="flex items-center space-x-4 text-slate-600 order-1 md:order-2">
                             <FaCcVisa className="text-2xl hover:text-slate-400 transition-colors" />
                             <FaCcMastercard className="text-2xl hover:text-slate-400 transition-colors" />
                             <FaCcAmex className="text-2xl hover:text-slate-400 transition-colors" />
-                            <FaPaypal className="text-2xl hover:text-slate-400 transition-colors" />
+                            <span className="text-xs font-bold tracking-wide">UPI</span>
                         </div>
                     </div>
                 </div>

@@ -202,8 +202,8 @@ export default function DownloadsPage() {
               </div>
 
               <div className="space-y-1">
-                <h4 className="text-3xl md:text-4xl font-black text-white">24/7</h4>
-                <p className="text-xs md:text-sm text-slate-400 font-medium uppercase tracking-wider">Customer Support</p>
+                <h4 className="text-3xl md:text-4xl font-black text-white">6 days</h4>
+                <p className="text-xs md:text-sm text-slate-400 font-medium uppercase tracking-wider">Phone Support (Mon–Sat)</p>
               </div>
 
             </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 
 export const metadata = {
-    title: 'Delete Account | PayMM',
+    title: 'Delete Your Paymm Account',
     description: 'Instructions on how to delete your PayMM account.',
     alternates: {
         canonical: 'https://www.paymm.in/delete-account',

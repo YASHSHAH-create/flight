@@ -2,7 +2,7 @@ import React from 'react';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: "Refund & Cancellation Policy | Paymm – Quick Cancellation & Refunds",
+    title: "Refund & Cancellation Policy – Flight Ticket Refund Timelines",
     description: "Read the Paymm Refund and Cancellation Policy to understand how to cancel your flight tickets and check processing times for refund amounts.",
     alternates: {
         canonical: "https://www.paymm.in/refund"
@@ -18,7 +18,7 @@ const RefundPage = () => {
                         Refund & Cancellation Policy
                     </h1>
                     <p className="text-slate-400">
-                        Last Updated: {new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
+                        Last Updated: 6 September 2026
                     </p>
                 </header>
 

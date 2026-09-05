@@ -104,7 +104,7 @@ export default function Home() {
           <div className="relative overflow-hidden py-16 px-8 bg-slate-900 text-white mx-[4vw] md:mx-16 rounded-[2rem] shadow-xl flex flex-col items-center text-center w-full max-w-7xl">
             <div className="relative z-10 max-w-2xl flex flex-col items-center">
               <h2 className="text-3xl md:text-4xl font-bold mb-4 leading-tight">Ready to start your journey?</h2>
-              <p className="mb-8 text-slate-400 max-w-md">Join millions of travelers booking cheap flights with Paymm.</p>
+              <p className="mb-8 text-slate-400 max-w-md">Join thousands of travellers booking cheap flights with Paymm.</p>
               <Link href="/search">
                 <button className="bg-white text-black px-10 py-4 rounded-full font-bold text-sm hover:bg-slate-200 transition-all shadow-lg active:scale-95">
                   Get Started
@@ -144,13 +144,13 @@ export default function Home() {
             <p className="leading-relaxed text-sm md:text-base mb-4">
               With thousands of travel portals out there, what makes Paymm stand out? It's our unwavering commitment to customer satisfaction 
               and value. We offer exclusive discounts, instant booking confirmations, and a highly intuitive search interface. 
-              Our advanced algorithms compare prices across domestic carriers like Indigo, Air India, Vistara, SpiceJet, and Akasa Air, 
+              Our advanced algorithms compare prices across domestic carriers like IndiGo, Air India, Air India Express, SpiceJet, and Akasa Air, 
               as well as leading international airlines. By choosing Paymm, you ensure that you are always getting the best deal on your air travel.
             </p>
             <ul className="list-disc pl-5 space-y-2 text-sm md:text-base">
               <li><strong>Real-Time Fare Comparison:</strong> We check hundreds of routes instantly to find you the lowest fares.</li>
               <li><strong>Secure Payments:</strong> Your transactions are protected with industry-leading encryption and security protocols.</li>
-              <li><strong>24/7 Customer Support:</strong> Our dedicated team is always ready to assist you with modifications, cancellations, and queries.</li>
+              <li><strong>Human Customer Support:</strong> Phone support Mon–Sat, 9 AM – 6 PM IST and email support 7 days a week for modifications, cancellations, and invoices.</li>
               <li><strong>Exclusive Offers:</strong> Enjoy seasonal sales, festive discounts, and special bank offers only available on Paymm.</li>
             </ul>
           </div>

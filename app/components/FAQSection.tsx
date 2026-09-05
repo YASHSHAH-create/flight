@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 const faqs = [
     {
         question: "Why is flight ticket booking the cheapest on Paymm?",
-        answer: "Paymm directly searches multiple airline websites for the cheapest fares. Many airlines sell their cheapest flight tickets on Paymm. Additionally, with its exclusive offers and deals, including several bank and partner offers, Paymm serves as the best and cheap platform to book cheap flights online."
+        answer: "Paymm pulls live fares from airline systems (GDS plus direct low-cost carrier connections) and shows every airline side by side, so you always see the lowest available fare for your date. Coupon offers and PayMM Coins cashback reduce the price further."
     },
     {
         question: "How do I book cheap flight tickets?",
@@ -15,7 +15,7 @@ const faqs = [
     },
     {
         question: "What are the benefits of flight booking with Paymm?",
-        answer: "Cheap fares, simple flight booking, live flight status tracking, exclusive flight ticket offers, flexible date options, price lock, travel insurance, automatic web-checkin, 24*7 customer care support and quick refunds are all advantages of booking flights with Paymm."
+        answer: "Booking with Paymm gets you live airline fares with no hidden charges, GST invoices for business travel, PayMM Coins rewards on every booking, ticket delivery on WhatsApp and email, human phone support Mon–Sat 9 AM – 6 PM IST, and refunds processed within 5–7 working days."
     },
     {
         question: "Can I modify or cancel my booking?",
@@ -45,7 +45,7 @@ const FAQSection = () => {
     };
 
     return (
-        <section className="py-16 px-4 md:px-16 w-full max-w-7xl mx-auto">
+        <section id="faq-section" className="py-16 px-4 md:px-16 w-full max-w-7xl mx-auto">
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}

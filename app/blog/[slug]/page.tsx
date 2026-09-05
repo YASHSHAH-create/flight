@@ -2,11 +2,14 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { getAllPosts, getPostBySlug } from '@/app/services/blogService';
-import { BlogPost } from '@/app/lib/blog-data';
 import { Metadata } from 'next';
 import Navbar from '@/app/components/Navbar';
 import ViewCounter from '@/app/components/ViewCounter';
-import { ArrowLeft, Calendar, Clock, Share2, ArrowRight, User } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, Share2, ArrowRight, User, Plane } from 'lucide-react';
+import { resolveAuthor, authorLd, AUTHORS } from '@/app/lib/authors';
+import { ORG_ID } from '@/app/lib/company';
+import { getIndexableRoutes } from '@/app/lib/routeValidator';
+import { AIRPORT_MAP } from '@/app/lib/airports';
 
 interface Props {
     params: Promise<{ slug: string }>;
@@ -23,7 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
 
     return {
-        title: `${post.title} | Paymm Blog`,
+        title: post.title,
         description: post.excerpt,
         keywords: post.keywords,
         alternates: {
@@ -35,7 +38,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             type: 'article',
             url: `https://www.paymm.in/blog/${post.slug}`,
             publishedTime: post.date,
-            authors: [post.author],
+            modifiedTime: post.date,
+            authors: [`https://www.paymm.in/author/${resolveAuthor(post.author).slug}`],
             images: [
                 {
                     url: post.imageUrl,
@@ -68,6 +72,19 @@ export default async function BlogPostPage({ params }: Props) {
     }
 
     const posts = await getAllPosts();
+    const author = resolveAuthor(post.author);
+    const reviewer = AUTHORS['yash-shah'];
+
+    // Routes to link from this article: any indexed route whose destination
+    // city is mentioned in the title/keywords (e.g. "Goa" -> Mumbai to Goa).
+    const haystack = `${post.title} ${post.excerpt} ${(post.keywords || []).join(' ')}`.toLowerCase();
+    const mentionedCodes = Object.keys(AIRPORT_MAP).filter(code => {
+        const city = AIRPORT_MAP[code].city.toLowerCase();
+        return city.length > 3 && haystack.includes(city);
+    });
+    const linkedRoutes = getIndexableRoutes()
+        .filter(r => mentionedCodes.includes(r.dest))
+        .slice(0, 6);
 
     // Find related posts (same category, excluding current)
     const relatedPosts = posts
@@ -82,25 +99,18 @@ export default async function BlogPostPage({ params }: Props) {
         relatedPosts.push(...others);
     }
 
-    const graph: any[] = [
+    const graph: Record<string, unknown>[] = [
         {
             '@type': 'BlogPosting',
             headline: post.title,
             image: [post.imageUrl],
             datePublished: post.date,
             dateModified: post.date,
-            author: [{
-                '@type': 'Person',
-                name: post.author,
-            }],
-            publisher: {
-                '@type': 'Organization',
-                name: 'Paymm',
-                logo: {
-                    '@type': 'ImageObject',
-                    url: 'https://www.paymm.in/paymm.png',
-                },
-            },
+            author: [authorLd(author)],
+            reviewedBy: authorLd(reviewer),
+            publisher: { '@id': ORG_ID },
+            isPartOf: { '@id': 'https://www.paymm.in/#website' },
+            inLanguage: 'en-IN',
             description: post.excerpt,
             mainEntityOfPage: {
                 '@type': 'WebPage',
@@ -198,13 +208,13 @@ export default async function BlogPostPage({ params }: Props) {
                                     <User size={20} className="text-slate-600" />
                                 </div>
                                 <div>
-                                    <span className="block font-semibold text-slate-900 text-sm leading-none">{post.author}</span>
-                                    <span className="text-xs text-slate-500">Travel Writer</span>
+                                    <Link href={`/author/${author.slug}`} className="block font-semibold text-slate-900 text-sm leading-none hover:text-blue-600">{author.name}</Link>
+                                    <span className="text-xs text-slate-500">{author.role} · Reviewed by <Link href={`/author/${reviewer.slug}`} className="hover:text-blue-600 underline">{reviewer.name}</Link></span>
                                 </div>
                             </div>
                             <div className="flex items-center gap-2 text-sm">
                                 <Calendar size={16} />
-                                <span>{new Date(post.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+                                <span>Updated {new Date(post.date).toLocaleDateString('en-IN', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
                             </div>
                             <div className="flex items-center gap-2 text-sm">
                                 <Clock size={16} />
@@ -233,16 +243,31 @@ export default async function BlogPostPage({ params }: Props) {
                         dangerouslySetInnerHTML={{ __html: post.content }}
                     />
 
+                    {/* Book flights for destinations mentioned in this article */}
+                    {linkedRoutes.length > 0 && (
+                        <nav aria-label="Related flight routes" className="mt-12 bg-blue-50 border border-blue-100 rounded-2xl p-6">
+                            <h3 className="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2"><Plane size={18} className="text-blue-600" /> Book flights for this trip</h3>
+                            <ul className="grid sm:grid-cols-2 gap-2 text-sm">
+                                {linkedRoutes.map(r => (
+                                    <li key={r.slug}>
+                                        <Link href={`/flights/${r.slug}`} className="text-blue-700 hover:underline">Cheap flights from {r.name.replace(' to ', ' to ')}</Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </nav>
+                    )}
+
                     {/* Author Bio Box - E-E-A-T */}
                     <div className="mt-16 bg-slate-50 rounded-2xl p-8 flex flex-col md:flex-row gap-6 items-center md:items-start text-center md:text-left">
                         <div className="w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
                             <User size={40} className="text-blue-600" />
                         </div>
                         <div>
-                            <h3 className="text-xl font-bold text-slate-900 mb-2">About {post.author}</h3>
-                            <p className="text-slate-600">
-                                {post.author} is a passionate traveler and content creator for Paymm. With a love for exploring hidden gems and sharing practical travel tips, they help you plan the perfect trip.
-                            </p>
+                            <h3 className="text-xl font-bold text-slate-900 mb-1">
+                                <Link href={`/author/${author.slug}`} className="hover:text-blue-600">About {author.name}</Link>
+                            </h3>
+                            <p className="text-xs text-slate-500 mb-3">{author.role}</p>
+                            <p className="text-slate-600">{author.bio}</p>
                         </div>
                     </div>
 

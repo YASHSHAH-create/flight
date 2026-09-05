@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     "Book cheap flight tickets with Paymm. Compare airline prices, find best deals on air tickets, and enjoy fast, secure flight booking online. Save up to 40% on flights.",
   keywords: SITE_KEYWORDS,
   applicationName: "Paymm",
-  authors: [{ name: "Paymm Team", url: "https://www.paymm.in" }],
+  authors: [{ name: "Paymm", url: "https://www.paymm.in/about" }],
   creator: "Paymm",
   publisher: "Paymm",
   formatDetection: {
@@ -107,47 +107,35 @@ import { AuthProvider } from "@/context/AuthContext";
 import Footer from "./components/Footer";
 import Script from "next/script";
 import AgentCapabilities from "./components/AgentCapabilities";
+import { COMPANY, ORG_ID, organizationLd } from "@/app/lib/company";
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Sitewide entity graph: Organization (single @id, referenced elsewhere) + WebSite.
   const structuredData = {
     "@context": "https://schema.org",
-    "@type": ["Organization", "LocalBusiness", "TravelAgency"],
-    name: "Paymm",
-    legalName: "PAYMM ADVISORY PRIVATE LIMITED",
-    taxID: "10AAMCP7167L1Z1",
-    url: "https://www.paymm.in",
-    logo: "https://www.paymm.in/paymm.png",
-    image: "https://www.paymm.in/paymm.png",
-    description:
-      "Book cheap flight tickets with Paymm. Compare airline prices and find best deals.",
-    telephone: "+91-9343300271",
-    email: "support@paymm.in",
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "New Delhi",
-      addressRegion: "Delhi",
-      addressCountry: "IN",
-    },
-    contactPoint: {
-      "@type": "ContactPoint",
-      telephone: "+91-9343300271",
-      contactType: "Customer Service",
-      availableLanguage: ["English", "Hindi"],
-      email: "support@paymm.in"
-    },
-    sameAs: [
-      "https://www.instagram.com/paymm_bookings/",
-      "https://www.linkedin.com/company/paymm/",
+    "@graph": [
+      organizationLd(),
+      {
+        "@type": "WebSite",
+        "@id": `${COMPANY.url}/#website`,
+        url: COMPANY.url,
+        name: COMPANY.brand,
+        publisher: { "@id": ORG_ID },
+        inLanguage: "en-IN",
+        potentialAction: {
+          "@type": "SearchAction",
+          target: {
+            "@type": "EntryPoint",
+            urlTemplate: `${COMPANY.url}/search?q={search_term_string}`,
+          },
+          "query-input": "required name=search_term_string",
+        },
+      },
     ],
-    potentialAction: {
-      "@type": "SearchAction",
-      target: "https://www.paymm.in/search?q={search_term_string}",
-      "query-input": "required name=search_term_string",
-    },
   };
 
   return (

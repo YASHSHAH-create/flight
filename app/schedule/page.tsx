@@ -3,7 +3,7 @@ import Navbar from '../components/Navbar';
 import Link from 'next/link';
 
 export const metadata = {
-    title: 'Flight Schedule | Paymm',
+    title: 'Flight Schedules – Daily Departure & Arrival Timings',
     description: 'Check flight schedules and availability for all major airlines. View daily departure and arrival timings for domestic and international flights across India.',
     alternates: {
         canonical: 'https://www.paymm.in/schedule',

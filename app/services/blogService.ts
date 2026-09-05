@@ -2,6 +2,12 @@
 import dbConnect from '../lib/db';
 import Post, { IPost } from '../models/Post';
 import { BlogPost, BLOG_POSTS as STATIC_POSTS } from '../lib/blog-data';
+import { resolveAuthor } from '../lib/authors';
+
+/** Old pseudonymous authors ("Beach Bum", ...) still exist in MongoDB; map them to a real author. */
+function withRealAuthor<T extends { author: string }>(p: T): T {
+    return { ...p, author: resolveAuthor(p.author).name };
+}
 
 // Helper to convert Mongoose doc to BlogPost interface
 function mapDocToPost(doc: any): BlogPost {
@@ -11,7 +17,7 @@ function mapDocToPost(doc: any): BlogPost {
         excerpt: doc.excerpt,
         content: doc.content,
         date: doc.date,
-        author: doc.author,
+        author: resolveAuthor(doc.author).name,
         category: doc.category,
         readTime: doc.readTime,
         imageUrl: doc.imageUrl,
@@ -43,7 +49,7 @@ export async function getAllPosts(): Promise<BlogPost[]> {
                 views: 0
             }));
             await Post.insertMany(postsToInsert);
-            return STATIC_POSTS.map(p => ({ ...p, views: 0 }));
+            return STATIC_POSTS.map(p => withRealAuthor({ ...p, views: 0 }));
         }
 
         // If there are missing posts, sync them
@@ -72,7 +78,7 @@ export async function getAllPosts(): Promise<BlogPost[]> {
         return dbPosts.map(mapDocToPost);
     } catch (error) {
         console.warn("Database fetch failed in getAllPosts, falling back to static content:", error);
-        return STATIC_POSTS.map(p => ({ ...p, views: 0 }));
+        return STATIC_POSTS.map(p => withRealAuthor({ ...p, views: 0 }));
     }
 }
 
@@ -98,7 +104,7 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
     // Check static fallback
     const staticPost = STATIC_POSTS.find(p => p.slug === slug);
     if (staticPost) {
-        return { ...staticPost, views: 0 };
+        return withRealAuthor({ ...staticPost, views: 0 });
     }
 
     return null;
