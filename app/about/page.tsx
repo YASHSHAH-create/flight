@@ -7,7 +7,7 @@ import { AUTHORS } from '@/app/lib/authors';
 
 export const metadata: Metadata = {
     title: "About Paymm – Who We Are, Our Team & Company Details",
-    description: "Paymm is an Indian online travel agency run by PAYMM ADVISORY PRIVATE LIMITED. Meet the founder, see our registered company details, and learn how we source airfares.",
+    description: "Paymm is an Indian online travel agency run by PAYMM ADVISORY PRIVATE LIMITED. Meet the team, see our registered directors and company details, and learn how we source airfares.",
     alternates: {
         canonical: "https://www.paymm.in/about"
     },
@@ -112,7 +112,7 @@ const AboutPage = () => {
                 </div>
 
                 <section className="mt-16">
-                    <h2 className="text-3xl font-bold text-white mb-8 text-center">Who runs Paymm</h2>
+                    <h2 className="text-3xl font-bold text-white mb-8 text-center">The team behind Paymm</h2>
                     <div className="grid md:grid-cols-2 gap-8">
                         <div className="bg-slate-900/50 p-6 rounded-xl border border-slate-800">
                             <div className="w-20 h-20 bg-blue-500/20 rounded-full mb-4 flex items-center justify-center text-2xl font-bold text-blue-300">
@@ -154,6 +154,11 @@ const AboutPage = () => {
                         <div>
                             <p className="text-slate-400 mb-1 uppercase text-xs tracking-wider">Registered Office</p>
                             <p className="text-xl font-medium text-white">{formatAddress()}</p>
+                        </div>
+                        <div>
+                            <p className="text-slate-400 mb-1 uppercase text-xs tracking-wider">Registered Directors</p>
+                            <p className="text-xl font-medium text-white">{COMPANY.directors.map(d => d.name).join(' · ')}</p>
+                            <p className="text-xs text-slate-500 mt-1">As per GST registration (Form REG-06), registered on 14 October 2025</p>
                         </div>
                         <div>
                             <p className="text-slate-400 mb-1 uppercase text-xs tracking-wider">Support Hours</p>

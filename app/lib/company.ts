@@ -3,10 +3,9 @@
  * Every page, footer, schema block and llms.txt must read from here so the
  * facts never contradict each other (Google + AI engines cross-check these).
  *
- * TODO (owner): fill streetAddress / addressLocality / postalCode with the
- * registered office exactly as it appears on the GST certificate.
- * GSTIN 10AAMCP7167L1Z1 -> state code 10 = Bihar. Do NOT put a different
- * state here unless the GST registration itself changes.
+ * Address, directors and GSTIN are copied verbatim from Form GST REG-06
+ * (registration certificate dated 14/10/2025). Do not change them unless the
+ * GST registration itself changes.
  */
 export const COMPANY = {
     brand: "Paymm",
@@ -20,19 +19,28 @@ export const COMPANY = {
     phoneE164: "+91-9343300271",
     phoneTel: "+919343300271",
     founded: "2025",
+    gstRegisteredOn: "2025-10-14",
+    /** Site owner / lead author. Not a registered director (see directors below). */
     founder: {
         name: "Yash Shah",
-        role: "Founder & Director",
+        role: "Team Leader",
         slug: "yash-shah",
         linkedin: "https://www.linkedin.com/company/paymm/",
     },
+    /** Directors as listed in Annexure B of the GST registration certificate. */
+    directors: [
+        { name: "Akash Kashyap", role: "Director" },
+        { name: "Niki Kumari", role: "Director" },
+    ],
     address: {
-        streetAddress: "",          // e.g. "Flat 2B, Ganga Apartments, Boring Road"
-        addressLocality: "",        // e.g. "Patna"
+        streetAddress: "2nd Floor, Ranjan Galaxy, Main Road Karbigahiya, Near Nutan Apartment, New Karbigahiya",
+        addressLocality: "Patna",
         addressRegion: "Bihar",
-        postalCode: "",             // e.g. "800001"
+        postalCode: "800020",
         addressCountry: "IN",
     },
+    /** Approximate map centre for the registered office (Karbigahiya, Patna). */
+    geo: { latitude: 25.6023, longitude: 85.1516 },
     // ONE consistent support statement, used everywhere.
     support: {
         phoneHours: "Mon–Sat, 9:00 AM – 6:00 PM IST",
@@ -104,13 +112,18 @@ export function organizationLd() {
         description:
             "Paymm is an Indian online travel agency for comparing and booking cheap domestic and international flight tickets, hotels and bus tickets.",
         foundingDate: COMPANY.founded,
-        founder: {
-            "@type": "Person",
-            "@id": `${COMPANY.url}/author/${COMPANY.founder.slug}#person`,
-            name: COMPANY.founder.name,
-            jobTitle: COMPANY.founder.role,
-            url: `${COMPANY.url}/author/${COMPANY.founder.slug}`,
-        },
+        employee: [
+            {
+                "@type": "Person",
+                "@id": `${COMPANY.url}/author/${COMPANY.founder.slug}#person`,
+                name: COMPANY.founder.name,
+                jobTitle: COMPANY.founder.role,
+                url: `${COMPANY.url}/author/${COMPANY.founder.slug}`,
+            },
+            ...COMPANY.directors.map(d => ({ "@type": "Person", name: d.name, jobTitle: d.role })),
+        ],
+        geo: { "@type": "GeoCoordinates", latitude: COMPANY.geo.latitude, longitude: COMPANY.geo.longitude },
+        hasMap: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(COMPANY.legalName + ", Ranjan Galaxy, Karbigahiya, Patna 800020")}`,
         telephone: COMPANY.phoneE164,
         email: COMPANY.email,
         address: postalAddressLd(),

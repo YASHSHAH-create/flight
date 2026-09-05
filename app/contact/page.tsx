@@ -107,6 +107,19 @@ const ContactPage = () => {
                     </div>
                 </div>
 
+                <section className="rounded-2xl overflow-hidden border border-slate-800">
+                    <iframe
+                        title={`Map: ${COMPANY.legalName}, Karbigahiya, Patna`}
+                        src={`https://www.google.com/maps?q=${encodeURIComponent('Ranjan Galaxy, Main Road Karbigahiya, Patna, Bihar 800020')}&output=embed`}
+                        width="100%"
+                        height="320"
+                        style={{ border: 0 }}
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        allowFullScreen
+                    />
+                </section>
+
                 <section className="bg-slate-900/40 border border-slate-800 rounded-2xl p-6 md:p-8 space-y-4">
                     <h2 className="text-xl font-bold text-white">Before you call: quick answers</h2>
                     <dl className="space-y-4 text-sm">

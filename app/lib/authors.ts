@@ -23,7 +23,7 @@ export const AUTHORS: Record<string, Author> = {
         type: "Person",
         role: COMPANY.founder.role + ", Paymm",
         bio:
-            "Yash Shah is the founder of Paymm (PAYMM ADVISORY PRIVATE LIMITED), the company behind the Paymm flight, hotel and bus booking platform and app. He works directly with airline and GDS partners on fare distribution, and writes about airfare pricing, booking strategy and the practical side of flying within India.",
+            "Yash Shah is Team Leader at Paymm (PAYMM ADVISORY PRIVATE LIMITED), the company behind the Paymm flight, hotel and bus booking platform and app. He leads the product and operations team, works directly with airline and GDS partners on fare distribution, and writes about airfare pricing, booking strategy and the practical side of flying within India.",
         sameAs: [COMPANY.social.linkedin, COMPANY.social.x],
     },
     "paymm-editorial-team": {
@@ -32,7 +32,7 @@ export const AUTHORS: Record<string, Author> = {
         type: "Organization",
         role: "Travel research desk at Paymm",
         bio:
-            "The Paymm Editorial Team researches and maintains our destination guides and flight route pages. Every article is fact-checked against airline schedules, airport operator websites and official tourism sources, and reviewed by founder Yash Shah before publishing.",
+            "The Paymm Editorial Team researches and maintains our destination guides and flight route pages. Every article is fact-checked against airline schedules, airport operator websites and official tourism sources, and reviewed by Team Leader Yash Shah before publishing.",
         sameAs: [COMPANY.url + "/about", COMPANY.social.linkedin],
     },
 };
