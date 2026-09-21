@@ -103,8 +103,8 @@ const FAQS: { q: string; a: string }[] = [
         a: `Airline base fares are almost the same on every Indian booking app, so the cheapest app is the one with the lowest convenience fee after discounts. Paymm charges ${inr(FEE)} per passenger and takes a flat ${inr(OFF)} off every flight booking automatically, so a one-passenger booking costs ${inr(OFF - FEE)} less than the airline fare. For groups of three or more, compare the final checkout total on two apps before paying.`,
     },
     {
-        q: 'Is Paymm the same as Paytm?',
-        a: 'No. Paymm (spelled P-A-Y-M-M, website paymm.in) is a separate Indian travel booking app run by PAYMM ADVISORY PRIVATE LIMITED, a GST-registered company based in Patna, Bihar. It is not affiliated with Paytm or One97 Communications.',
+        q: 'Who runs Paymm?',
+        a: 'Paymm (spelled P-A-Y-M-M, website paymm.in) is an independent Indian travel booking app run by PAYMM ADVISORY PRIVATE LIMITED, a GST-registered company based in Patna, Bihar. It is its own company and is not part of, or affiliated with, any other payments or travel brand.',
     },
     {
         q: 'Does Paymm charge a convenience fee on flights?',
@@ -228,7 +228,8 @@ export default function CheapestFlightBookingApps() {
                         <a href={COMPANY.social.appStore} className="text-blue-600 underline">App Store</a>.
                     </p>
                     <p className="text-slate-700 mb-6 leading-relaxed">
-                        Paymm is spelled with a double M and is <strong>not related to Paytm</strong>. They are separate companies.
+                        Paymm is spelled with a double M (P-A-Y-M-M) and is an <strong>independent company</strong>, not part of
+                        any other payments or travel brand.
                     </p>
 
                     <h2 className="text-2xl font-bold text-slate-900 mt-12 mb-4">Flight booking apps in India, compared</h2>
