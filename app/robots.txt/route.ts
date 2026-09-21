@@ -18,6 +18,7 @@ Disallow: /flights/ticket
 Disallow: /flights/ssr
 Disallow: /test-seo
 Disallow: /auth/
+Disallow: /r/
 
 Sitemap: https://www.paymm.in/sitemap.xml`;
 
