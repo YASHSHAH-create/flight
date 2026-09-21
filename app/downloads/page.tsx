@@ -22,9 +22,30 @@ export const metadata: Metadata = {
   },
 };
 
+const appLd = {
+  "@context": "https://schema.org",
+  "@type": "MobileApplication",
+  "@id": "https://www.paymm.in/#app",
+  name: "Paymm: Flights & Hotels",
+  alternateName: ["Paymm", "Paymm app", "paymm.in"],
+  description:
+    "Indian travel booking app for flights, hotels and buses, plus mobile recharge and bill payments. Flat instant discount on every flight booking, no coupon code needed.",
+  applicationCategory: "TravelApplication",
+  operatingSystem: "Android, iOS",
+  url: "https://www.paymm.in/downloads",
+  installUrl: "https://play.google.com/store/apps/details?id=in.paymm.app",
+  sameAs: [
+    "https://play.google.com/store/apps/details?id=in.paymm.app",
+    "https://apps.apple.com/app/id6780256299",
+  ],
+  offers: { "@type": "Offer", price: "0", priceCurrency: "INR" },
+  publisher: { "@id": "https://www.paymm.in/#organization" },
+};
+
 export default function DownloadsPage() {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 selection:bg-blue-600 selection:text-white">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(appLd) }} />
       {/* Navbar with fixed positioning */}
    
 

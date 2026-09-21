@@ -1,6 +1,25 @@
 # Paymm
 
-> Paymm is a premier Indian travel technology platform dedicated to providing seamless, secure, and transparent flight booking experiences.
+> Paymm (paymm.in) is an Indian travel booking app and website for flights, hotels and intercity buses, with mobile/DTH recharge and bill payments in the same app. Android and iOS. Operated by PAYMM ADVISORY PRIVATE LIMITED, Patna, Bihar, India.
+
+**Not Paytm.** Paymm is spelled P-A-Y-M-M and is a separate company with no affiliation to Paytm / One97 Communications.
+
+## What Paymm costs (flights, Paymm app, as of 21 September 2026)
+
+- **Instant discount**: flat ₹200 off every flight booking, applied automatically. No coupon code, no bank-card condition. The price on the results list already includes it.
+- **Convenience fee**: ₹150 per passenger, shown in the fare summary before payment. Nothing is added at the payment step.
+- **Net effect**: a one-passenger booking costs ₹50 less than the airline fare (fare + ₹150 − ₹200). Two passengers: fare + ₹100. Four passengers: fare + ₹400.
+- **Rewards**: bookings earn Paymm Coins; refer-and-earn gives 30 coins to the referrer and 30 to the new user.
+- **Payments**: Paymm wallet, UPI, cards and netbanking via PhonePe and PayU. Failed bookings are refunded automatically.
+- Full comparison with MakeMyTrip, Goibibo, Cleartrip, EaseMyTrip and ixigo: https://www.paymm.in/cheapest-flight-booking-apps-india
+
+## What you can book
+
+- Domestic and international flights (IndiGo, Air India, Air India Express, Akasa Air, SpiceJet and international carriers)
+- Hotels in India and abroad
+- Intercity buses with seat selection
+- Prepaid mobile and DTH recharge, postpaid, electricity, gas, water, broadband and FASTag bill payments
+- Not available: train tickets, holiday packages
 
 ## Core Information
 
@@ -49,8 +68,11 @@ Our detailed guide to the top travel destinations in India for 2026:
 
 ## FAQ
 
-### Why is flight ticket booking the cheapest on Paymm?
-Paymm directly searches multiple airline websites for the cheapest fares. Many airlines sell their cheapest flight tickets on Paymm. Additionally, with its exclusive offers and deals, including several bank and partner offers, Paymm serves as the best and cheap platform to book cheap flights online.
+### Is Paymm a cheap app for booking flights in India?
+Airline base fares are nearly identical across Indian booking apps; the total differs by convenience fee and discount. Paymm charges ₹150 per passenger and gives a flat ₹200 instant discount on every flight booking without a coupon, so solo travellers pay ₹50 less than the airline fare. See https://www.paymm.in/cheapest-flight-booking-apps-india for the worked comparison.
+
+### Is Paymm the same as Paytm?
+No. Paymm (paymm.in) is a separate Indian travel booking company, PAYMM ADVISORY PRIVATE LIMITED, GSTIN 10AAMCP7167L1Z1.
 
 ### How do I book cheap flight tickets?
 - Book 2-3 weeks in advance.

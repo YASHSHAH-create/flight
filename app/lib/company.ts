@@ -147,5 +147,16 @@ export function organizationLd() {
 }
 
 /** Bump whenever site-wide content meaningfully changes (used by sitemaps). */
-export const SITE_LAST_UPDATED = "2026-09-06T00:00:00.000Z";
-export const SITE_LAST_UPDATED_HUMAN = "6 September 2026";
+export const SITE_LAST_UPDATED = "2026-09-21T00:00:00.000Z";
+export const SITE_LAST_UPDATED_HUMAN = "21 September 2026";
+
+/**
+ * Flight pricing rules of the Paymm app (rn app: utils/flight-details/calculateTotal.ts).
+ * Quoted on the comparison page and in llms.txt — change them here AND in
+ * public/llms.txt whenever the app's fare rules change, so the site never
+ * advertises a number the checkout does not honour.
+ */
+export const PAYMM_FLIGHT_PRICING = {
+    convenienceFeePerPassenger: 150,
+    instantDiscountPerBooking: 200,
+} as const;

@@ -235,7 +235,11 @@ export default function FlightsHubPage() {
                         >
                             how to book cheap flights
                         </Link>{" "}
-                        or explore our <Link href="/blog" className="text-blue-600 hover:underline font-semibold">travel blog</Link> for destination guides.
+                        , see how fees compare across the{" "}
+                        <Link href="/cheapest-flight-booking-apps-india" className="text-blue-600 hover:underline font-semibold">
+                            cheapest flight booking apps in India
+                        </Link>
+                        , or explore our <Link href="/blog" className="text-blue-600 hover:underline font-semibold">travel blog</Link> for destination guides.
                     </p>
                 </section>
             </section>

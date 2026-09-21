@@ -68,6 +68,7 @@ const Footer = () => {
                                 { name: 'All Flight Routes', href: '/flights' },
                                 { name: 'Travel Blog', href: '/blog' },
                                 { name: 'How to Book Cheap Flights', href: '/how-to-book-cheap-flights' },
+                                { name: 'Cheapest Flight Booking Apps', href: '/cheapest-flight-booking-apps-india' },
                                 { name: 'Download App', href: '/downloads' },
                             ].map((l) => (
                                 <li key={l.href}>

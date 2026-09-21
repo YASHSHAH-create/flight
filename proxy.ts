@@ -7,7 +7,6 @@ export async function proxy(request: NextRequest) {
   if (url.pathname === '/') {
     const acceptHeader = request.headers.get('accept') || '';
     const contentTypeHeader = request.headers.get('content-type') || '';
-    const userAgent = (request.headers.get('user-agent') || '').toLowerCase();
 
     const isMarkdownHeader =
       acceptHeader.includes('text/markdown') ||
@@ -15,15 +14,13 @@ export async function proxy(request: NextRequest) {
       contentTypeHeader.includes('text/markdown') ||
       contentTypeHeader.includes('text/x-markdown');
 
-    const isBotOrCrawler =
-      userAgent.includes('bot') ||
-      userAgent.includes('crawler') ||
-      userAgent.includes('spider') ||
-      userAgent.includes('crawl') ||
-      userAgent.includes('google-extended') ||
-      userAgent.includes('openai');
-
-    if (isMarkdownHeader || isBotOrCrawler) {
+    // Markdown ONLY when the client asks for it (Accept: text/markdown).
+    // Never switch on User-Agent: from Jun 2026 every UA containing "bot" —
+    // Googlebot, Bingbot, GPTBot, ClaudeBot, PerplexityBot — was handed this
+    // 3.6 KB text file instead of the homepage, so search engines and AI
+    // crawlers saw a home page with no <title>, no schema and no links
+    // (that is cloaking, and it hid the site's most important page).
+    if (isMarkdownHeader) {
       try {
         // Fetch public/llms.txt using the incoming request's base URL
         const response = await fetch(new URL('/llms.txt', request.url));
@@ -33,6 +30,8 @@ export async function proxy(request: NextRequest) {
             status: 200,
             headers: {
               'Content-Type': 'text/markdown; charset=utf-8',
+              // Same URL, two representations — keep caches from mixing them up.
+              Vary: 'Accept',
             },
           });
         }
