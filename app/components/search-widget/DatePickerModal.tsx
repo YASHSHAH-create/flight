@@ -58,7 +58,7 @@ const DatePickerModal = ({ isOpen, onClose, onSelect, title, selectedDate, minDa
     return createPortal(
         <AnimatePresence>
             {isOpen && (
-                <div className="fixed inset-0 z-[100] flex flex-col justify-end md:justify-center bg-slate-900/60 backdrop-blur-xl supports-[backdrop-filter]:backdrop-blur-xl">
+                <div className="fixed inset-0 z-[100] flex flex-col justify-end md:justify-center bg-ink/60 backdrop-blur-sm">
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -76,14 +76,14 @@ const DatePickerModal = ({ isOpen, onClose, onSelect, title, selectedDate, minDa
                         role="dialog"
                         aria-modal="true"
                     >
-                        <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                        <div className="p-4 border-b border-hair flex items-center justify-between bg-lav">
                             <button
                                 onClick={() => changeMonth(-1)}
                                 className="p-2 hover:bg-slate-200 rounded-full transition-colors"
                             >
                                 <ChevronDown size={20} className="rotate-90" />
                             </button>
-                            <h3 className="text-lg font-bold text-slate-800">
+                            <h3 className="text-lg font-bold text-ink">
                                 {currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' })}
                             </h3>
                             <button
@@ -122,7 +122,7 @@ const DatePickerModal = ({ isOpen, onClose, onSelect, title, selectedDate, minDa
                                             onClick={() => handleDateSelect(day)}
                                             className={`
                                                 h-10 w-10 rounded-full flex items-center justify-center text-sm font-bold transition-all
-                                                ${isSelected ? 'bg-black text-white shadow-lg scale-110' : 'text-slate-700 hover:bg-slate-100'}
+                                                ${isSelected ? 'bg-brand text-white shadow-lg scale-110' : 'text-ink hover:bg-brand-soft'}
                                                 ${isPast ? 'opacity-20 cursor-not-allowed hover:bg-transparent' : ''}
                                             `}
                                         >

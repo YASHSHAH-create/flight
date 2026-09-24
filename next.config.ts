@@ -17,6 +17,32 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Security headers (applied to every route). CSP is intentionally not
+  // enforced here yet: GTM/AdSense/Vercel Analytics inject inline scripts and
+  // a strict policy would need per-script nonces first.
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'X-Frame-Options', value: 'DENY' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(self), payment=(self), usb=()' },
+          { key: 'X-DNS-Prefetch-Control', value: 'on' },
+        ],
+      },
+      {
+        // Booking API: never cache, never embed.
+        source: '/api/(bus|bus-auth)/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'no-store' },
+          { key: 'X-Robots-Tag', value: 'noindex' },
+        ],
+      },
+    ];
+  },
   async redirects() {
     return [
       {
@@ -37,8 +63,10 @@ const nextConfig: NextConfig = {
   
     return [
       {
-        source: '/api/:path*',
-        destination: `${FLIGHT_API_URL}/api/:path*`, // Proxy to Backend
+        // Legacy flight-site proxy. The bus flow's own route handlers live under
+        // /api/bus and /api/bus-auth and must never be forwarded upstream.
+        source: '/api/:path((?!bus/|bus-auth/|bus$|bus-auth$).*)',
+        destination: `${FLIGHT_API_URL}/api/:path`, // Proxy to Backend
       },
       {
         source: '/auth/:path*',

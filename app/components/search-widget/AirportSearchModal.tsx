@@ -38,7 +38,7 @@ const AirportSearchModal = ({ isOpen, onClose, onSelect, activeField, airports }
     return createPortal(
         <AnimatePresence>
             {isOpen && (
-                <div className="fixed inset-0 z-[100] flex flex-col justify-end md:justify-center bg-slate-900/60 backdrop-blur-xl supports-[backdrop-filter]:backdrop-blur-xl">
+                <div className="fixed inset-0 z-[100] flex flex-col justify-end md:justify-center bg-ink/60 backdrop-blur-sm">
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}

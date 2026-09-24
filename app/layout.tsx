@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,6 +14,19 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
   display: "swap",
+});
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const jakarta = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["600", "700", "800"],
 });
 
 import { SITE_KEYWORDS } from "@/app/lib/keywords";
@@ -104,6 +117,8 @@ export const metadata: Metadata = {
 };
 
 import { AuthProvider } from "@/context/AuthContext";
+import { SessionProvider } from "@/context/SessionContext";
+import LoginModal from "./components/bus/LoginModal";
 import Footer from "./components/Footer";
 import Script from "next/script";
 import AgentCapabilities from "./components/AgentCapabilities";
@@ -179,7 +194,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${jakarta.variable} font-sans antialiased`}
       >
         {/* Google Tag Manager (noscript) */}
         <noscript>
@@ -222,8 +237,11 @@ export default function RootLayout({
         </Script>
 
         <AuthProvider>
+          <SessionProvider>
+          <LoginModal />
           {children}
           <AgentCapabilities />
+                  </SessionProvider>
         </AuthProvider>
         <Footer />
         <SpeedInsights />

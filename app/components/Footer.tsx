@@ -1,206 +1,99 @@
-
 import Link from 'next/link';
 import Image from 'next/image';
 import { FaInstagram, FaLinkedin, FaXTwitter, FaGooglePlay, FaApple } from 'react-icons/fa6';
-import { FaCcVisa, FaCcMastercard, FaCcAmex } from 'react-icons/fa';
 import { COMPANY, formatAddress } from '@/app/lib/company';
 import { FOOTER_ROUTES } from '@/app/lib/routeValidator';
-import { MdEmail, MdPhone, MdLocationOn, MdVerifiedUser } from 'react-icons/md';
+import { FEATURED_ROUTE_SLUGS, resolveRouteSlug } from '@/app/lib/bus/routes';
+
+const COLS = [
+    {
+        title: 'Products',
+        links: [
+            { name: 'Flights', href: '/flights' }, { name: 'Hotels', href: '/hotels/search' }, { name: 'Buses', href: '/bus' },
+            { name: 'Recharge', href: '/downloads' }, { name: 'Bill Pay', href: '/downloads' }, { name: 'Wallet & PayMM Coins', href: '/downloads' },
+            { name: 'Holiday Packages', href: '/packages' },
+        ],
+    },
+    {
+        title: 'Company',
+        links: [
+            { name: 'About', href: '/about' }, { name: 'Blog', href: '/blog' }, { name: 'Contact', href: '/contact' },
+            { name: 'How to book cheap flights', href: '/how-to-book-cheap-flights' }, { name: 'Cheapest flight booking apps', href: '/cheapest-flight-booking-apps-india' },
+            { name: 'Flight schedule', href: '/schedule' },
+        ],
+    },
+    {
+        title: 'Support',
+        links: [
+            { name: 'Help centre', href: '/contact' }, { name: 'Refund policy', href: '/refund' }, { name: 'Cancellation', href: '/refund' },
+            { name: 'Privacy', href: '/privacy' }, { name: 'Terms', href: '/terms' }, { name: 'Delete account', href: '/delete-account' },
+        ],
+    },
+];
 
 const Footer = () => {
+    const busRoutes = FEATURED_ROUTE_SLUGS.map(resolveRouteSlug).filter((r): r is NonNullable<typeof r> => !!r).slice(0, 12);
     return (
-        <footer className="relative bg-[#020617] text-slate-300 pt-20 pb-10 border-t border-slate-800 overflow-hidden">
-
-            {/* Background Decorative Elements */}
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
-            <div className="absolute -top-[200px] -left-[200px] w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
-            <div className="absolute -bottom-[200px] -right-[200px] w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
-            <div className="container mx-auto px-6 relative z-10">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-
-                    {/* Brand Section */}
-                    <div className="space-y-6">
-                        <Link href="/" className="flex items-center gap-3 group select-none mb-6">
-                            <div className="relative w-10 h-10 md:w-11 md:h-11 rounded-xl overflow-hidden shadow-sm ring-1 ring-white/10 transition-all duration-300 group-hover:scale-105 group-hover:shadow-md bg-white">
-                                <Image
-                                    src="/paymm.png"
-                                    alt="Paymm Logo"
-                                    fill
-                                    className="object-cover"
-                                />
-                            </div>
-                            <span className="text-3xl font-black tracking-tighter text-white group-hover:text-blue-400 transition-colors leading-none pb-1">
-                                Paymm
-                            </span>
+        <footer className="bg-night text-[#C9C4D6] pt-16 pb-8 mt-10">
+            <div className="max-w-[1280px] mx-auto px-4 md:px-6">
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10 mb-12">
+                    <div className="col-span-2 lg:col-span-2 space-y-5">
+                        <Link href="/" className="flex items-center gap-2.5 select-none">
+                            <span className="relative w-9 h-9 rounded-xl overflow-hidden bg-white"><Image src="/paymm.png" alt="Paymm" fill className="object-cover" /></span>
+                            <span className="font-display text-2xl font-extrabold tracking-[-0.03em] text-white">Paymm</span>
                         </Link>
-                        <p className="text-slate-400 leading-relaxed text-sm">
-                            Compare and book flights, hotels and bus tickets from one app. Secure payments, GST invoices, and real people on support ({COMPANY.support.phoneHours}).
-                        </p>
-                        <div className="flex items-start space-x-3 p-4 bg-slate-900/50 rounded-xl border border-slate-800/50 backdrop-blur-sm">
-                            <MdVerifiedUser className="text-emerald-400 text-xl mt-0.5" />
-                            <div>
-                                <p className="text-xs text-slate-500 uppercase tracking-wide font-semibold">{COMPANY.legalName}</p>
-                                <p className="text-sm font-medium text-slate-200 tracking-wider font-mono mt-1">GSTIN: {COMPANY.gstin}</p>
-                            </div>
+                        <p className="text-sm leading-relaxed max-w-sm">Flights, hotels, buses, recharges and bill payments in one app — with wallet, PayMM Coins and real people on support ({COMPANY.support.phoneHours}).</p>
+                        <div className="flex gap-2">
+                            <a href={COMPANY.social.playStore} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-xl bg-night-surface border border-white/10 px-3.5 py-2.5 text-sm font-bold text-white hover:border-night-accent transition-colors"><FaGooglePlay /> Google Play</a>
+                            <a href={COMPANY.social.appStore} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-xl bg-night-surface border border-white/10 px-3.5 py-2.5 text-sm font-bold text-white hover:border-night-accent transition-colors"><FaApple /> App Store</a>
+                        </div>
+                        <div className="text-xs space-y-1">
+                            <p className="text-[#8E88A3] uppercase tracking-wider font-semibold">{COMPANY.legalName}</p>
+                            <p className="font-mono">GSTIN {COMPANY.gstin}</p>
+                            <p>{formatAddress()}</p>
+                            <p><a href={`mailto:${COMPANY.email}`} className="hover:text-white">{COMPANY.email}</a> · <a href={`tel:${COMPANY.phoneTel}`} className="hover:text-white">{COMPANY.phoneDisplay}</a></p>
                         </div>
                     </div>
-
-                    {/* Quick Navigation */}
-                    <div>
-                        <h3 className="text-lg font-bold text-white mb-6 flex items-center">
-                            Explore
-                            <span className="ml-2 w-12 h-0.5 bg-blue-500 rounded-full"></span>
-                        </h3>
-                        <ul className="space-y-3">
-                            {['About', 'Contact'].map((item) => (
-                                <li key={item}>
-                                    <Link
-                                        href={`/${item.toLowerCase()}`}
-                                        className="text-slate-400 hover:text-blue-400 transition-colors flex items-center group"
-                                    >
-                                        <span className="w-1.5 h-1.5 rounded-full bg-slate-600 mr-2 group-hover:bg-blue-400 transition-colors"></span>
-                                        {item} Us
-                                    </Link>
-                                </li>
-                            ))}
-                            {[
-                                { name: 'All Flight Routes', href: '/flights' },
-                                { name: 'Travel Blog', href: '/blog' },
-                                { name: 'How to Book Cheap Flights', href: '/how-to-book-cheap-flights' },
-                                { name: 'Cheapest Flight Booking Apps', href: '/cheapest-flight-booking-apps-india' },
-                                { name: 'Download App', href: '/downloads' },
-                            ].map((l) => (
-                                <li key={l.href}>
-                                    <Link href={l.href} className="text-slate-400 hover:text-blue-400 transition-colors flex items-center group">
-                                        <span className="w-1.5 h-1.5 rounded-full bg-slate-600 mr-2 group-hover:bg-blue-400 transition-colors"></span>
-                                        {l.name}
-                                    </Link>
-                                </li>
-                            ))}
-                            {/* Add more links if present in the app */}
-                            <li>
-                                <Link href="/" className="text-slate-400 hover:text-blue-400 transition-colors flex items-center group">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-slate-600 mr-2 group-hover:bg-blue-400 transition-colors"></span>
-                                    Home
-                                </Link>
-                            </li>
-                        </ul>
-                    </div>
-
-                    {/* Legal Links */}
-                    <div>
-                        <h3 className="text-lg font-bold text-white mb-6 flex items-center">
-                            Legal
-                            <span className="ml-2 w-12 h-0.5 bg-purple-500 rounded-full"></span>
-                        </h3>
-                        <ul className="space-y-3">
-                            {[
-                                { name: 'Terms of Use', href: '/terms' },
-                                { name: 'Privacy Policy', href: '/privacy' },
-                                { name: 'Refund Policy', href: '/refund' }
-                            ].map((link) => (
-                                <li key={link.name}>
-                                    <Link
-                                        href={link.href}
-                                        className="text-slate-400 hover:text-purple-400 transition-colors flex items-center group"
-                                    >
-                                        <span className="w-1.5 h-1.5 rounded-full bg-slate-600 mr-2 group-hover:bg-purple-400 transition-colors"></span>
-                                        {link.name}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    {/* Contact & Newsletter */}
-                    <div>
-                        <h3 className="text-lg font-bold text-white mb-6 flex items-center">
-                            Get in Touch
-                            <span className="ml-2 w-12 h-0.5 bg-emerald-500 rounded-full"></span>
-                        </h3>
-                        <ul className="space-y-4 mb-8">
-                            <li className="flex items-start space-x-3">
-                                <div className="p-2 bg-slate-800 rounded-lg text-emerald-400">
-                                    <MdEmail />
-                                </div>
-                                <div>
-                                    <p className="text-xs text-slate-500">Email Support</p>
-                                    <a href={`mailto:${COMPANY.email}`} className="text-slate-200 hover:text-white transition-colors text-sm">{COMPANY.email}</a>
-                                </div>
-                            </li>
-                            <li className="flex items-start space-x-3">
-                                <div className="p-2 bg-slate-800 rounded-lg text-blue-400">
-                                    <MdPhone />
-                                </div>
-                                <div>
-                                    <p className="text-xs text-slate-500">Helpline · {COMPANY.support.phoneHours}</p>
-                                    <a href={`tel:${COMPANY.phoneTel}`} className="text-slate-200 hover:text-white transition-colors text-sm">{COMPANY.phoneDisplay}</a>
-                                </div>
-                            </li>
-                            <li className="flex items-start space-x-3">
-                                <div className="p-2 bg-slate-800 rounded-lg text-purple-400">
-                                    <MdLocationOn />
-                                </div>
-                                <div>
-                                    <p className="text-xs text-slate-500">Registered Office</p>
-                                    <span className="text-slate-200 text-sm">{formatAddress()}</span>
-                                </div>
-                            </li>
-                        </ul>
-
-                        <div>
-                            <p className="text-sm text-slate-400 mb-3">Follow us</p>
-                            <div className="flex space-x-3">
-                                {[
-                                    { icon: FaInstagram, url: COMPANY.social.instagram, label: "Paymm on Instagram" },
-                                    { icon: FaLinkedin, url: COMPANY.social.linkedin, label: "Paymm on LinkedIn" },
-                                    { icon: FaXTwitter, url: COMPANY.social.x, label: `Paymm on X (${COMPANY.social.xHandle})` },
-                                    { icon: FaGooglePlay, url: COMPANY.social.playStore, label: "Paymm on Google Play" },
-                                    { icon: FaApple, url: COMPANY.social.appStore, label: "Paymm on the App Store" },
-                                ].map((item, index) => (
-                                    <a
-                                        key={index}
-                                        href={item.url}
-                                        aria-label={item.label}
-                                        title={item.label}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="w-9 h-9 flex items-center justify-center rounded-lg bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white transition-all transform hover:-translate-y-1"
-                                    >
-                                        <item.icon />
-                                    </a>
-                                ))}
-                            </div>
+                    {COLS.map((c) => (
+                        <div key={c.title}>
+                            <h3 className="text-white font-bold mb-4">{c.title}</h3>
+                            <ul className="space-y-2.5 text-sm">
+                                {c.links.map((l) => <li key={l.name + l.href}><Link href={l.href} className="hover:text-night-accent transition-colors">{l.name}</Link></li>)}
+                            </ul>
                         </div>
-                    </div>
+                    ))}
                 </div>
 
-                {/* Popular routes: gives every route page a sitewide inbound link */}
-                <nav aria-label="Popular flight routes" className="border-t border-slate-800/50 pt-8 mt-4">
-                    <p className="text-xs uppercase tracking-wider text-slate-500 font-semibold mb-3">Popular flight routes</p>
-                    <ul className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-slate-400">
-                        {FOOTER_ROUTES.map((r) => (
-                            <li key={r.slug}>
-                                <Link href={`/flights/${r.slug}`} className="hover:text-blue-400 transition-colors">{r.name} flights</Link>
-                            </li>
-                        ))}
-                        <li><Link href="/flights" className="text-blue-400 hover:underline">All routes →</Link></li>
-                    </ul>
+                <nav aria-label="Popular routes" className="border-t border-white/10 pt-8 grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+                    <div>
+                        <p className="uppercase tracking-wider text-[#8E88A3] font-semibold mb-3">Popular flight routes</p>
+                        <ul className="flex flex-wrap gap-x-4 gap-y-2">
+                            {FOOTER_ROUTES.map((r) => <li key={r.slug}><Link href={`/flights/${r.slug}`} className="hover:text-night-accent transition-colors">{r.name} flights</Link></li>)}
+                            <li><Link href="/flights" className="text-night-accent hover:underline">All routes →</Link></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p className="uppercase tracking-wider text-[#8E88A3] font-semibold mb-3">Popular bus routes</p>
+                        <ul className="flex flex-wrap gap-x-4 gap-y-2">
+                            {busRoutes.map((r) => <li key={r.slug}><Link href={`/bus/${r.slug}`} className="hover:text-night-accent transition-colors">{r.from.name} to {r.to.name} bus</Link></li>)}
+                            <li><Link href="/bus" className="text-night-accent hover:underline">All bus routes →</Link></li>
+                        </ul>
+                    </div>
                 </nav>
 
-                {/* Bottom Bar */}
-                <div className="border-t border-slate-800/50 pt-8 mt-8">
-                    <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                        <p className="text-slate-500 text-sm order-2 md:order-1">
-                            &copy; {new Date().getFullYear()} {COMPANY.legalName}. All rights reserved. Made with <span className="text-red-500 animate-pulse">❤</span> in India.
-                        </p>
-                        <div className="flex items-center space-x-4 text-slate-600 order-1 md:order-2">
-                            <FaCcVisa className="text-2xl hover:text-slate-400 transition-colors" />
-                            <FaCcMastercard className="text-2xl hover:text-slate-400 transition-colors" />
-                            <FaCcAmex className="text-2xl hover:text-slate-400 transition-colors" />
-                            <span className="text-xs font-bold tracking-wide">UPI</span>
-                        </div>
+                <div className="border-t border-white/10 mt-8 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
+                    <p>© {new Date().getFullYear()} {COMPANY.legalName}. Made in India 🇮🇳</p>
+                    <div className="flex items-center gap-3 font-bold tracking-wide text-[#8E88A3]">
+                        <span>UPI</span><span>VISA</span><span>Mastercard</span><span>RuPay</span><span>PhonePe</span><span>PayU</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        {[
+                            { icon: FaInstagram, url: COMPANY.social.instagram, label: 'Instagram' },
+                            { icon: FaLinkedin, url: COMPANY.social.linkedin, label: 'LinkedIn' },
+                            { icon: FaXTwitter, url: COMPANY.social.x, label: 'X' },
+                        ].map((s) => (
+                            <a key={s.label} href={s.url} target="_blank" rel="noopener noreferrer" aria-label={`Paymm on ${s.label}`} className="w-9 h-9 rounded-lg bg-night-surface border border-white/10 flex items-center justify-center hover:text-white hover:border-night-accent transition-colors"><s.icon /></a>
+                        ))}
                     </div>
                 </div>
             </div>

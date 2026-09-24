@@ -19,6 +19,11 @@ Disallow: /flights/ssr
 Disallow: /test-seo
 Disallow: /auth/
 Disallow: /r/
+Disallow: /bus/search
+Disallow: /bus/select
+Disallow: /bus/passengers
+Disallow: /bus/booking/
+Disallow: /bus/my-bookings
 
 Sitemap: https://www.paymm.in/sitemap.xml`;
 

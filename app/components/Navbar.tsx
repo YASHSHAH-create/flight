@@ -1,250 +1,148 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ChevronDown, Menu, LogOut, User, Globe, Package, CalendarDays, Settings, Briefcase, X, BookOpen, Smartphone } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { Menu, LogOut, User, X, Plane, Hotel, Bus, Smartphone, Package, BookOpen, Briefcase, LifeBuoy, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { FaGooglePlay, FaApple } from 'react-icons/fa6';
 import { useAuth } from '@/context/AuthContext';
-import AppBanner from './AppBanner';
+import { useSession } from '@/context/SessionContext';
+import { COMPANY } from '@/app/lib/company';
 
+const SERVICES = [
+    { name: 'Flights', href: '/flights', icon: Plane, tint: 'bg-brand-soft text-brand' },
+    { name: 'Hotels', href: '/hotels/search', icon: Hotel, tint: 'bg-[#FFE9E3] text-[#C2410C]' },
+    { name: 'Buses', href: '/bus', icon: Bus, tint: 'bg-[#E0F5F1] text-[#0E7C66]' },
+    { name: 'Recharge & Bills', href: '/downloads', icon: Smartphone, tint: 'bg-gold-soft text-gold' },
+    { name: 'Packages', href: '/packages', icon: Package, tint: 'bg-[#E3F0FF] text-[#1D4ED8]' },
+    { name: 'Blog', href: '/blog', icon: BookOpen, tint: 'bg-ok-soft text-ok' },
+];
+
+/**
+ * Sticky 72px top nav (Royal Purple system): white with hairline border,
+ * blur on scroll. Sign-in opens the Paymm account modal (phone OTP / Google).
+ */
 const Navbar = () => {
-    const { user, login, logout } = useAuth();
+    const { user: googleUser, logout: googleLogout } = useAuth();
+    const { user: sessionUser, requireLogin, logout: sessionLogout } = useSession();
+    const pathname = usePathname();
     const [scrolled, setScrolled] = useState(false);
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
-        const handleScroll = () => {
-            if (window.scrollY > 10) {
-                setScrolled(true);
-            } else {
-                setScrolled(false);
-            }
-        };
-
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
+        const onScroll = () => setScrolled(window.scrollY > 8);
+        onScroll();
+        window.addEventListener('scroll', onScroll, { passive: true });
+        return () => window.removeEventListener('scroll', onScroll);
     }, []);
+    useEffect(() => { setOpen(false); }, [pathname]);
 
+    const user = sessionUser
+        ? { name: sessionUser.name || sessionUser.phone || sessionUser.email, email: sessionUser.email, picture: undefined as string | undefined }
+        : googleUser ? { name: googleUser.name, email: googleUser.email, picture: googleUser.picture } : null;
 
+    const logout = async () => {
+        if (sessionUser) await sessionLogout();
+        if (googleUser) await googleLogout();
+    };
+
+    const isActive = (href: string) => (href === '/' ? pathname === '/' : (pathname || '').startsWith(href.split('#')[0]));
 
     return (
-        <header
-            className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 border-b flex flex-col ${scrolled
-                ? 'bg-white/80 backdrop-blur-xl border-slate-200/60 shadow-lg shadow-slate-900/5'
-                : 'bg-transparent border-transparent'
-                }`}
-        >
-            <AppBanner />
-            <nav className={`w-full max-w-[1440px] mx-auto px-4 md:px-8 flex items-center justify-between transition-all duration-300 ${scrolled ? 'py-3' : 'py-5'}`}>
-                {/* Logo */}
-                <Link href="/" className="flex items-center gap-3 group select-none">
-                    <div className="relative w-10 h-10 md:w-11 md:h-11 rounded-xl overflow-hidden shadow-sm ring-1 ring-slate-900/5 transition-all duration-300 group-hover:scale-105 group-hover:shadow-md bg-white">
-                        <Image
-                            src="/paymm.png"
-                            alt="Paymm Logo"
-                            fill
-                            className="object-cover"
-                            priority
-                        />
-                    </div>
-                    <span className="text-2xl md:text-3xl font-black tracking-tighter text-slate-900 group-hover:text-blue-700 transition-colors leading-none pb-1">
-                        Paymm
+        <header className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 border-b ${scrolled ? 'bg-white/85 backdrop-blur-xl border-hair' : 'bg-white/60 backdrop-blur-md border-transparent'}`}>
+            <nav className="max-w-[1280px] mx-auto px-4 md:px-6 h-[68px] md:h-[72px] flex items-center justify-between gap-4">
+                <Link href="/" className="flex items-center gap-2.5 select-none shrink-0" aria-label="Paymm home">
+                    <span className="relative w-9 h-9 rounded-xl overflow-hidden bg-white ring-1 ring-hair">
+                        <Image src="/paymm.png" alt="Paymm" fill className="object-cover" priority />
                     </span>
+                    <span className="font-display text-2xl font-extrabold tracking-[-0.03em] text-brand leading-none">Paymm</span>
                 </Link>
 
-                {/* Desktop Nav - Pill Shape Container */}
-                <div className={`hidden lg:flex items-center gap-1 px-3 py-2 rounded-full transition-all duration-300 ${scrolled
-                    ? 'bg-slate-100/80 backdrop-blur-md text-slate-600 border border-slate-200 shadow-sm'
-                    : 'bg-white/30 backdrop-blur-md text-slate-800 border border-white/40 shadow-sm'
-                    }`}>
-                    {[
-                        { name: 'Holiday Packages', href: '/packages', icon: Package },
-                        { name: 'Flight Schedule', href: '/schedule', icon: CalendarDays },
-                        { name: 'Travel Blog', href: '/blog', icon: BookOpen },
-                        { name: 'Account Settings', href: '/profile', icon: Settings },
-                        { name: 'My Bookings', href: '/bookings', icon: Briefcase },
-                        { name: 'Download App', href: '/downloads', icon: Smartphone },
-                    ].map((item) => (
-                        <Link
-                            key={item.name}
-                            href={item.href}
-                            className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 hover:bg-white hover:text-black hover:shadow-sm"
-                        >
-                            <item.icon size={16} strokeWidth={2.5} className="opacity-70" />
-                            <span>{item.name}</span>
+                <div className="hidden lg:flex items-center gap-1">
+                    {SERVICES.map((s) => (
+                        <Link key={s.name} href={s.href} className={`px-3.5 py-2 rounded-full text-sm font-bold transition-colors ${isActive(s.href) && s.href !== '/downloads' ? 'bg-brand-soft text-brand' : 'text-ink-2 hover:text-ink hover:bg-brand-soft/60'}`}>
+                            {s.name}
                         </Link>
                     ))}
                 </div>
 
-                {/* Right Actions */}
-                <div className="hidden md:flex items-center gap-6">
-                    {/* Auth */}
+                <div className="hidden md:flex items-center gap-2">
+                    <Link href="/downloads" className="btn-outline text-sm py-2 px-4">
+                        <FaGooglePlay size={12} /><FaApple size={13} /> Download App
+                    </Link>
+                    <Link href="/contact" className="btn-ghost text-sm py-2 px-3 text-ink-2 hover:text-brand">Support</Link>
                     {user ? (
-                        <div className="flex items-center gap-3 pl-2 border-l border-slate-200/50">
-                            <div className="flex items-center gap-2 group cursor-pointer">
+                        <div className="flex items-center gap-2 pl-2 ml-1 border-l border-hair">
+                            <Link href={sessionUser ? '/bus/my-bookings' : '/bookings'} className="flex items-center gap-2 rounded-full pl-1 pr-3 py-1 hover:bg-brand-soft transition-colors">
                                 {user.picture ? (
-                                    <img
-                                        src={user.picture}
-                                        alt={user.name}
-                                        referrerPolicy="no-referrer"
-                                        className="w-9 h-9 rounded-full ring-2 ring-white shadow-md object-cover"
-                                    />
+                                    // eslint-disable-next-line @next/next/no-img-element
+                                    <img src={user.picture} alt="" referrerPolicy="no-referrer" className="w-8 h-8 rounded-full object-cover ring-2 ring-white" />
                                 ) : (
-                                    <div className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 shadow-sm ring-2 ring-white">
-                                        <User size={18} />
-                                    </div>
+                                    <span className="w-8 h-8 rounded-full bg-brand-soft text-brand flex items-center justify-center"><User size={16} /></span>
                                 )}
-                                <div className="flex flex-col">
-                                    <span className="text-xs font-bold text-slate-900 leading-none">{user.name}</span>
-                                    <span className="text-[10px] text-slate-500 font-medium">Traveler</span>
-                                </div>
-                            </div>
-                            <button
-                                onClick={() => logout()}
-                                className="w-9 h-9 flex items-center justify-center rounded-full text-slate-400 hover:bg-red-50 hover:text-red-600 transition-all"
-                                title="Logout"
-                            >
-                                <LogOut size={18} />
-                            </button>
+                                <span className="text-sm font-bold text-ink max-w-[120px] truncate">{user.name}</span>
+                            </Link>
+                            <button onClick={logout} title="Sign out" className="w-9 h-9 rounded-full text-ink-3 hover:bg-err-soft hover:text-err flex items-center justify-center transition-colors"><LogOut size={16} /></button>
                         </div>
                     ) : (
-                        <div className="flex items-center gap-4">
-                            <a href="#" className={`text-sm font-bold transition-colors ${scrolled ? 'text-slate-600 hover:text-black' : 'text-slate-800 hover:text-black'}`}>
-                                Register
-                            </a>
-                            <button
-                                onClick={() => login()}
-                                className="bg-[#0f172a] text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-black transition-all shadow-lg shadow-purple-900/20 active:scale-95 hover:-translate-y-0.5"
-                            >
-                                Sign In
-                            </button>
-                        </div>
+                        <button onClick={() => requireLogin()} className="btn-primary text-sm py-2.5 px-5">Login / Sign up</button>
                     )}
                 </div>
 
-                {/* Mobile Toggle */}
-                <div className="md:hidden flex items-center gap-4">
+                <div className="md:hidden flex items-center gap-2">
                     {user ? (
-                        <div className="flex items-center gap-2">
-                            {user.picture ? (
-                                <img
-                                    src={user.picture}
-                                    alt={user.name}
-                                    referrerPolicy="no-referrer"
-                                    className="w-8 h-8 rounded-full ring-2 ring-white shadow-sm object-cover"
-                                />
-                            ) : (
-                                <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 shadow-sm ring-2 ring-white">
-                                    <User size={16} />
-                                </div>
-                            )}
-                        </div>
+                        <Link href={sessionUser ? '/bus/my-bookings' : '/bookings'} className="w-9 h-9 rounded-full bg-brand-soft text-brand flex items-center justify-center" aria-label="Account"><User size={18} /></Link>
                     ) : (
-                        <button
-                            onClick={() => login()}
-                            className="bg-slate-900 text-white px-4 py-2 rounded-full text-xs font-bold"
-                        >
-                            Sign In
-                        </button>
+                        <button onClick={() => requireLogin()} className="btn-primary text-xs py-2 px-4">Login</button>
                     )}
-                    <button onClick={() => setIsMobileMenuOpen(true)} className="text-slate-900">
-                        <Menu size={24} />
-                    </button>
+                    <button onClick={() => setOpen(true)} className="w-10 h-10 rounded-full flex items-center justify-center text-ink hover:bg-brand-soft" aria-label="Menu"><Menu size={22} /></button>
                 </div>
             </nav>
 
-            {/* Mobile Menu Overlay */}
             <AnimatePresence>
-                {isMobileMenuOpen && (
+                {open && (
                     <>
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            onClick={() => setIsMobileMenuOpen(false)}
-                            className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[110]"
-                        />
-                        <motion.div
-                            initial={{ x: '100%' }}
-                            animate={{ x: 0 }}
-                            exit={{ x: '100%' }}
-                            transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                            className="fixed top-0 right-0 h-full w-[80vw] max-w-sm bg-white shadow-2xl z-[120] p-6 flex flex-col overflow-y-auto"
-                        >
-                            <div className="flex items-center justify-between mb-8">
-                                <span className="text-xl font-black text-slate-900 tracking-tight">Menu</span>
-                                <button
-                                    onClick={() => setIsMobileMenuOpen(false)}
-                                    className="p-2 hover:bg-slate-100 rounded-full transition-colors"
-                                >
-                                    <X size={24} />
-                                </button>
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setOpen(false)} className="fixed inset-0 bg-ink/50 backdrop-blur-sm z-[110]" />
+                        <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', damping: 26, stiffness: 300 }}
+                            className="fixed top-0 right-0 h-full w-[86vw] max-w-sm bg-white z-[120] p-5 flex flex-col overflow-y-auto">
+                            <div className="flex items-center justify-between mb-5">
+                                <span className="font-display text-xl font-extrabold text-brand">Paymm</span>
+                                <button onClick={() => setOpen(false)} className="p-2 rounded-full hover:bg-brand-soft" aria-label="Close"><X size={22} /></button>
                             </div>
-
-                            <div className="flex flex-col space-y-2">
-                                {[
-                                    { name: 'Holiday Packages', href: '/packages', icon: Package },
-                                    { name: 'Flight Schedule', href: '/schedule', icon: CalendarDays },
-                                    { name: 'Travel Blog', href: '/blog', icon: BookOpen },
-                                    { name: 'Account Settings', href: '#', icon: Settings },
-                                    { name: 'My Bookings', href: '/bookings', icon: Briefcase },
-                                    { name: 'Download App', href: '/downloads', icon: Smartphone },
-                                ].map((item) => (
-                                    <Link
-                                        key={item.name}
-                                        href={item.href}
-                                        onClick={() => setIsMobileMenuOpen(false)}
-                                        className="flex items-center gap-4 px-4 py-4 rounded-xl text-slate-700 font-semibold hover:bg-slate-50 active:bg-slate-100 transition-colors"
-                                    >
-                                        <item.icon size={20} className="text-slate-400" />
-                                        <span>{item.name}</span>
+                            <div className="grid grid-cols-3 gap-2 mb-5">
+                                {SERVICES.map((s) => (
+                                    <Link key={s.name} href={s.href} className="flex flex-col items-center gap-1.5 rounded-2xl border border-hair p-3 text-center hover:bg-lav">
+                                        <span className={`w-10 h-10 rounded-xl flex items-center justify-center ${s.tint}`}><s.icon size={20} /></span>
+                                        <span className="text-[11px] font-bold text-ink leading-tight">{s.name}</span>
                                     </Link>
                                 ))}
                             </div>
-
-                            <div className="mt-auto border-t border-slate-100 pt-6">
+                            <div className="divide-y divide-hair rounded-2xl border border-hair overflow-hidden">
+                                {[
+                                    { name: 'My bus bookings', href: '/bus/my-bookings', icon: Briefcase },
+                                    { name: 'My flight bookings', href: '/bookings', icon: Plane },
+                                    { name: 'Download app', href: '/downloads', icon: Smartphone },
+                                    { name: 'Support', href: '/contact', icon: LifeBuoy },
+                                ].map((l) => (
+                                    <Link key={l.href} href={l.href} className="flex items-center gap-3 px-4 py-3.5 text-sm font-semibold text-ink hover:bg-lav">
+                                        <l.icon size={18} className="text-ink-3" />{l.name}<ChevronRight size={16} className="ml-auto text-ink-3" />
+                                    </Link>
+                                ))}
+                            </div>
+                            <div className="mt-auto pt-6">
                                 {user ? (
-                                    <div className="space-y-4">
-                                        <div className="flex items-center gap-3 px-2">
-                                            {user.picture ? (
-                                                <img
-                                                    src={user.picture}
-                                                    alt={user.name}
-                                                    referrerPolicy="no-referrer"
-                                                    className="w-10 h-10 rounded-full ring-2 ring-slate-100 object-cover"
-                                                />
-                                            ) : (
-                                                <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500">
-                                                    <User size={20} />
-                                                </div>
-                                            )}
-                                            <div className="flex flex-col">
-                                                <span className="font-bold text-slate-900">{user.name}</span>
-                                                <span className="text-xs text-slate-500">{user.email}</span>
-                                            </div>
+                                    <div className="space-y-3">
+                                        <div className="flex items-center gap-3">
+                                            <span className="w-10 h-10 rounded-full bg-brand-soft text-brand flex items-center justify-center"><User size={18} /></span>
+                                            <div className="min-w-0"><p className="font-bold text-ink truncate">{user.name}</p><p className="text-xs text-ink-2 truncate">{user.email}</p></div>
                                         </div>
-                                        <button
-                                            onClick={() => {
-                                                logout();
-                                                setIsMobileMenuOpen(false);
-                                            }}
-                                            className="w-full flex items-center justify-center gap-2 bg-red-50 text-red-600 font-bold py-3 rounded-xl hover:bg-red-100 transition-colors"
-                                        >
-                                            <LogOut size={18} />
-                                            <span>Logout</span>
-                                        </button>
+                                        <button onClick={() => { logout(); setOpen(false); }} className="w-full rounded-xl bg-err-soft text-err font-bold py-3 flex items-center justify-center gap-2"><LogOut size={16} /> Sign out</button>
                                     </div>
                                 ) : (
-                                    <button
-                                        onClick={() => {
-                                            login();
-                                            setIsMobileMenuOpen(false);
-                                        }}
-                                        className="w-full bg-slate-900 text-white font-bold py-3 rounded-xl hover:bg-black transition-colors shadow-lg shadow-slate-900/20"
-                                    >
-                                        Sign In
-                                    </button>
+                                    <button onClick={() => { setOpen(false); requireLogin(); }} className="btn-primary w-full">Login / Sign up</button>
                                 )}
+                                <p className="text-[11px] text-ink-3 mt-4 text-center">{COMPANY.support.summary}</p>
                             </div>
                         </motion.div>
                     </>

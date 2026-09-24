@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { AIRPORT_MAP } from '@/app/lib/airports';
 import { BLOG_POSTS } from '@/app/lib/blog-data';
 import { getIndexableRoutes } from '@/app/lib/routeValidator';
+import { indexableRoutes as indexableBusRoutes } from '@/app/lib/bus/routes';
 import { SITE_LAST_UPDATED } from '@/app/lib/company';
 import { AUTHORS } from '@/app/lib/authors';
 
@@ -32,7 +33,7 @@ export async function GET(
             const staticRoutes = [
                 '', '/about', '/contact', '/privacy',
                 '/refund', '/terms', '/blog', '/packages', '/schedule', '/how-to-book-cheap-flights',
-                '/flights', '/downloads', '/cheapest-flight-booking-apps-india',
+                '/flights', '/downloads', '/cheapest-flight-booking-apps-india', '/bus',
                 ...Object.keys(AUTHORS).map(a => `/author/${a}`)
             ];
             urls = staticRoutes.map(route => ({
@@ -40,6 +41,15 @@ export async function GET(
                 lastModified: SITE_LAST_UPDATED,
                 changeFrequency: 'weekly',
                 priority: route === '' ? 1.0 : 0.8
+            }));
+            break;
+
+        case 'bus-routes':
+            urls = indexableBusRoutes().map(r => ({
+                url: `${baseUrl}/bus/${r.slug}`,
+                lastModified: SITE_LAST_UPDATED,
+                changeFrequency: 'weekly',
+                priority: 0.8
             }));
             break;
 

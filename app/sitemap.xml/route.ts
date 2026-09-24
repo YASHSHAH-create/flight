@@ -6,6 +6,7 @@ export async function GET() {
 
     const sitemaps = [
         'f-static',
+        'bus-routes',
         'cf-misc',
         'cf-a2b-dom',
         'cf-a2b-int-out',

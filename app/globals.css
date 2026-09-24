@@ -1,5 +1,57 @@
 @import "tailwindcss";
 
+/* ── Paymm Royal Purple design tokens (Claude Design spec, Sep 2026) ───────── */
+@theme {
+  --color-brand: #4F2BD0;
+  --color-brand-hover: #4325B5;
+  --color-brand-soft: #EFEAFB;
+  --color-brand-deep: #2E1A80;
+  --color-accent: #7C5CE6;
+  --color-lav: #F8F7FC;
+  --color-ink: #1E1930;
+  --color-ink-2: #5E5873;
+  --color-ink-3: #8E88A3;
+  --color-hair: rgba(79, 43, 208, 0.10);
+  --color-gold: #B8860B;
+  --color-gold-soft: #FFF4D6;
+  --color-gold-bright: #FFD54F;
+  --color-ok: #0F9D6E;
+  --color-ok-soft: #E3F7EF;
+  --color-warn: #A34E00;
+  --color-warn-soft: #FFF1E6;
+  --color-err: #D63A3A;
+  --color-err-soft: #FDE8E8;
+  --color-night: #0B0A0F;
+  --color-night-surface: #17151D;
+  --color-night-accent: #B794F6;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-jakarta), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --radius-card: 16px;
+  --radius-panel: 24px;
+}
+
+@layer base {
+  body { background: #F8F7FC; color: #1E1930; }
+  ::selection { background: #EFEAFB; color: #1E1930; }
+}
+
+@layer components {
+  .eyebrow { @apply text-[11px] font-bold uppercase tracking-[0.12em] text-accent; }
+  .btn-primary { @apply inline-flex items-center justify-center gap-2 bg-brand text-white rounded-full font-bold px-6 py-3 hover:bg-brand-hover transition-colors disabled:opacity-60 disabled:cursor-not-allowed; }
+  .btn-outline { @apply inline-flex items-center justify-center gap-2 bg-white text-ink rounded-full font-bold px-5 py-2.5 border border-hair hover:bg-brand-soft hover:text-brand transition-colors; }
+  .btn-ghost { @apply inline-flex items-center justify-center gap-2 text-brand rounded-full font-bold px-4 py-2 hover:bg-brand-soft transition-colors; }
+  .card { @apply bg-white rounded-2xl border border-hair; }
+  .panel { @apply bg-white rounded-3xl border border-hair; }
+  .pill-soft { @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold; }
+  .field-cell { @apply w-full text-left px-4 py-3 rounded-2xl hover:bg-brand-soft/60 transition-colors cursor-pointer; }
+  .field-label { @apply block text-[11px] font-bold uppercase tracking-wide text-ink-3 mb-0.5; }
+  .field-value { @apply block text-lg md:text-xl font-extrabold text-ink tracking-tight leading-tight truncate; }
+  .field-sub { @apply block text-xs text-ink-2 truncate; }
+  .shimmer { background: linear-gradient(90deg, #EFEAFB 25%, #F8F7FC 50%, #EFEAFB 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
+  @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+}
+
+
 @layer utilities {
   .no-scrollbar::-webkit-scrollbar {
     display: none;
