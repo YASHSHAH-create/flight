@@ -46,12 +46,12 @@ const SearchCard = ({ initialTab = 'flights' }: { initialTab?: Tab }) => {
 
     return (
         <div className="panel shadow-[0_24px_70px_rgba(79,43,208,0.12)] p-3 md:p-6 w-full max-w-[1100px] mx-auto text-left">
-            <div role="tablist" aria-label="Search type" className="flex gap-1.5 overflow-x-auto no-scrollbar -mx-1 px-1 pb-3 mb-3 border-b border-hair">
+            <div role="tablist" aria-label="Search type" className="flex gap-1 md:gap-1.5 overflow-x-auto no-scrollbar -mx-1 px-1 pb-2.5 mb-3 border-b border-hair">
                 {TABS.map((t) => {
                     const on = t.id === tab;
                     return (
                         <button key={t.id} role="tab" aria-selected={on} onClick={() => setTab(t.id)}
-                            className={`flex items-center gap-2 px-3.5 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-colors ${on ? 'bg-brand-soft text-brand' : 'text-ink-2 hover:bg-lav'}`}>
+                            className={`flex items-center gap-1.5 md:gap-2 px-2.5 md:px-3.5 py-1.5 md:py-2 rounded-full text-[13px] md:text-sm font-bold whitespace-nowrap transition-colors ${on ? 'bg-brand-soft text-brand' : 'text-ink-2 hover:bg-lav'}`}>
                             <span className={`w-7 h-7 rounded-lg bg-gradient-to-br ${t.tint} flex items-center justify-center text-base shadow-[inset_0_-2px_0_rgba(0,0,0,0.05)]`} aria-hidden>{t.emoji}</span>
                             {t.label}
                         </button>

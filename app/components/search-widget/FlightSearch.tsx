@@ -216,7 +216,7 @@ const FlightSearch = ({ initialState }: FlightSearchProps) => {
     return (
         <div className="relative" onClick={() => setOpenDropdown(null)}>
             {/* Top Row: Trip Type, Travellers, Class */}
-            <div className="flex flex-wrap justify-center md:justify-start items-center gap-2 md:gap-8 mb-4 md:mb-8 text-xs md:text-sm font-bold text-ink-2 relative z-50">
+            <div className="flex flex-wrap justify-center md:justify-start items-center gap-2 md:gap-6 mb-3 md:mb-6 text-xs md:text-sm font-bold text-ink-2 relative z-50">
                 {/* Trip Type */}
                 <div className="relative">
                     <div onClick={(e) => { e.stopPropagation(); toggleDropdown('tripType'); }}
@@ -388,16 +388,16 @@ const FlightSearch = ({ initialState }: FlightSearchProps) => {
             )}
 
             {/* Fare type chips */}
-            <div className="mt-4 flex flex-wrap items-center gap-2 text-xs">
-                <span className="text-ink-2 font-semibold">Fare type:</span>
+            <div className="mt-3 flex flex-nowrap items-center gap-2 text-xs overflow-x-auto no-scrollbar -mx-1 px-1">
+                <span className="text-ink-2 font-semibold whitespace-nowrap">Fare type:</span>
                 {['Regular', 'Student', 'Senior citizen', 'Armed forces'].map((f) => (
                     <button key={f} type="button" onClick={() => setFareType(f)}
-                        className={`px-3 py-1 rounded-full border font-semibold transition-colors ${fareType === f ? 'bg-brand text-white border-brand' : 'bg-white text-ink-2 border-hair hover:border-brand'}`}>{f}</button>
+                        className={`px-3 py-1 rounded-full border font-semibold whitespace-nowrap transition-colors ${fareType === f ? 'bg-brand text-white border-brand' : 'bg-white text-ink-2 border-hair hover:border-brand'}`}>{f}</button>
                 ))}
             </div>
 
             {/* Search Button */}
-            <div className="mt-4 flex justify-end">
+            <div className="mt-3 md:mt-4 flex justify-end">
                 <button onClick={handleSearch}
                     className="w-full md:w-auto bg-brand text-white px-8 py-3.5 rounded-full font-bold hover:bg-brand-hover hover:shadow-[0_10px_30px_rgba(79,43,208,0.25)] transition-all flex items-center justify-center space-x-2">
                     <span>Search Flights</span>

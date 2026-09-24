@@ -4,7 +4,7 @@ import { ArrowRight, Clock, Headphones, Coins, ShieldCheck, Wallet, Smartphone }
 import { FaGooglePlay, FaApple } from 'react-icons/fa6';
 import { COMPANY, PAYMM_FLIGHT_PRICING } from '@/app/lib/company';
 import { BLOG_POSTS } from '@/app/lib/blog-data';
-import { FOOTER_ROUTES } from '@/app/lib/routeValidator';
+import { FOOTER_ROUTES, routeSlug } from '@/app/lib/routeValidator';
 import { FEATURED_ROUTE_SLUGS, resolveRouteSlug } from '@/app/lib/bus/routes';
 
 /* ───────────────────────── Services bento ───────────────────────── */
@@ -80,7 +80,7 @@ export const PopularSection = () => {
                     <h2 className="font-display text-2xl md:text-3xl font-extrabold text-ink tracking-[-0.02em] mb-5">Where India is going this season</h2>
                     <div className="grid grid-cols-2 gap-3">
                         {DESTINATIONS.map((d) => (
-                            <Link key={d.name} href={`/flights/${d.from.toLowerCase()}-to-${d.code.toLowerCase()}`} className="relative aspect-[4/5] rounded-2xl overflow-hidden group border border-hair">
+                            <Link key={d.name} href={`/flights/${routeSlug(d.from, d.code)}`} className="relative aspect-[4/5] rounded-2xl overflow-hidden group border border-hair">
                                 <Image src={`https://picsum.photos/seed/${d.seed}/480/600`} alt={`${d.name}`} fill className="object-cover transition-transform duration-700 group-hover:scale-105" sizes="(max-width: 768px) 50vw, 260px" />
                                 <div className="absolute inset-0 bg-gradient-to-t from-[#1E1930]/80 via-transparent to-[#7C5CE6]/10" />
                                 <div className="absolute bottom-0 p-4 text-white"><h3 className="font-extrabold text-lg">{d.name}</h3><p className="text-xs text-white/80">{d.sub}</p></div>

@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ShieldCheck, Headphones, Wallet, Users } from "lucide-react";
 import Navbar from "./components/Navbar";
 import JsonLd from "./components/JsonLd";
 import SearchCard from "./components/home/SearchCard";
 import { ServicesBento, PopularSection, WhyPaymm, AppBand, BlogRow } from "./components/home/Sections";
 import { Offers, HomeTestimonials, HomeFAQ, WhatsAppStrip } from "./components/home/Interactive";
 import { COMPANY } from "@/app/lib/company";
+import { routeSlug } from "@/app/lib/routeValidator";
 
 export const metadata: Metadata = {
   alternates: { canonical: "https://www.paymm.in" },
@@ -19,7 +19,7 @@ export default function Home() {
       <Navbar />
 
       {/* Hero + search module */}
-      <section className="relative overflow-hidden pt-28 md:pt-36 pb-10 md:pb-16">
+      <section className="relative overflow-hidden pt-[84px] md:pt-28 pb-6 md:pb-12">
         <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(55% 45% at 50% 0%, rgba(124,92,230,0.18) 0%, rgba(248,247,252,0) 70%)' }} />
         {/* Floating photo cards (desktop only, purely decorative) */}
         <div className="hidden xl:block absolute right-[4%] top-40 w-44 h-56 rounded-2xl overflow-hidden rotate-6 border border-hair shadow-[0_20px_50px_rgba(79,43,208,0.15)] pointer-events-none" aria-hidden>
@@ -31,18 +31,12 @@ export default function Home() {
           <div className="absolute inset-0 bg-brand/10" />
         </div>
 
-        <div className="relative max-w-[1100px] mx-auto px-4 md:px-6 text-center">
-          <p className="eyebrow mb-3">India’s all-in-one travel &amp; payments app</p>
-          <h1 className="font-display text-[clamp(2rem,6.5vw,3.5rem)] font-extrabold text-ink tracking-[-0.02em] leading-[1.05] max-w-3xl mx-auto">
-            Fly, stay, ride &amp; recharge — one app, zero hassle.
+        <div className="relative max-w-[1100px] mx-auto px-3 md:px-6 text-center">
+          {/* One-line H1 only: keeps the page's primary heading for search engines
+              while leaving the phone viewport to the search card. */}
+          <h1 className="font-display text-base md:text-2xl font-extrabold text-ink tracking-[-0.02em] mb-3 md:mb-5">
+            Book flights, hotels &amp; bus tickets at the lowest fares
           </h1>
-          <p className="text-ink-2 text-base md:text-lg mt-4 max-w-2xl mx-auto">Lowest live fares, instant refunds to wallet, and PayMM Coins on every booking.</p>
-          <ul className="mt-4 mb-8 flex flex-wrap justify-center gap-x-5 gap-y-2 text-xs md:text-sm font-semibold text-ink-2">
-            <li className="flex items-center gap-1.5"><ShieldCheck size={15} className="text-ok" /> Secure UPI · card · wallet payments</li>
-            <li className="flex items-center gap-1.5"><Headphones size={15} className="text-brand" /> Support {COMPANY.support.phoneHours}</li>
-            <li className="flex items-center gap-1.5"><Wallet size={15} className="text-gold" /> Instant wallet refunds</li>
-            <li className="flex items-center gap-1.5"><Users size={15} className="text-accent" /> GST invoices for business travel</li>
-          </ul>
           <SearchCard />
         </div>
       </section>
@@ -75,7 +69,7 @@ export default function Home() {
           </ul>
           <h3 className="font-extrabold text-ink text-lg">Popular routes</h3>
           <p>
-            Popular flight routes include <Link href="/flights/del-to-bom" className="text-brand underline">Delhi to Mumbai</Link>, <Link href="/flights/blr-to-del" className="text-brand underline">Bangalore to Delhi</Link> and <Link href="/flights/del-to-goi" className="text-brand underline">Delhi to Goa</Link>;
+            Popular flight routes include <Link href={`/flights/${routeSlug("DEL", "BOM")}`} className="text-brand underline">Delhi to Mumbai</Link>, <Link href={`/flights/${routeSlug("BLR", "DEL")}`} className="text-brand underline">Bangalore to Delhi</Link> and <Link href={`/flights/${routeSlug("DEL", "GOI")}`} className="text-brand underline">Delhi to Goa</Link>;
             popular bus routes include <Link href="/bus/delhi-to-manali" className="text-brand underline">Delhi to Manali</Link>, <Link href="/bus/mumbai-to-goa" className="text-brand underline">Mumbai to Goa</Link> and <Link href="/bus/bangalore-to-chennai" className="text-brand underline">Bangalore to Chennai</Link>.
             Browse <Link href="/flights" className="text-brand underline">all flight routes</Link> or <Link href="/bus" className="text-brand underline">all bus routes</Link>.
           </p>
