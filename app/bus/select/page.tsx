@@ -19,7 +19,7 @@ const PointList = ({ title, points, value, onChange }: { title: string; points: 
                 <h3 className="font-extrabold text-ink">{title}</h3>
                 {points.length > 6 && <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search" className="text-xs border border-hair rounded-full px-3 py-1.5 outline-none focus:border-brand w-28" />}
             </div>
-            <div className="max-h-64 overflow-y-auto custom-scrollbar rounded-xl border border-hair divide-y divide-hair bg-white">
+            <div className="max-h-52 overflow-y-auto custom-scrollbar rounded-xl border border-hair divide-y divide-hair bg-white">
                 {list.length === 0 && <p className="p-4 text-sm text-ink-3">No points listed.</p>}
                 {list.map((p) => {
                     const on = value?.id === p.id;
@@ -46,6 +46,7 @@ function SelectInner() {
     const [selected, setSelected] = useState<Seat[]>([]);
     const [boarding, setBoarding] = useState<BusPoint | undefined>();
     const [dropping, setDropping] = useState<BusPoint | undefined>();
+    const [pointTab, setPointTab] = useState<'boarding' | 'dropping'>('boarding');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [warn, setWarn] = useState('');
@@ -107,7 +108,7 @@ function SelectInner() {
             </div>
 
             {draft && (
-                <div className="panel p-4 md:p-5 mb-4 flex flex-col md:flex-row md:items-center gap-3">
+                <div className="panel p-3 md:p-5 mb-3 flex flex-col md:flex-row md:items-center gap-1.5 md:gap-3">
                     <div className="min-w-0">
                         <h1 className="text-lg md:text-xl font-extrabold text-ink font-display truncate">{draft.bus.operator}</h1>
                         <p className="text-xs md:text-sm text-ink-2 truncate">{draft.bus.busType}</p>
@@ -123,9 +124,8 @@ function SelectInner() {
             {error && <div className="card p-5 text-err font-semibold mb-4">{error} <Link href="/bus" className="underline ml-2">Search again</Link></div>}
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-                <section className="lg:col-span-7 card p-4 md:p-6">
-                    <h2 className="font-extrabold text-ink mb-1">Pick your seats</h2>
-                    <p className="text-xs text-ink-2 mb-4">Tap a seat to select it. Prices shown are per seat, all taxes included.</p>
+                <section className="lg:col-span-7 card p-3 md:p-5">
+                    <h2 className="font-extrabold text-ink mb-2">Pick your seats <span className="text-xs font-semibold text-ink-3">· per-seat fare, taxes included</span></h2>
                     {loading ? (
                         <div className="h-[420px] rounded-2xl shimmer" />
                     ) : layout ? (
@@ -134,11 +134,20 @@ function SelectInner() {
                 </section>
 
                 <aside className="lg:col-span-5 space-y-4">
-                    <div className="card p-4 md:p-5 space-y-5">
+                    <div className="card p-3 md:p-4">
                         {loading ? <div className="h-40 rounded-xl shimmer" /> : (
                             <>
-                                <PointList title="Boarding point" points={points.boarding} value={boarding} onChange={setBoarding} />
-                                {points.dropping.length > 0 && <PointList title="Dropping point" points={points.dropping} value={dropping} onChange={setDropping} />}
+                                <div role="tablist" className="grid grid-cols-2 gap-1 rounded-full bg-lav border border-hair p-0.5 mb-3">
+                                    {([['boarding', 'Boarding', boarding], ['dropping', 'Dropping', dropping]] as const).map(([k, l, v]) => (
+                                        <button key={k} role="tab" aria-selected={pointTab === k} onClick={() => setPointTab(k)}
+                                            className={`px-3 py-1.5 rounded-full text-xs font-bold truncate transition-colors ${pointTab === k ? 'bg-brand text-white' : 'text-ink-2'}`}>
+                                            {l}{v ? ` · ${v.time}` : ''}
+                                        </button>
+                                    ))}
+                                </div>
+                                {pointTab === 'boarding'
+                                    ? <PointList title="Boarding point" points={points.boarding} value={boarding} onChange={(p) => { setBoarding(p); if (points.dropping.length && !dropping) setPointTab('dropping'); }} />
+                                    : <PointList title="Dropping point" points={points.dropping} value={dropping} onChange={setDropping} />}
                             </>
                         )}
                     </div>
