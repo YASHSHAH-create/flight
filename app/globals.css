@@ -172,3 +172,8 @@ body {
     will-change: transform;
   }
 }
+/* Site-wide app download popup (app/components/AppDownloadPopup.tsx) */
+@keyframes appPopupIn {
+  from { opacity: 0; transform: translateY(24px) scale(.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}

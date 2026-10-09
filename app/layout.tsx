@@ -122,6 +122,7 @@ import LoginModal from "./components/bus/LoginModal";
 import Footer from "./components/Footer";
 import Script from "next/script";
 import AgentCapabilities from "./components/AgentCapabilities";
+import AppDownloadPopup from "./components/AppDownloadPopup";
 import { COMPANY, ORG_ID, organizationLd } from "@/app/lib/company";
 
 export default function RootLayout({
@@ -241,6 +242,7 @@ export default function RootLayout({
           <LoginModal />
           {children}
           <AgentCapabilities />
+          <AppDownloadPopup />
                   </SessionProvider>
         </AuthProvider>
         <Footer />
