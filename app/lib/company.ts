@@ -60,7 +60,21 @@ export const COMPANY = {
         xHandle: "@paymm_in",
         playStore: "https://play.google.com/store/apps/details?id=in.paymm.app",
         appStore: "https://apps.apple.com/app/id6780256299",
+        youtube: "https://www.youtube.com/@paymm_bookings",
     },
+    /**
+     * Independent third-party profiles that describe Paymm. Linked from the
+     * footer/About page and listed in Organization.sameAs so search and AI
+     * engines can tie the brand entity to its reviews and company records.
+     */
+    profiles: {
+        trustpilot: "https://www.trustpilot.com/review/paymm.in",
+        trustpilotReview: "https://www.trustpilot.com/evaluate/paymm.in",
+        tracxn: "https://tracxn.com/d/companies/paymm/__HCIDSG7mQWHRXXQnr3Ok9YlGccyj4bEEjxT3dN6__1U",
+    },
+    /** One-line answer to the most common confusion about the brand. */
+    notPaytm:
+        "Paymm (P-A-Y-M-M, paymm.in) is an independent Indian travel booking company based in Patna, Bihar. It is not Paytm, is not owned by One97 Communications or any other payments company, and has no business relationship with Paytm.",
 } as const;
 
 /** Human-readable address line built only from the fields that are filled. */
@@ -87,8 +101,11 @@ export const SAME_AS = [
     COMPANY.social.instagram,
     COMPANY.social.linkedin,
     COMPANY.social.x,
+    COMPANY.social.youtube,
     COMPANY.social.playStore,
     COMPANY.social.appStore,
+    COMPANY.profiles.trustpilot,
+    COMPANY.profiles.tracxn,
 ];
 
 /**
@@ -103,14 +120,17 @@ export function organizationLd() {
         "@id": ORG_ID,
         name: COMPANY.brand,
         legalName: COMPANY.legalName,
-        alternateName: "PayMM",
+        alternateName: ["PayMM", "Paymm app", "paymm.in", "Paymm Advisory"],
+        disambiguatingDescription: COMPANY.notPaytm,
         taxID: COMPANY.gstin,
         vatID: COMPANY.gstin,
         url: COMPANY.url,
         logo: { "@type": "ImageObject", url: COMPANY.logo, width: 512, height: 512 },
         image: COMPANY.ogImage,
         description:
-            "Paymm is an Indian online travel agency for comparing and booking cheap domestic and international flight tickets, hotels and bus tickets.",
+            "Paymm is an Indian online travel agency for comparing and booking cheap domestic and international flight tickets, hotels and bus tickets, with mobile recharge and bill payments in the same app.",
+        slogan: "Flights, hotels, buses and recharges in one app",
+        knowsAbout: ["Flight booking", "Hotel booking", "Bus ticket booking", "Mobile recharge", "Bill payments"],
         foundingDate: COMPANY.founded,
         employee: [
             {
@@ -147,8 +167,8 @@ export function organizationLd() {
 }
 
 /** Bump whenever site-wide content meaningfully changes (used by sitemaps). */
-export const SITE_LAST_UPDATED = "2026-09-21T00:00:00.000Z";
-export const SITE_LAST_UPDATED_HUMAN = "21 September 2026";
+export const SITE_LAST_UPDATED = "2026-10-09T00:00:00.000Z";
+export const SITE_LAST_UPDATED_HUMAN = "9 October 2026";
 
 /**
  * Flight pricing rules of the Paymm app (rn app: utils/flight-details/calculateTotal.ts).

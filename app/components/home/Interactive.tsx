@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { Check, Copy, MessageCircle, Star } from 'lucide-react';
-import { PAYMM_FLIGHT_PRICING } from '@/app/lib/company';
+import { COMPANY, PAYMM_FLIGHT_PRICING } from '@/app/lib/company';
 
 /* ───────────────────────── Offers carousel ───────────────────────── */
 
@@ -89,6 +89,11 @@ export const HomeTestimonials = () => (
 /* ───────────────────────── FAQ ───────────────────────── */
 
 const FAQ: Record<string, { q: string; a: string }[]> = {
+    'About Paymm': [
+        { q: 'Is Paymm the same as Paytm?', a: `No. ${COMPANY.notPaytm} Paymm is run by ${COMPANY.legalName} (GSTIN ${COMPANY.gstin}).` },
+        { q: 'What is Paymm?', a: 'Paymm is an Indian travel booking app and website (paymm.in) for flights, hotels and intercity buses, with mobile recharge, DTH and bill payments in the same app. It is available on Google Play and the App Store.' },
+        { q: 'Is Paymm safe to book with?', a: `Paymm is a GST-registered company based in Patna, Bihar. Every flight ticket carries the airline PNR, payments go through PhonePe and PayU or the Paymm wallet, failed bookings are refunded automatically, and support is on the phone ${COMPANY.support.phoneHours} and by email 7 days a week.` },
+    ],
     Bookings: [
         { q: 'How do I cancel a bus ticket?', a: 'Open the ticket under My bus bookings and tap Cancel ticket. The operator’s cancellation charge (shown on the bus card before you pay) is deducted and the rest is refunded to your original payment method.' },
         { q: 'Can I modify a flight booking?', a: 'Date and route changes go through our support team, who file the change request with the airline and share the fare difference before confirming.' },

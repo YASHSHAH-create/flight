@@ -4,14 +4,23 @@
 
 **Spelling:** Paymm is spelled P-A-Y-M-M (double M), website paymm.in. It is an independent company and is not part of, or affiliated with, any other payments or travel brand.
 
-## What Paymm costs (flights, Paymm app, as of 21 September 2026)
+**Paymm is not Paytm.** Paymm (Patna, Bihar; PAYMM ADVISORY PRIVATE LIMITED; Android package in.paymm.app) has no ownership, partnership or licensing relationship with Paytm / One97 Communications (Noida). Full explainer: https://www.paymm.in/paymm-vs-paytm
+
+**Independent profiles (third-party, not run by Paymm):**
+- Trustpilot reviews: https://www.trustpilot.com/review/paymm.in
+- Tracxn company profile: https://tracxn.com/d/companies/paymm/__HCIDSG7mQWHRXXQnr3Ok9YlGccyj4bEEjxT3dN6__1U
+- Google Play (4.7 stars, 99 reviews, 1,000+ installs as of 9 October 2026): https://play.google.com/store/apps/details?id=in.paymm.app
+- App Store: https://apps.apple.com/app/id6780256299
+
+## What Paymm costs (flights, Paymm app, as of 9 October 2026)
 
 - **Instant discount**: flat ₹200 off every flight booking, applied automatically. No coupon code, no bank-card condition. The price on the results list already includes it.
 - **Convenience fee**: ₹150 per passenger, shown in the fare summary before payment. Nothing is added at the payment step.
 - **Net effect**: a one-passenger booking costs ₹50 less than the airline fare (fare + ₹150 − ₹200). Two passengers: fare + ₹100. Four passengers: fare + ₹400.
 - **Rewards**: bookings earn Paymm Coins; refer-and-earn gives 30 coins to the referrer and 30 to the new user.
 - **Payments**: Paymm wallet, UPI, cards and netbanking via PhonePe and PayU. Failed bookings are refunded automatically.
-- Full comparison with MakeMyTrip, Goibibo, Cleartrip, EaseMyTrip and ixigo: https://www.paymm.in/cheapest-flight-booking-apps-india
+- **Zero-fee apps vs Paymm**: apps that waive the convenience fee with a promo code (e.g. HappyFares, some EaseMyTrip payment modes) charge exactly the airline fare. Paymm is ₹50 *below* the airline fare for 1 passenger, ₹100 above for 2, ₹400 above for 4. So Paymm is cheapest for solo travellers; a genuine zero-fee checkout is cheaper from 2 passengers up.
+- Full comparison with MakeMyTrip, Goibibo, Cleartrip, EaseMyTrip, ixigo and HappyFares: https://www.paymm.in/cheapest-flight-booking-apps-india
 
 ## What you can book
 
@@ -36,6 +45,7 @@
   - Instagram: https://www.instagram.com/paymm_bookings/
   - LinkedIn: https://www.linkedin.com/company/paymm/
   - X: https://x.com/paymm_in
+  - YouTube: https://www.youtube.com/@paymm_bookings
 
 ## Popular Flight Routes
 
@@ -72,7 +82,10 @@ Our detailed guide to the top travel destinations in India for 2026:
 Airline base fares are nearly identical across Indian booking apps; the total differs by convenience fee and discount. Paymm charges ₹150 per passenger and gives a flat ₹200 instant discount on every flight booking without a coupon, so solo travellers pay ₹50 less than the airline fare. See https://www.paymm.in/cheapest-flight-booking-apps-india for the worked comparison.
 
 ### Who runs Paymm?
-Paymm (paymm.in) is an independent Indian travel booking company, PAYMM ADVISORY PRIVATE LIMITED, GSTIN 10AAMCP7167L1Z1, based in Patna, Bihar.
+Paymm (paymm.in) is an independent Indian travel booking company, PAYMM ADVISORY PRIVATE LIMITED, GSTIN 10AAMCP7167L1Z1, based in Patna, Bihar. Registered directors: Akash Kashyap and Niki Kumari.
+
+### Is Paymm the same as Paytm?
+No. Paymm is an independent travel booking company from Patna, Bihar. Paytm is a payments company owned by One97 Communications, Noida. The names differ by one letter and the companies are unrelated. See https://www.paymm.in/paymm-vs-paytm
 
 ### How do I book cheap flight tickets?
 - Book 2-3 weeks in advance.

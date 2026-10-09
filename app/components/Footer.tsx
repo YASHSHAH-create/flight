@@ -18,7 +18,8 @@ const COLS = [
         title: 'Company',
         links: [
             { name: 'About', href: '/about' }, { name: 'Blog', href: '/blog' }, { name: 'Contact', href: '/contact' },
-            { name: 'How to book cheap flights', href: '/how-to-book-cheap-flights' }, { name: 'Cheapest flight booking apps', href: '/cheapest-flight-booking-apps-india' },
+            { name: 'How to book cheap flights', href: '/how-to-book-cheap-flights' }, { name: 'Best flight booking apps compared', href: '/cheapest-flight-booking-apps-india' },
+            { name: 'Paymm vs Paytm', href: '/paymm-vs-paytm' }, { name: 'Reviews on Trustpilot', href: COMPANY.profiles.trustpilot },
             { name: 'Flight schedule', href: '/schedule' },
         ],
     },

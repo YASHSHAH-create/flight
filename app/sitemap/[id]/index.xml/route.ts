@@ -33,7 +33,7 @@ export async function GET(
             const staticRoutes = [
                 '', '/about', '/contact', '/privacy',
                 '/refund', '/terms', '/blog', '/packages', '/schedule', '/how-to-book-cheap-flights',
-                '/flights', '/downloads', '/cheapest-flight-booking-apps-india', '/bus',
+                '/flights', '/downloads', '/cheapest-flight-booking-apps-india', '/paymm-vs-paytm', '/bus',
                 ...Object.keys(AUTHORS).map(a => `/author/${a}`)
             ];
             urls = staticRoutes.map(route => ({

@@ -1,4 +1,5 @@
 
+import { COMPANY } from "@/app/lib/company";
 import { Metadata } from "next";
 import { 
   Smartphone, 
@@ -196,6 +197,7 @@ export default function DownloadsPage() {
               </div>
 
             </div>
+            <p className="text-[11px] text-slate-500 mt-6 relative z-10">Store and review figures as listed publicly on 9 October 2026. Paymm launched in 2025 and is a small company; we would rather show real numbers than big ones.</p>
           </div>
 
           {/* Social Proof Statistics */}
@@ -206,20 +208,20 @@ export default function DownloadsPage() {
             <div className="absolute bottom-0 left-0 w-80 h-80 bg-purple-500/10 rounded-full blur-[70px] pointer-events-none translate-y-1/2 -translate-x-1/2" />
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 relative z-10">
-              
+
               <div className="space-y-1">
-                <h4 className="text-3xl md:text-4xl font-black text-white">100K+</h4>
-                <p className="text-xs md:text-sm text-slate-400 font-medium uppercase tracking-wider">App Downloads</p>
+                <h4 className="text-3xl md:text-4xl font-black text-white">4.7★</h4>
+                <p className="text-xs md:text-sm text-slate-400 font-medium uppercase tracking-wider">Google Play rating (99 reviews)</p>
               </div>
 
               <div className="space-y-1">
-                <h4 className="text-3xl md:text-4xl font-black text-white">4.8★</h4>
-                <p className="text-xs md:text-sm text-slate-400 font-medium uppercase tracking-wider">Play Store Rating</p>
+                <h4 className="text-3xl md:text-4xl font-black text-white">4.6★</h4>
+                <p className="text-xs md:text-sm text-slate-400 font-medium uppercase tracking-wider"><a href={COMPANY.profiles.trustpilot} target="_blank" rel="noopener noreferrer" className="hover:text-white underline">Trustpilot</a> (18 reviews)</p>
               </div>
 
               <div className="space-y-1">
-                <h4 className="text-3xl md:text-4xl font-black text-white">50K+</h4>
-                <p className="text-xs md:text-sm text-slate-400 font-medium uppercase tracking-wider">Happy Travelers</p>
+                <h4 className="text-3xl md:text-4xl font-black text-white">1,000+</h4>
+                <p className="text-xs md:text-sm text-slate-400 font-medium uppercase tracking-wider">Android installs</p>
               </div>
 
               <div className="space-y-1">

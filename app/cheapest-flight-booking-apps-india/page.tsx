@@ -5,16 +5,16 @@ import Footer from '../components/Footer';
 import { COMPANY, PAYMM_FLIGHT_PRICING } from '../lib/company';
 
 const PAGE_URL = 'https://www.paymm.in/cheapest-flight-booking-apps-india';
-const UPDATED_ISO = '2026-09-21';
-const UPDATED_HUMAN = '21 September 2026';
+const UPDATED_ISO = '2026-10-09';
+const UPDATED_HUMAN = '9 October 2026';
 
 export const metadata = {
-    title: 'Cheapest Flight Booking Apps in India (2026): Fees Compared',
+    title: 'Best Flight Booking Apps in India (2026): Cheapest Fees Compared',
     description:
-        'Which flight booking app is actually cheapest in India? We compare convenience fees and standing discounts on Paymm, MakeMyTrip, Goibibo, EaseMyTrip, Cleartrip and ixigo, with worked examples.',
+        'Which flight booking app is best and cheapest in India in 2026? We compare convenience fees, zero-fee promo codes and standing discounts on Paymm, MakeMyTrip, Goibibo, EaseMyTrip, Cleartrip, ixigo and HappyFares, with worked examples.',
     alternates: { canonical: PAGE_URL },
     openGraph: {
-        title: 'Cheapest Flight Booking Apps in India (2026): Fees Compared',
+        title: 'Best Flight Booking Apps in India (2026): Cheapest Fees Compared',
         description:
             'Base fares are nearly identical across apps. The difference is the convenience fee and the discount. Here is the maths, app by app.',
         url: PAGE_URL,
@@ -80,6 +80,14 @@ const APPS: AppRow[] = [
         url: 'https://www.easemytrip.com',
     },
     {
+        name: 'HappyFares',
+        kind: 'Booking app (flights)',
+        fee: 'Reported ₹0 with its own promo code; standard fee otherwise',
+        discount: 'Zero convenience fee when the code is applied at checkout',
+        bestFor: 'People who remember to apply the code and only need flights',
+        url: 'https://www.happyfares.in',
+    },
+    {
         name: 'ixigo',
         kind: 'Booking app (strong on trains)',
         fee: 'Reported ₹100–₹300 per passenger',
@@ -115,6 +123,14 @@ const FAQS: { q: string; a: string }[] = [
         a: `No. The ${inr(OFF)} instant discount is already included in the price shown on the flight results list in the Paymm app, so the price you see first is the price you pay.`,
     },
     {
+        q: 'Is a zero convenience fee app cheaper than Paymm?',
+        a: `For one passenger, no: a zero-fee app charges the airline fare, while Paymm charges the airline fare minus ${inr(OFF - FEE)} (${inr(FEE)} fee minus ${inr(OFF)} discount). For two passengers Paymm is ${inr(FEE * 2 - OFF)} above the airline fare, so a genuinely zero-fee checkout is ${inr(FEE * 2 - OFF)} cheaper. Zero-fee offers usually depend on a promo code or a specific payment mode, so check that the fee line really reads ₹0 on the final screen.`,
+    },
+    {
+        q: 'Is Paymm the same as Paytm?',
+        a: COMPANY.notPaytm + ' See our Paymm vs Paytm explainer at https://www.paymm.in/paymm-vs-paytm.',
+    },
+    {
         q: 'Is Paymm safe for booking flights?',
         a: `Paymm is operated by ${COMPANY.legalName} (GSTIN ${COMPANY.gstin}). Tickets are issued with the airline PNR, payments run through PhonePe and PayU payment gateways or the Paymm wallet, and failed bookings are refunded automatically. Support is available by phone ${COMPANY.support.phoneHours} and by email 7 days a week.`,
     },
@@ -128,9 +144,9 @@ export default function CheapestFlightBookingApps() {
     const articleLd = {
         '@context': 'https://schema.org',
         '@type': 'Article',
-        headline: 'Cheapest Flight Booking Apps in India (2026): Fees Compared',
+        headline: 'Best Flight Booking Apps in India (2026): Cheapest Fees Compared',
         description: metadata.description,
-        datePublished: UPDATED_ISO,
+        datePublished: '2026-09-21',
         dateModified: UPDATED_ISO,
         mainEntityOfPage: PAGE_URL,
         author: {
@@ -197,7 +213,7 @@ export default function CheapestFlightBookingApps() {
 
                 <article className="max-w-none">
                     <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight">
-                        Cheapest Flight Booking Apps in India (2026): Fees Compared
+                        Best Flight Booking Apps in India (2026): Cheapest Fees Compared
                     </h1>
                     <p className="text-sm text-slate-500 mb-8">
                         By{' '}
@@ -229,7 +245,8 @@ export default function CheapestFlightBookingApps() {
                     </p>
                     <p className="text-slate-700 mb-6 leading-relaxed">
                         Paymm is spelled with a double M (P-A-Y-M-M) and is an <strong>independent company</strong>, not part of
-                        any other payments or travel brand.
+                        any other payments or travel brand. In particular, Paymm is not Paytm; see{' '}
+                        <Link href="/paymm-vs-paytm" className="text-blue-600 underline">Paymm vs Paytm</Link>.
                     </p>
 
                     <h2 className="text-2xl font-bold text-slate-900 mt-12 mb-4">Flight booking apps in India, compared</h2>
@@ -298,11 +315,62 @@ export default function CheapestFlightBookingApps() {
                         which is below the per-passenger fees reported for the largest apps, but it is worth comparing checkout totals.
                     </p>
 
+                    <h2 className="text-2xl font-bold text-slate-900 mt-12 mb-4">Zero convenience fee vs flat discount: which wins?</h2>
+                    <p className="text-slate-700 mb-4 leading-relaxed">
+                        Two pricing models compete for &ldquo;cheapest&rdquo; in 2026. Apps such as HappyFares and, on some payment modes,
+                        EaseMyTrip waive the convenience fee entirely when you apply a promo code, so you pay exactly the airline
+                        fare. Paymm instead charges {inr(FEE)} per passenger and takes {inr(OFF)} off every booking with no code.
+                    </p>
+                    <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white">
+                        <table className="w-full text-left text-sm">
+                            <thead className="bg-slate-100 text-slate-700">
+                                <tr>
+                                    <th className="p-4 font-semibold">Passengers</th>
+                                    <th className="p-4 font-semibold">Zero-fee app (code applied)</th>
+                                    <th className="p-4 font-semibold">Paymm (automatic)</th>
+                                    <th className="p-4 font-semibold">Cheaper option</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {[1, 2, 3, 4].map((pax) => {
+                                    const diff = FEE * pax - OFF;
+                                    return (
+                                        <tr key={pax} className="border-t border-slate-200">
+                                            <td className="p-4 text-slate-700">{pax}</td>
+                                            <td className="p-4 text-slate-700">Airline fare</td>
+                                            <td className="p-4 text-slate-700">Airline fare {diff < 0 ? `− ${inr(-diff)}` : `+ ${inr(diff)}`}</td>
+                                            <td className="p-4 font-semibold text-slate-900">{diff < 0 ? `Paymm by ${inr(-diff)}` : diff === 0 ? 'Same' : `Zero-fee app by ${inr(diff)}`}</td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
+                    <p className="text-slate-700 mt-4 leading-relaxed">
+                        So the honest answer: for a solo traveller Paymm is the cheapest total we know of, because it ends below the
+                        airline fare. From two passengers up, a zero-fee checkout wins, provided the code actually applies to your
+                        fare and payment mode. Either way, the gap is small; the date you fly moves the price far more than the app.
+                    </p>
+
+                    <h2 className="text-2xl font-bold text-slate-900 mt-12 mb-4">What independent sources say about Paymm</h2>
+                    <p className="text-slate-700 mb-4 leading-relaxed">
+                        Paymm is a small company, so there is less third-party coverage than for the apps above. The public records
+                        that exist: a{' '}
+                        <a className="text-blue-600 underline" rel="noopener" href={COMPANY.profiles.trustpilot}>Trustpilot profile</a>{' '}
+                        for paymm.in, a{' '}
+                        <a className="text-blue-600 underline" rel="noopener" href={COMPANY.profiles.tracxn}>Tracxn company profile</a>, the{' '}
+                        <a className="text-blue-600 underline" rel="noopener" href={COMPANY.social.playStore}>Google Play</a> and{' '}
+                        <a className="text-blue-600 underline" rel="noopener" href={COMPANY.social.appStore}>App Store</a> listings, and the GST
+                        registration ({COMPANY.gstin}) you can verify on the GST portal. If you have booked with Paymm, a review on
+                        Trustpilot or the app stores helps the next traveller judge us on evidence rather than on our own page.
+                    </p>
+
                     <h2 className="text-2xl font-bold text-slate-900 mt-12 mb-4">Where Paymm is not the best choice</h2>
                     <ul className="list-disc pl-6 text-slate-700 space-y-2">
                         <li>Train tickets: Paymm does not sell them. ixigo or IRCTC is the right tool.</li>
                         <li>Holiday packages with flights, hotel and transfers in one price: MakeMyTrip has the wider catalogue.</li>
                         <li>Phone support outside {COMPANY.support.phoneHours}: Paymm answers email 7 days a week, but phone lines are closed at night.</li>
+                        <li>Groups of three or more who can get a genuine zero-fee checkout elsewhere (see the table above).</li>
                         <li>Paymm launched in 2025 and is a much smaller company than the apps above.</li>
                     </ul>
 
@@ -338,6 +406,11 @@ export default function CheapestFlightBookingApps() {
                         <li>
                             <a className="text-blue-600 underline" rel="nofollow noopener" href="https://flightgpt.in/blog/makemytrip-vs-easemytrip-vs-cleartrip-which-cheapest-2026">
                                 FlightGPT: MMT vs EaseMyTrip vs Cleartrip, true price comparison 2026
+                            </a>
+                        </li>
+                        <li>
+                            <a className="text-blue-600 underline" rel="nofollow noopener" href="https://www.happyfares.in/">
+                                HappyFares: zero convenience fee promo code, as stated on its own site
                             </a>
                         </li>
                         <li>

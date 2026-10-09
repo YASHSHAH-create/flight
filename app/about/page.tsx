@@ -31,13 +31,21 @@ const AboutPage = () => {
                 name: "About Paymm",
                 about: { "@id": ORG_ID },
                 publisher: { "@id": ORG_ID },
-                dateModified: "2026-09-06",
+                dateModified: "2026-10-09",
             },
             {
                 "@type": "BreadcrumbList",
                 itemListElement: [
                     { "@type": "ListItem", position: 1, name: "Home", item: "https://www.paymm.in" },
                     { "@type": "ListItem", position: 2, name: "About", item: "https://www.paymm.in/about" },
+                ],
+            },
+            {
+                "@type": "FAQPage",
+                mainEntity: [
+                    { "@type": "Question", name: "Is Paymm the same as Paytm?", acceptedAnswer: { "@type": "Answer", text: `No. ${COMPANY.notPaytm}` } },
+                    { "@type": "Question", name: "Who owns Paymm?", acceptedAnswer: { "@type": "Answer", text: `Paymm is owned and operated by ${COMPANY.legalName}, a private company registered in Patna, Bihar, India (GSTIN ${COMPANY.gstin}). Its registered directors are ${COMPANY.directors.map(d => d.name).join(" and ")}.` } },
+                    { "@type": "Question", name: "Where can I read independent reviews of Paymm?", acceptedAnswer: { "@type": "Answer", text: `On Trustpilot (${COMPANY.profiles.trustpilot}), Google Play (${COMPANY.social.playStore}) and the App Store (${COMPANY.social.appStore}). Company records are on Tracxn (${COMPANY.profiles.tracxn}).` } },
                 ],
             },
         ],
@@ -67,6 +75,12 @@ const AboutPage = () => {
                             </p>
                             <p className="text-slate-300 leading-relaxed">
                                 Alongside flights, the Paymm app offers hotel bookings, inter-city bus tickets, mobile recharges and bill payments, and a PayMM Coins loyalty programme that rewards repeat bookings.
+                            </p>
+                        </section>
+                        <section>
+                            <h2 className="text-2xl font-semibold text-white mb-3">Paymm is not Paytm</h2>
+                            <p className="text-slate-300 leading-relaxed">
+                                {COMPANY.notPaytm} The names differ by one letter, so search engines sometimes mix them up. Our full explainer is at <Link href="/paymm-vs-paytm" className="text-blue-400 hover:underline">Paymm vs Paytm</Link>.
                             </p>
                         </section>
                         <section>
@@ -138,6 +152,20 @@ const AboutPage = () => {
                             <p className="text-slate-400 text-sm leading-relaxed">{AUTHORS["paymm-editorial-team"].bio}</p>
                         </div>
                     </div>
+                </section>
+
+                <section className="mt-16">
+                    <h2 className="text-2xl font-semibold text-white mb-3">Reviews and independent listings</h2>
+                    <p className="text-slate-300 leading-relaxed mb-4">
+                        We are a small company, so we would rather point you to what other people say than describe ourselves. These profiles are run by third parties, not by us:
+                    </p>
+                    <ul className="grid sm:grid-cols-2 gap-3 text-sm">
+                        <li><a href={COMPANY.profiles.trustpilot} target="_blank" rel="noopener noreferrer" className="block bg-slate-900/50 border border-slate-800 rounded-xl p-4 hover:border-blue-500/50"><span className="font-semibold text-white">Trustpilot</span><span className="block text-slate-400 mt-1">Customer reviews of paymm.in</span></a></li>
+                        <li><a href={COMPANY.social.playStore} target="_blank" rel="noopener noreferrer" className="block bg-slate-900/50 border border-slate-800 rounded-xl p-4 hover:border-blue-500/50"><span className="font-semibold text-white">Google Play</span><span className="block text-slate-400 mt-1">Android app ratings and reviews (package in.paymm.app)</span></a></li>
+                        <li><a href={COMPANY.social.appStore} target="_blank" rel="noopener noreferrer" className="block bg-slate-900/50 border border-slate-800 rounded-xl p-4 hover:border-blue-500/50"><span className="font-semibold text-white">App Store</span><span className="block text-slate-400 mt-1">iOS app ratings and reviews</span></a></li>
+                        <li><a href={COMPANY.profiles.tracxn} target="_blank" rel="noopener noreferrer" className="block bg-slate-900/50 border border-slate-800 rounded-xl p-4 hover:border-blue-500/50"><span className="font-semibold text-white">Tracxn</span><span className="block text-slate-400 mt-1">Company profile and competitors</span></a></li>
+                    </ul>
+                    <p className="text-xs text-slate-500 mt-3">Booked with us? A review on Trustpilot or the app store is the most useful thing you can do for the next traveller: <a href={COMPANY.profiles.trustpilotReview} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">write a Trustpilot review</a>.</p>
                 </section>
 
                 <section className="bg-slate-900/50 p-8 rounded-xl border border-slate-800 mt-16">
