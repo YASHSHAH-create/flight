@@ -6,12 +6,14 @@ import { X, Plane, Bus, Hotel, Coins } from "lucide-react";
 import { FaApple, FaGooglePlay } from "react-icons/fa";
 import { COMPANY } from "@/app/lib/company";
 
-// Site-wide "download the app" popup. Shown once per browser (localStorage
-// flag), on every page, after a short delay so the page content loads first.
+// Site-wide "download the app" popup. Shown once per visit (sessionStorage
+// flag, so it comes back every time the site is opened in a new tab/session
+// but not on every page within one visit), after a short delay so the page
+// content loads first.
 // iOS visitors go to the App Store, everyone else to Google Play; desktop
 // visitors get both buttons because there is no store to pick from.
 
-const STORAGE_KEY = "paymm_app_popup_seen_v1";
+const STORAGE_KEY = "paymm_app_popup_seen_session";
 const SHOW_DELAY_MS = 2500;
 
 // Pages where the popup would get in the way or is redundant.
@@ -42,9 +44,9 @@ function isBot(): boolean {
 
 function markSeen() {
   try {
-    localStorage.setItem(STORAGE_KEY, String(Date.now()));
+    sessionStorage.setItem(STORAGE_KEY, String(Date.now()));
   } catch {
-    // Private mode / blocked storage: the popup may show again next visit.
+    // Blocked storage: the popup may show again on the next page.
   }
 }
 
@@ -57,7 +59,7 @@ export default function AppDownloadPopup() {
     if (SKIP_PREFIXES.some((p) => pathname.startsWith(p))) return;
     if (isBot() || isInsideApp()) return;
     try {
-      if (localStorage.getItem(STORAGE_KEY)) return;
+      if (sessionStorage.getItem(STORAGE_KEY)) return;
     } catch {
       // storage unavailable: still show once this session
     }
